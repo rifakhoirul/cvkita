@@ -12,6 +12,11 @@
   <div class="logo">CV<span>Kita</span></div>
   <div class="topbar-actions">
     <button id="btn-template" class="btn ghost" type="button">🎨 Template</button>
+    <button id="btn-ats" class="btn ghost" type="button">📊 Cek ATS</button>
+    <button id="btn-export" class="btn ghost" type="button">💾 Backup</button>
+    <label class="btn ghost" for="file-import" style="display:inline-flex;align-items:center">📂 Import</label>
+    <input type="file" id="file-import" accept=".json" hidden>
+    <button id="btn-reset" class="btn ghost danger" type="button">🗑️ Reset</button>
     <button id="btn-download" class="btn primary" type="button">⬇️ Unduh PDF (Gratis)</button>
   </div>
 </header>
@@ -23,6 +28,14 @@
     <button class="tpl-btn" data-tpl="modern">Modern</button>
     <button class="tpl-btn" data-tpl="minimal">Minimal</button>
   </div>
+</div>
+
+<div id="ats-panel" class="ats-panel hidden">
+  <div class="ats-head">
+    <span>Skor ATS kamu:</span>
+    <strong id="ats-score">0</strong><span class="ats-max">/100</span>
+  </div>
+  <ul id="ats-tips"></ul>
 </div>
 
 <main class="workspace">
@@ -77,6 +90,6 @@
   CVKita — CV gratis tanpa watermark untuk fresh graduate Indonesia. Data 100% tersimpan di perangkatmu, tidak dikirim ke server.
 </footer>
 
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=3"></script>
 </body>
 </html>
