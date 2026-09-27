@@ -5,8 +5,10 @@ const PREMIUM_TEMPLATES = ['executive'];
 
 const isPremium = () => !!localStorage.getItem(LICENSE_KEY);
 
+const API_BASE = 'https://cvkita-api.cvkita-rifakhoirul.workers.dev';
+
 async function verifyLicense(code) {
-  const res = await fetch('/api/license/verify', {
+  const res = await fetch(`${API_BASE}/api/license/verify`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code: (code || '').trim() }),
@@ -16,7 +18,7 @@ async function verifyLicense(code) {
 }
 
 async function aiRewrite(payload) {
-  const res = await fetch('/api/rewrite', {
+  const res = await fetch(`${API_BASE}/api/rewrite`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...payload, license: localStorage.getItem(LICENSE_KEY) || '' }),
