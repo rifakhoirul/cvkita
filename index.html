@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVKita — Bikin CV Lolos ATS untuk Fresh Graduate Indonesia</title>
+<meta name="description" content="Buat CV profesional dan lolos ATS dalam 5 menit. Gratis, tanpa watermark, dirancang khusus untuk fresh graduate Indonesia.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">CV<span>Kita</span></div>
+  <div class="topbar-actions">
+    <button id="btn-template" class="btn ghost" type="button">🎨 Template</button>
+    <button id="btn-download" class="btn primary" type="button">⬇️ Unduh PDF (Gratis)</button>
+  </div>
+</header>
+
+<div id="template-panel" class="template-panel hidden">
+  <p>Pilih template (semua lolos ATS):</p>
+  <div class="tpl-row">
+    <button class="tpl-btn" data-tpl="classic">Classic</button>
+    <button class="tpl-btn" data-tpl="modern">Modern</button>
+    <button class="tpl-btn" data-tpl="minimal">Minimal</button>
+  </div>
+</div>
+
+<main class="workspace">
+  <section class="form-side">
+    <div class="hint-card">
+      💡 <b>Tips:</b> Isi semua yang relevan — organisasi, magang, project, kompetisi. Fresh graduate tidak wajib punya "pengalaman kerja". CV otomatis tersimpan di perangkatmu.
+    </div>
+
+    <form id="cv-form">
+      <details open><summary>1. Data Diri</summary>
+        <input name="nama" placeholder="Nama lengkap" required>
+        <input name="headline" placeholder="Headline, mis: Fresh Graduate Teknik Informatika">
+        <input name="email" type="email" placeholder="Email">
+        <input name="telepon" placeholder="No. WhatsApp: 08xx-xxxx-xxxx">
+        <input name="kota" placeholder="Kota, mis: Jakarta">
+        <input name="linkedin" placeholder="Link LinkedIn / GitHub / Portofolio">
+        <textarea name="ringkasan" rows="3" placeholder="Ringkasan singkat 2–3 kalimat: siapa kamu, lulusan apa, apa yang kamu cari"></textarea>
+      </details>
+
+      <details open><summary>2. Pendidikan</summary>
+        <div id="pendidikan-list" class="repeat-list"></div>
+        <button type="button" class="btn add" data-add="pendidikan">+ Tambah Pendidikan</button>
+      </details>
+
+      <details open><summary>3. Pengalaman (Magang / Organisasi / Kerja)</summary>
+        <div id="pengalaman-list" class="repeat-list"></div>
+        <button type="button" class="btn add" data-add="pengalaman">+ Tambah Pengalaman</button>
+      </details>
+
+      <details open><summary>4. Project / Portofolio</summary>
+        <div id="project-list" class="repeat-list"></div>
+        <button type="button" class="btn add" data-add="project">+ Tambah Project</button>
+      </details>
+
+      <details open><summary>5. Keahlian</summary>
+        <textarea name="keahlian" rows="3" placeholder="Pisahkan dengan koma: Python, Excel, Figma, Public Speaking"></textarea>
+        <textarea name="bahasa" rows="2" placeholder="Bahasa: Indonesia (Native), Inggris (Profesional)"></textarea>
+      </details>
+
+      <details open><summary>6. Prestasi & Sertifikasi</summary>
+        <textarea name="prestasi" rows="3" placeholder="Satu per baris: Juara 2 Lomba Karya Tulis Ilmiah Nasional 2025"></textarea>
+      </details>
+    </form>
+  </section>
+
+  <section class="preview-side">
+    <div id="cv-paper" class="tpl-classic"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  CVKita — CV gratis tanpa watermark untuk fresh graduate Indonesia. Data 100% tersimpan di perangkatmu, tidak dikirim ke server.
+</footer>
+
+<script src="js/app.js?v=2"></script>
+</body>
+</html>
