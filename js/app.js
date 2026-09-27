@@ -53,7 +53,10 @@ function entryHTML(key, data = {}) {
       ? `<textarea name="${key}.${f.n}" rows="3" placeholder="${f.p}">${data[f.n] || ''}</textarea>`
       : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}">`
   ).join('');
-  return `<div class="entry" data-key="${key}">${fields}<button type="button" class="btn del" data-del>Hapus</button></div>`;
+  const aiBtn = key === 'pengalaman'
+    ? '<button type="button" class="btn ai btn-ai">✨ Improve dengan AI</button>'
+    : '';
+  return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del>Hapus</button></div>`;
 }
 
 function renderList(key, items = [{}]) {
@@ -134,10 +137,37 @@ document.addEventListener('click', e => {
   }
   if (e.target.id === 'btn-template') $('#template-panel').classList.toggle('hidden');
   if (e.target.classList.contains('tpl-btn')) {
+    const tpl = e.target.dataset.tpl;
+    if (typeof PREMIUM_TEMPLATES !== 'undefined' && PREMIUM_TEMPLATES.includes(tpl) && !isPremium()) {
+      showPaywall();
+      return;
+    }
     document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('active'));
     e.target.classList.add('active');
-    localStorage.setItem(TPL_KEY, e.target.dataset.tpl);
+    localStorage.setItem(TPL_KEY, tpl);
     render();
+  }
+  if (e.target.classList.contains('btn-ai')) {
+    handleAiRewrite(e.target);
+  }
+  if (e.target.id === 'btn-aktivasi') {
+    const code = $('#aktivasi-kode').value;
+    $('#aktivasi-error').classList.add('hidden');
+    verifyLicense(code)
+      .then(r => {
+        if (r.valid) {
+          localStorage.setItem(LICENSE_KEY, code.trim());
+          document.querySelectorAll('.tpl-btn.locked').forEach(b => b.classList.remove('locked'));
+          $('#paywall').classList.add('hidden');
+        } else {
+          $('#aktivasi-error').textContent = r.error || 'Kode tidak valid. Cek lagi atau hubungi kami.';
+          $('#aktivasi-error').classList.remove('hidden');
+        }
+      })
+      .catch(() => {
+        $('#aktivasi-error').textContent = 'Gagal memverifikasi. Cek koneksi internetmu.';
+        $('#aktivasi-error').classList.remove('hidden');
+      });
   }
   if (e.target.id === 'btn-download') window.print();
   if (e.target.id === 'btn-reset') {
@@ -204,6 +234,30 @@ function atsScore() {
   add((lists.pengalaman || []).some(p => (p.deskripsi || '').split('\n').filter(l => l.trim()).length >= 2), 5, 'Di pengalaman, tulis minimal 2 poin capaian (mulai dengan kata kerja)');
 
   return { score: Math.min(score, 100), tips };
+}
+
+async function handleAiRewrite(btn) {
+  if (!isPremium()) { showPaywall(); return; }
+  const entry = btn.closest('.entry');
+  const posisi = entry.querySelector('[name="pengalaman.posisi"]')?.value || '';
+  const organisasi = entry.querySelector('[name="pengalaman.organisasi"]')?.value || '';
+  const deskripsi = entry.querySelector('[name="pengalaman.deskripsi"]')?.value || '';
+
+  const btnLabel = btn.textContent;
+  btn.textContent = '⏳ Menulis ulang...';
+  btn.disabled = true;
+  try {
+    const { result } = await aiRewrite({ posisi, organisasi, deskripsi });
+    const ta = entry.querySelector('[name="pengalaman.deskripsi"]');
+    ta.value = result;
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    btn.textContent = '✓ Ditingkatkan';
+  } catch (err) {
+    alert(err.message);
+    btn.textContent = btnLabel;
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 // Init

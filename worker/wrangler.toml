@@ -1,0 +1,11 @@
+name = "cvkita-api"
+main = "index.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+LICENSE_CODES = "BOOST-DEMO-0001:3,BOOST-DEMO-0002:3"
+
+# KV namespace untuk pelacakan kuota (opsional; tanpa ini kuota tidak dilacak lintas perangkat)
+# [[kv_namespaces]]
+# binding = "KV"
+# id = "<isi setelah wrangler kv:namespace create>"

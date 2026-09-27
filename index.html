@@ -27,6 +27,8 @@
     <button class="tpl-btn" data-tpl="classic">Classic</button>
     <button class="tpl-btn" data-tpl="modern">Modern</button>
     <button class="tpl-btn" data-tpl="minimal">Minimal</button>
+    <button class="tpl-btn locked" data-tpl="executive">👑 Executive</button>
+    <button class="tpl-btn locked" data-tpl="tech">👑 Tech</button>
   </div>
 </div>
 
@@ -36,6 +38,25 @@
     <strong id="ats-score">0</strong><span class="ats-max">/100</span>
   </div>
   <ul id="ats-tips"></ul>
+</div>
+
+<div id="paywall" class="paywall hidden">
+  <div class="paywall-card">
+    <h3>✨ Buka Fitur Premium — Rp 19.000</h3>
+    <p>Sekali bayar, bukan langganan. PDF gratis selamanya tetap.</p>
+    <ul>
+      <li>✨ AI rewrite bullet point & ringkasan (3x per CV)</li>
+      <li>🎨 5 template premium</li>
+      <li>📄 Cover letter otomatis</li>
+    </ul>
+    <p class="paywall-cta">Sudah bayar? Masukkan kode aktivasi:</p>
+    <div class="aktivasi-row">
+      <input id="aktivasi-kode" placeholder="BOOST-XXXX-XXXX" autocomplete="off">
+      <button id="btn-aktivasi" class="btn primary" type="button">Aktivasi</button>
+    </div>
+    <p id="aktivasi-error" class="aktivasi-error hidden">Kode tidak valid. Cek lagi atau hubungi kami.</p>
+    <p class="paywall-belum">Belum bayar? Scan QRIS di halaman pembayaran → <a href="/pay.html">cara pembayaran</a></p>
+  </div>
 </div>
 
 <main class="workspace">
@@ -90,6 +111,7 @@
   CVKita — CV gratis tanpa watermark untuk fresh graduate Indonesia. Data 100% tersimpan di perangkatmu, tidak dikirim ke server.
 </footer>
 
-<script src="js/app.js?v=3"></script>
+<script src="js/premium.js?v=3"></script>
+<script src="js/app.js?v=4"></script>
 </body>
 </html>
