@@ -14,12 +14,20 @@
     <li>Scan QRIS di bawah pakai aplikasi apa saja (GoPay, OVO, DANA, m-banking)</li>
     <li>Bayar <b>Rp 19.000</b></li>
     <li>Screenshot bukti bayar, kirim ke WhatsApp <b>08xx-xxxx-xxxx</b> dengan format: <code>BOOST#nama#email</code></li>
-    <li>Kode aktivasi dikirim ke WhatsApp/email kamu (maks. 1x24 jam, biasanya < 1 jam)</li>
+    <li>Kode aktivasi dikirim ke WhatsApp/email kamu (maks. 1x24 jam, biasanya &lt; 1 jam)</li>
     <li>Masukkan kode di halaman utama → ✨ Premium aktif</li>
   </ol>
-  <img src="img/qris.png" alt="QRIS pembayaran" style="max-width:280px;display:block;margin:16px 0;border:1px solid #e3e7f0;border-radius:8px;padding:8px">
-  <p style="font-size:.85rem;color:#5b6478">Kode berlaku untuk 3x AI rewrite. PDF &amp; template gratis tidak terpengaruh.</p>
-  <a href="/" class="btn primary" style="display:inline-block;text-decoration:none;margin-top:8px">← Kembali ke Editor</a>
+  <!-- QRIS placeholder: ganti img/qris.png dengan QRIS asli dari rekeningmu.
+       Alt + fallback box ini menjaga halaman tetap rapi selama belum ada. -->
+  <div class="qris-box">
+    <img src="img/qris.png" alt="QRIS pembayaran" id="qris-img" onerror="this.classList.add('hidden');document.getElementById('qris-fallback').classList.remove('hidden')">
+    <div id="qris-fallback" class="hidden">
+      <strong>QRIS belum tersedia</strong>
+      <p>Sementara ini, transfer Rp 19.000 ke QRIS/rekening yang tercantum di bio, lalu kirim bukti bayar via WhatsApp.</p>
+    </div>
+  </div>
+  <p style="font-size:.9rem;color:#5b6478">Yang kamu dapat: <b>2 template premium</b> (Executive &amp; Tech) + AI rewrite 3x + cover letter. PDF gratis tanpa watermark tidak terpengaruh.</p>
+  <a href="/" class="btn primary" style="display:inline-block;text-decoration:none;margin-top:16px">← Kembali ke Editor</a>
 </main>
 </body>
 </html>

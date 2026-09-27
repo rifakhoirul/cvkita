@@ -1,4 +1,13 @@
+/* ============================================================
+   CVKita — style.css
+   Prinsip desain: mobile-first, kontras WCAG AA, semua template
+   CV satu kolom & ATS-friendly.
+   ============================================================ */
+
 :root{
+  /* Oranye #f97316 = warna merek CVKita, dipakai konsisten di
+     logo, CTA, dan aksen. accent-dark untuk hover agar kontras
+     teks putih di atasnya tetap ≥ 4.5:1 (WCAG AA). */
   --bg:#f3f5f9; --card:#fff; --ink:#1a2233; --muted:#5b6478;
   --accent:#f97316; --accent-dark:#ea580c; --line:#e3e7f0;
 }
@@ -6,76 +15,146 @@
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
 button{cursor:pointer;font-family:inherit}
 
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;gap:8px;flex-wrap:wrap}
 .logo{font-size:1.25rem;font-weight:800}
 .logo span{color:var(--accent)}
-.topbar-actions{display:flex;gap:8px}
-.btn{border:none;border-radius:8px;padding:9px 14px;font-size:.85rem;font-weight:600}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Touch target: semua tombol minimal 44px tinggi (pedoman aksesibilitas
+   mobile). Font 0.9rem bukan 0.85 agar tetap terbaca di layar 360px. */
+.btn{border:none;border-radius:8px;padding:11px 16px;min-height:44px;font-size:.9rem;font-weight:600}
 .btn.primary{background:var(--accent);color:#fff}
 .btn.primary:hover{background:var(--accent-dark)}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.btn.add{background:#eef2ff;color:#4356c9;margin-top:6px}
-.btn.del{background:#fff1f0;color:#d43030;border:1px solid #ffd6d3;margin-top:6px;font-size:.75rem;padding:5px 10px}
+.btn.add{background:#eef2ff;color:#303fb3;margin-top:6px} /* #4356c9 digelapkan → kontras ≥ 4.5:1 */
+.btn.del{background:#fff1f0;color:#c11c1c;border:1px solid #ffd6d3;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
+.btn.danger{border-color:#ffd6d3;color:#c11c1c}
+.btn.danger:hover{background:#fff1f0}
 
 .template-panel{background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
 .template-panel p{font-size:.85rem;color:var(--muted);margin-bottom:8px}
-.tpl-row{display:flex;gap:8px}
-.tpl-btn{flex:1;padding:10px;border:2px solid var(--line);border-radius:8px;background:#fafbfd;font-weight:600}
-.tpl-btn.active{border-color:var(--accent);color:var(--accent)}
-.hidden{display:none}
+.tpl-row{display:flex;gap:8px;flex-wrap:wrap}
+.tpl-btn{flex:1;min-width:96px;padding:12px 10px;min-height:44px;border:2px solid var(--line);border-radius:8px;background:#fafbfd;font-weight:600;font-size:.85rem}
+.tpl-btn.active{border-color:var(--accent);color:var(--accent-dark)}
+.tpl-btn.locked{opacity:.6}
+/* .paywall pakai display:flex, jadi harus dikalahkan eksplisit oleh .hidden */
+.hidden,.paywall.hidden{display:none}
 
 .workspace{display:grid;grid-template-columns:1fr;gap:16px;padding:16px;max-width:1100px;margin:0 auto}
 @media(min-width:920px){.workspace{grid-template-columns:1fr 1fr;align-items:start}}
 
-.hint-card{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:.8rem;padding:10px 12px;border-radius:8px;margin-bottom:12px}
+.hint-card{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:.8rem;padding:10px 12px;border-radius:8px;margin-bottom:12px}
 #cv-form details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
-#cv-form summary{padding:12px 14px;font-weight:700;font-size:.9rem;cursor:pointer}
+#cv-form summary{padding:13px 14px;min-height:44px;font-weight:700;font-size:.9rem;cursor:pointer}
 #cv-form details[open] summary{border-bottom:1px solid var(--line)}
 #cv-form details>*:not(summary){margin:10px 14px;width:calc(100% - 28px)}
-input,textarea{border:1px solid var(--line);border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;background:#fafbfd}
+/* Input 1rem (16px) mencegah auto-zoom di iOS & nyaman diketik di Android kentang. */
+input,textarea{border:1px solid var(--line);border-radius:8px;padding:11px;font-size:1rem;font-family:inherit;background:#fafbfd;color:var(--ink)}
 input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--accent)}
 .repeat-list .entry{border:1px dashed var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
 .repeat-list .entry input,.repeat-list .entry textarea{width:100%;margin-bottom:8px}
 
 .preview-side{position:sticky;top:66px}
-#cv-paper{background:#fff;min-height:840px;box-shadow:0 2px 16px rgba(20,30,60,.12);border-radius:4px;padding:36px 32px;font-size:.82rem;line-height:1.45}
-#cv-paper h1{font-size:1.45rem;letter-spacing:.3px}
-#cv-paper h2{font-size:.95rem;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid currentColor;padding-bottom:3px;margin:18px 0 8px}
-#cv-paper .meta{color:var(--muted);font-size:.8rem;margin-top:4px}
+/* Variabel turunan per template (di-override blok template di bawah) —
+   memakai variabel agar selektor ID #cv-paper tidak 'menang' atas class template. */
+#cv-paper{--cv-font:inherit;--cv-ink:#1a2233;--cv-h1-font:inherit;--cv-h1-color:var(--cv-ink);--cv-h1-size:1.45rem;--cv-h1-weight:800;--cv-h1-spacing:.3px;--cv-h2-color:var(--cv-ink);--cv-h2-border:currentColor;--cv-h2-transform:none;--cv-h2-spacing:1px;--cv-h2-weight:700;--cv-sub:#5b6478;--cv-tag-bg:#f1f4fa;--cv-tag-border:#e3e7f0;--cv-tag-ink:var(--cv-ink);background:#fff;min-height:840px;box-shadow:0 2px 16px rgba(20,30,60,.12);border-radius:4px;padding:36px 32px;font-size:.82rem;line-height:1.5;font-family:var(--cv-font);color:var(--cv-ink)}
+#cv-paper h1{font-size:var(--cv-h1-size);letter-spacing:var(--cv-h1-spacing);font-weight:var(--cv-h1-weight);color:var(--cv-h1-color);font-family:var(--cv-h1-font)}
+/* Heading CV memakai text-transform:none — ATS gagal membaca heading yang
+   di-spasi per huruf ("E X P E R I E N C E"), jadi letter-spacing hanya 1px. */
+#cv-paper h2{font-size:.95rem;letter-spacing:var(--cv-h2-spacing);text-transform:var(--cv-h2-transform);font-weight:var(--cv-h2-weight);color:var(--cv-h2-color);border-bottom:2px solid var(--cv-h2-border);padding-bottom:3px;margin:18px 0 8px}
+#cv-paper .meta{color:var(--cv-sub);font-size:.8rem;margin-top:4px}
 #cv-paper .item{margin-bottom:10px}
+/* item-head pakai flex dua span — di PDF hasil print tetap tampil sebagai
+   dua teks berurutan (bukan tabel/text box), aman untuk parser ATS. */
 #cv-paper .item-head{display:flex;justify-content:space-between;font-weight:700}
-#cv-paper .item-sub{color:var(--muted);font-style:italic}
+#cv-paper .item-sub{color:var(--cv-sub);font-style:italic}
 #cv-paper ul{margin:4px 0 0 18px}
-#cv-paper .skill-tags span{display:inline-block;background:#f1f4fa;border:1px solid var(--line);border-radius:5px;padding:2px 8px;margin:2px 4px 2px 0;font-size:.78rem}
+/* Skill tags: hanya span inline ber-border tipis — ATS tetap membaca teksnya
+   karena bukan tabel, text box, atau ikon grafis. */
+#cv-paper .skill-tags span{display:inline-block;background:var(--cv-tag-bg);border:1px solid var(--cv-tag-border);color:var(--cv-tag-ink);border-radius:5px;padding:2px 8px;margin:2px 4px 2px 0;font-size:.78rem}
 
-/* Templates */
-.tpl-classic{color:#111}
-.tpl-classic h2{border-color:#111}
-.tpl-modern{color:#0f3d5c}
-.tpl-modern h1{color:#0f3d5c}
-.tpl-modern h2{border-color:#1273a6;color:#1273a6}
-.tpl-modern .skill-tags span{background:#e7f3fa;border-color:#bcdff0}
-.tpl-minimal{color:#222}
-.tpl-minimal h1{font-weight:400;letter-spacing:2px}
-.tpl-minimal h2{border-color:#bbb;font-weight:400;letter-spacing:2px}
-.tpl-minimal .skill-tags span{background:#f6f6f6;border-color:#ddd}
+/* ============================================================
+   TEMPLATE CV
+   Semua template: SATU KOLOM (tanpa float/flex kolom ganda),
+   heading standar (h1/h2), font standar, warna teks kontras tinggi.
+   Parser ATS membaca urutan DOM secara linear — struktur markup
+   tidak pernah diubah oleh template, hanya tipografi & warna.
+   ============================================================ */
+
+/* Classic — sans-serif netral, hitam pekat. Kontras maksimal (≥ 12:1),
+   paling aman untuk parser ATS paling ketat. */
+#cv-paper.tpl-classic{--cv-ink:#111;--cv-sub:#444}
+
+/* Modern — biru tua kantor (bukan biru terang); kontras ≥ 7:1.
+   Aksen hanya di garis heading: teks berwarna terang sering gagal OCR ATS. */
+#cv-paper.tpl-modern{--cv-ink:#0f3d5c;--cv-sub:#33566b;--cv-h1-color:#0f3d5c;--cv-h2-border:#1273a6;--cv-h2-color:#0f3d5c;--cv-tag-bg:#e7f3fa;--cv-tag-border:#bcdff0;--cv-tag-ink:#0f3d5c}
+
+/* Minimal — sans ringan, banyak whitespace. Ukuran huruf tetap ≥ .82rem:
+   ATS dan rekruter sama-sama kesulitan dengan teks terlalu kecil. */
+#cv-paper.tpl-minimal{--cv-ink:#222;--cv-sub:#555;--cv-h1-weight:400;--cv-h1-spacing:2px;--cv-h2-border:#bbb;--cv-h2-weight:400;--cv-h2-spacing:2px;--cv-tag-bg:#f6f6f6;--cv-tag-border:#ddd;--cv-tag-ink:#222}
+
+/* Executive — PREMIUM. Serif Georgia (font standar bawaan OS, aman ATS
+   karena bukan webfont dekoratif). Nuansa formal untuk korporat/bank.
+   Warna charcoal tetap gelap agar mesin ATS membacanya seperti hitam. */
+#cv-paper.tpl-executive{--cv-font:Georgia,'Times New Roman',serif;--cv-ink:#111827;--cv-sub:#374151;--cv-h1-font:Georgia,serif;--cv-h1-size:1.55rem;--cv-h1-spacing:.5px;--cv-h2-font-family:Georgia,serif;--cv-h2-color:#1f2937;--cv-h2-border:#374151;--cv-h2-size:1rem;--cv-h2-spacing:.5px;--cv-h2-transform:uppercase;--cv-tag-bg:transparent;--cv-tag-border:#374151;--cv-tag-ink:#111827}
+#cv-paper.tpl-executive h2{font-family:Georgia,serif;font-size:var(--cv-h2-size)} /* uppercase 1 kata pendek aman: ATS membaca karakter, bukan spacing */
+
+/* Tech — PREMIUM. Sans-serif sistem + aksen indigo gelap (#312e81, kontras
+   ≥ 9:1) — nuansa engineering tanpa mengorbankan parseability. Heading
+   dipisah lewat warna & garis tipis, bukan letter-spacing besar. */
+#cv-paper.tpl-tech{--cv-ink:#1e293b;--cv-sub:#475569;--cv-h1-size:1.5rem;--cv-h1-spacing:0;--cv-h2-color:#312e81;--cv-h2-border:#c7d2fe;--cv-h2-spacing:.3px;--cv-tag-bg:#eef2ff;--cv-tag-border:#c7d2fe;--cv-tag-ink:#312e81}
 
 .footer{text-align:center;color:var(--muted);font-size:.75rem;padding:20px}
 
-.btn.danger{border-color:#ffd6d3;color:#d43030}
-.btn.danger:hover{background:#fff1f0}
 .ats-panel{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px}
 .ats-head{display:flex;align-items:baseline;gap:6px;font-size:.9rem}
-.ats-head strong{font-size:1.6rem;color:var(--accent)}
+.ats-head strong{font-size:1.6rem;color:var(--accent-dark)} /* oranye murni #f97316 di atas putih < 3:1; dipakai varian gelap untuk teks penting */
 .ats-max{color:var(--muted);font-size:.85rem}
 #ats-tips{margin:8px 0 0 18px;font-size:.85rem;color:var(--muted)}
 #ats-tips li{margin-bottom:3px}
 
+/* Paywall */
+.paywall{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.paywall-card{background:var(--card);border-radius:12px;padding:20px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.paywall-card h3{font-size:1.05rem;margin-bottom:8px}
+.paywall-card ul{margin:10px 0 10px 18px;font-size:.9rem;line-height:1.7}
+.paywall-card ul li{margin-bottom:2px}
+.paywall-cta{font-size:.85rem;color:var(--muted);margin-top:8px}
+.aktivasi-row{display:flex;gap:8px;margin-top:6px}
+.aktivasi-row input{flex:1;min-width:0}
+.aktivasi-error{color:#c11c1c;font-size:.85rem;margin-top:8px}
+.paywall-belum{font-size:.85rem;color:var(--muted);margin-top:12px}
+.paywall-belum a{color:var(--accent-dark)}
+
+/* Mobile 360px: topbar & preview menyusut agar form tetap prioritas */
+@media(max-width:420px){
+  .topbar{padding:8px 12px}
+  .topbar-actions{gap:6px}
+  .btn{padding:10px 12px}
+  #btn-download{width:100%} /* CTA utama full-width agar mudah dijangkau ibu jari */
+  #cv-paper{padding:20px 16px;font-size:.78rem}
+}
+
+/* ============================================================
+   PRINT — target: PDF 1 halaman rapi & terbaca mesin ATS.
+   Aturan ATS: info penting TIDAK boleh di header/footer halaman,
+   jadi seluruh UI aplikasi disembunyikan, hanya #cv-paper dicetak.
+   ============================================================ */
 @media print{
-  .topbar,.template-panel,.form-side,.footer,.hint-card,.ats-panel{display:none!important}
+  .topbar,.template-panel,.form-side,.footer,.hint-card,.ats-panel,.paywall,.btn{display:none!important}
   body{background:#fff}
   .workspace{display:block;padding:0;max-width:none}
   .preview-side{position:static}
+  /* Bayangan & radius hanya untuk layar — di PDF jadi artefak abu-abu
+     yang mengganggu parser. */
   #cv-paper{box-shadow:none;border-radius:0;min-height:auto;padding:0;width:100%}
+  /* Ukuran cetak tetap ≥ 10pt setara agar rekruter & OCR tidak kesulitan. */
+  #cv-paper{font-size:11pt}
+  #cv-paper h1{font-size:20pt}
+  #cv-paper h2{font-size:12pt}
+  /* Page break tidak boleh memotong satu item pengalaman jadi 2 halaman. */
+  #cv-paper .item{page-break-inside:avoid}
+  /* 14mm margin: cukup untuk printer rumahan, dan konten tetap di body
+     dokumen — bukan di area header/footer halaman yang sering di-skip ATS. */
   @page{margin:14mm}
 }
