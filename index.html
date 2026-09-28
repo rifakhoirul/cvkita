@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -90,14 +90,14 @@
   <section class="form-side">
     <div class="hero">
       <p class="hero-eyebrow">Untuk fresh graduate Indonesia</p>
-      <h1 class="hero-title">CV yang <em>dibaca</em> mesin, <em>dihargai</em> manusia.</h1>
-      <p class="hero-sub">Isi form di bawah — CV rapi &amp; lolos ATS jadi dalam 5 menit. Gratis, tanpa watermark.</p>
-      <p class="hero-privacy"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg> <span><b>Data kamu aman.</b> Semua tersimpan di HP-mu, tidak dikirim ke server.</span></p>
+      <h1 class="hero-title">CV yang <em>dibaca mesin, dihargai manusia</em>.</h1>
+      <p class="hero-facts"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg> <span><b>Data aman di HP-mu</b> · Gratis · Lolos ATS</span></p>
     </div>
 
-    <div class="hint-card">
+    <!-- Tips: hanya muncul setelah user mulai mengisi (tidak membebani layar awal) -->
+    <div class="hint-card" id="hint-card" style="display:none">
       <svg class="ic" aria-hidden="true"><use href="#i-bulb"></use></svg>
-      <div><b>Tips:</b> Isi semua yang relevan — organisasi, magang, project, kompetisi. Fresh graduate tidak wajib punya "pengalaman kerja". CV otomatis tersimpan di perangkatmu.</div>
+      <div><b>Tips:</b> Isi semua yang relevan — organisasi, magang, project, kompetisi. Fresh graduate tidak wajib punya "pengalaman kerja".</div>
     </div>
 
     <form id="cv-form">
@@ -167,6 +167,6 @@
 
 <script src="js/premium.js?v=5"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=11"></script>
+<script src="js/app.js?v=12"></script>
 </body>
 </html>

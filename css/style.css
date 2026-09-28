@@ -76,10 +76,10 @@ a{color:var(--brand-dark)}
 .hero-eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-dark);margin-bottom:6px}
 .hero-title{font-family:var(--font-accent),Georgia,serif;font-size:clamp(1.7rem,6vw,2.4rem);line-height:1.15;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
 .hero-title em{font-style:italic;color:var(--brand-dark)}
-.hero-sub{color:var(--muted);font-size:.95rem;max-width:46ch}
-/* Jaminan privasi: kekhawatiran #1 saat mengisi data diri online */
-.hero-privacy{display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;background:#eef7f1;border:1px solid #c6e6d3;border-radius:10px;color:#166534;font-size:.8rem;line-height:1.45}
-.hero-privacy .ic{flex:none}
+/* Facts bar: satu baris ringkas menggantikan sub + badge privasi + tips */
+.hero-facts{display:flex;align-items:center;gap:6px;margin-top:10px;color:var(--muted);font-size:.8rem}
+.hero-facts .ic{flex:none;color:var(--ok)}
+.hero-facts b{color:var(--ink)}
 
 /* ===== Tips: netral, tidak menyaingi CTA ===== */
 .hint-card{display:flex;gap:8px;align-items:flex-start;background:#f1efe9;border:1px solid var(--line);color:var(--muted);font-size:.8rem;padding:10px 12px;border-radius:10px;margin-bottom:14px}

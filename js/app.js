@@ -172,6 +172,9 @@ document.addEventListener('click', e => {
   if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky' || e.target.closest && e.target.closest('#btn-download-preview')) window.print();
   // Sticky bar: muncul begitu ada minimal satu field terisi (hanya mobile via CSS)
   const sticky = document.getElementById('sticky-download');
+  // Tips juga baru muncul saat user mulai mengisi — layar awal tetap bersih
+  const hint = document.getElementById('hint-card');
+  if (hint && hint.style.display === 'none') hint.style.display = '';
   if (sticky && (e.target.name === 'nama' || e.target.name === 'headline')) {
     const ada = (e.target.value || '').trim().length > 0;
     sticky.classList.toggle('show', ada);
