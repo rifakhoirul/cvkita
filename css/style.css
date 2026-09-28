@@ -111,6 +111,9 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .preview-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .preview-label{font-weight:700;font-size:.85rem;color:var(--muted)}
 .preview-note{font-size:.72rem;color:#98a0b0}
+/* Unduh di bawah preview: hanya mobile (desktop sudah berdampingan) */
+.dl-below{display:none;width:100%;margin-top:12px;min-height:48px}
+@media(max-width:919px){.dl-below{display:flex;align-items:center;justify-content:center;gap:6px}}
 
 /* ============================================================
    CV PAPER — preview A4. Variabel turunan per template

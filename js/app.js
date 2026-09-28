@@ -169,7 +169,7 @@ document.addEventListener('click', e => {
         $('#aktivasi-error').classList.remove('hidden');
       });
   }
-  if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky') window.print();
+  if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky' || e.target.closest && e.target.closest('#btn-download-preview')) window.print();
   // Sticky bar: muncul begitu ada minimal satu field terisi (hanya mobile via CSS)
   const sticky = document.getElementById('sticky-download');
   if (sticky && (e.target.name === 'nama' || e.target.name === 'headline')) {
