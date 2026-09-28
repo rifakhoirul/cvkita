@@ -3,31 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cara Pembayaran — CVKita Premium</title>
+<title>Aktivasi Premium — CVKita</title>
 <link rel="stylesheet" href="css/style.css">
+<!-- Midtrans Snap (production) -->
+<script src="https://app.midtrans.com/snap/snap.js"
+        data-client-key="Mid-client-JC5qOJTb6L0NNrp8"></script>
 </head>
 <body>
 <header class="topbar"><div class="logo">CV<span>Kita</span></div></header>
 <main style="max-width:640px;margin:24px auto;padding:0 16px">
   <h2>Aktivasi Premium — Rp 19.000 sekali bayar</h2>
-  <ol style="line-height:1.9;margin:16px 0 8px 20px">
-    <li>Scan QRIS di bawah pakai aplikasi apa saja (GoPay, OVO, DANA, m-banking)</li>
-    <li>Bayar <b>Rp 19.000</b></li>
-    <li>Screenshot bukti bayar, kirim ke WhatsApp <b>08xx-xxxx-xxxx</b> dengan format: <code>BOOST#nama#email</code></li>
-    <li>Kode aktivasi dikirim ke WhatsApp/email kamu (maks. 1x24 jam, biasanya &lt; 1 jam)</li>
-    <li>Masukkan kode di halaman utama → ✨ Premium aktif</li>
-  </ol>
-  <!-- QRIS placeholder: ganti img/qris.png dengan QRIS asli dari rekeningmu.
-       Alt + fallback box ini menjaga halaman tetap rapi selama belum ada. -->
-  <div class="qris-box">
-    <img src="img/qris.png" alt="QRIS pembayaran" id="qris-img" onerror="this.classList.add('hidden');document.getElementById('qris-fallback').classList.remove('hidden')">
-    <div id="qris-fallback" class="hidden">
-      <strong>QRIS belum tersedia</strong>
-      <p>Sementara ini, transfer Rp 19.000 ke QRIS/rekening yang tercantum di bio, lalu kirim bukti bayar via WhatsApp.</p>
+  <p style="line-height:1.8;margin:12px 0">Bayar sekali, langsung aktif otomatis.
+  QRIS, GoPay, ShopeePay, atau transfer bank — semua bisa, lewat Midtrans.</p>
+
+  <div class="paybox" id="paybox">
+    <div class="pay-item">
+      <div>
+        <b>Booster CVKita</b>
+        <p style="font-size:.86rem;color:#5b6478;margin:4px 0 0">AI rewrite 3× + 2 template premium + cover letter</p>
+      </div>
+      <div style="text-align:right">
+        <b style="font-size:1.05rem">Rp 19.000</b><br>
+        <button class="btn primary" id="btn-buy-19" style="margin-top:6px;min-height:44px">Beli</button>
+      </div>
+    </div>
+    <div class="pay-item" style="border-top:1px solid #e5e7eb;margin-top:14px;padding-top:14px">
+      <div>
+        <b>Paket Lamaran</b>
+        <p style="font-size:.86rem;color:#5b6478;margin:4px 0 0">Booster + AI rewrite 8× — untuk yang sedang melamar serius ke banyak tempat</p>
+      </div>
+      <div style="text-align:right">
+        <b style="font-size:1.05rem">Rp 39.000</b><br>
+        <button class="btn primary" id="btn-buy-39" style="margin-top:6px;min-height:44px">Beli</button>
+      </div>
     </div>
   </div>
-  <p style="font-size:.9rem;color:#5b6478">Yang kamu dapat: <b>2 template premium</b> (Executive &amp; Tech) + AI rewrite 3x + cover letter. PDF gratis tanpa watermark tidak terpengaruh.</p>
+
+  <p id="pay-status" role="status" style="min-height:1.4em;font-size:.9rem;color:#059669;margin-top:10px"></p>
+  <noscript><p style="color:#b91c1c">Aktifkan JavaScript untuk melakukan pembayaran.</p></noscript>
+
+  <!-- Pembayaran manual tetap tersedia sebagai cadangan -->
+  <details style="margin-top:18px;font-size:.9rem">
+    <summary style="cursor:pointer;color:#5b6478">Ada masalah saat bayar online? Cara manual</summary>
+    <ol style="line-height:1.9;margin:10px 0 8px 20px">
+      <li>Transfer / QRIS manual Rp 19.000 (minta nomor via WhatsApp di bio)</li>
+      <li>Kirim bukti bayar: <code>BOOST#nama#email</code></li>
+      <li>Kode aktivasi dikirim maks. 1×24 jam</li>
+    </ol>
+  </details>
+
   <a href="/" class="btn primary" style="display:inline-block;text-decoration:none;margin-top:16px">← Kembali ke Editor</a>
 </main>
+
+<script>
+(function () {
+  var API = 'https://cvkita-api.cvkita-rifakhoirul.workers.dev';
+  var status = document.getElementById('pay-status');
+
+  function buy(amount) {
+    status.style.color = '#5b6478';
+    status.textContent = 'Menyiapkan pembayaran...';
+    fetch(API + '/api/pay/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: amount })
+    })
+    .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, body: b }; }); })
+    .then(function (res) {
+      if (!res.ok || !res.body.token) {
+        status.style.color = '#b91c1c';
+        status.textContent = res.body.error || 'Gagal menyiapkan pembayaran. Coba lagi.';
+        return;
+      }
+      status.textContent = 'Membuka jendela pembayaran...';
+      // Snap popup — dibuka hanya jika snap.js siap
+      if (window.snap) {
+        window.snap.pay(res.body.token, {
+          onSuccess: function () {
+            status.style.color = '#059669';
+            status.innerHTML = 'Pembayaran berhasil! Simpan order <b>' + res.body.order_id +
+              '</b> — kode aktivasi dikirim otomatis. Masukkan kodenya di halaman utama.';
+          },
+          onPending: function () {
+            status.style.color = '#b45309';
+            status.innerHTML = 'Pembayaran tertunda. Selesaikan sebelum batas waktu — order <b>' +
+              res.body.order_id + '</b>.';
+          },
+          onError: function () {
+            status.style.color = '#b91c1c';
+            status.textContent = 'Pembayaran gagal. Coba lagi atau pakai cara manual di bawah.';
+          },
+          onClose: function () {
+            status.textContent = 'Jendela pembayaran ditutup. Transaksi belum selesai.';
+          }
+        });
+      } else {
+        // Fallback: redirect langsung kalau snap.js gagal termuat
+        if (res.body.redirect_url) {
+          window.location.href = res.body.redirect_url;
+        } else {
+          status.textContent = 'Gagal memuat pembayaran. Muat ulang halaman.';
+        }
+      }
+    })
+    .catch(function () {
+      status.style.color = '#b91c1c';
+      status.textContent = 'Tidak bisa menghubungi server. Periksa koneksi internet.';
+    });
+  }
+
+  document.getElementById('btn-buy-19').addEventListener('click', function () { buy(19000); });
+  document.getElementById('btn-buy-39').addEventListener('click', function () { buy(39000); });
+})();
+</script>
 </body>
 </html>
