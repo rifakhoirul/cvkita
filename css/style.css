@@ -80,6 +80,17 @@ a{color:var(--brand-dark)}
 .sample-top{margin-bottom:14px;width:100%}
 .ats-below{margin-top:12px;width:100%}
 .btn-ai-ringkasan{margin-top:10px}
+/* Job search panel (premium) */
+.js-below{margin-top:8px;width:100%}
+.jobsearch-panel{margin-top:10px;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:#fafbfc}
+.jobsearch-panel.hidden{display:none}
+.jobsearch-panel .js-cat{font-size:.9rem;margin-bottom:8px}
+.jobsearch-panel .js-links{list-style:none;padding:0;margin:0}
+.jobsearch-panel .js-links li{margin-bottom:6px}
+.jobsearch-panel .js-links a{color:var(--brand-dark, #c2410c);text-decoration:none;font-size:.9rem;word-break:break-all}
+.jobsearch-panel .js-links a:hover{text-decoration:underline}
+.jobsearch-panel .js-remaining{font-size:.78rem;color:var(--muted);margin-top:8px}
+.jobsearch-panel .js-error{color:#b91c1c;font-size:.9rem}
 /* Facts bar: satu baris ringkas menggantikan sub + badge privasi + tips */
 .hero-facts{display:flex;align-items:center;gap:6px;margin-top:10px;color:var(--muted);font-size:.8rem}
 .hero-facts .ic{flex:none;color:var(--ok)}
