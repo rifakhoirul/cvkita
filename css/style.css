@@ -88,12 +88,15 @@ a{color:var(--brand-dark)}
 #cv-form summary::after{content:'';width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-right:4px;transition:transform .15s}
 #cv-form details[open] summary::after{transform:rotate(225deg);margin-top:6px}
 #cv-form details[open] summary{border-bottom:1px solid var(--line)}
-#cv-form details>*:not(summary){margin:8px 14px;width:calc(100% - 28px)}
+#cv-form details>*:not(summary){margin:8px 14px 0;width:calc(100% - 28px)}
+#cv-form details>*:last-child{margin-bottom:14px}
 
 /* Label permanen di atas field (audit: placeholder-only buruk utk aksesibilitas) */
-#cv-form label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:10px}
-#cv-form label input,#cv-form label textarea{margin-top:6px}
-input,textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:1rem;font-family:inherit;background:#fbfaf7;color:var(--ink);margin-bottom:2px}
+#cv-form label{display:block;font-size:.75rem;font-weight:700;letter-spacing:.01em;color:var(--muted);margin-bottom:12px}
+#cv-form label input,#cv-form label textarea{margin-top:5px}
+/* Field mobile: lebih ramping & konsisten (audit: box terlalu gemuk) */
+input,textarea{display:block;width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:1rem;font-family:inherit;background:#fbfaf7;color:var(--ink);margin-bottom:0}
+textarea{padding:10px 11px;min-height:70px;resize:vertical}
 input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 ::placeholder{color:#98a0b0;opacity:1;font-weight:400}
 
