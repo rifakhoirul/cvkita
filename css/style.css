@@ -79,8 +79,8 @@ a{color:var(--brand-dark)}
 #cv-form details>*:not(summary){margin:8px 14px;width:calc(100% - 28px)}
 
 /* Label permanen di atas field (audit: placeholder-only buruk utk aksesibilitas) */
-#cv-form label{display:block;font-size:.78rem;font-weight:700;color:var(--muted)}
-#cv-form label input,#cv-form label textarea{margin-top:4px}
+#cv-form label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:10px}
+#cv-form label input,#cv-form label textarea{margin-top:6px}
 input,textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:1rem;font-family:inherit;background:#fbfaf7;color:var(--ink);margin-bottom:2px}
 input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 ::placeholder{color:#98a0b0;opacity:1;font-weight:400}
