@@ -294,3 +294,32 @@ async function handleAiRewrite(btn) {
   document.querySelector(`.tpl-btn[data-tpl="${tpl}"]`)?.classList.add('active');
   render();
 })();
+
+/* ===== Menu overflow mobile (⋯) =====
+   Tombol menu menjalankan aksi tombol aslinya; klik luar menutup. */
+(function () {
+  const more = document.getElementById('btn-more');
+  const menu = document.getElementById('more-menu');
+  if (!more || !menu) return;
+
+  function close() { menu.classList.add('hidden'); more.setAttribute('aria-expanded', 'false'); }
+
+  more.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = menu.classList.toggle('hidden');
+    more.setAttribute('aria-expanded', String(!open));
+  });
+  document.addEventListener('click', (e) => {
+    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== more) close();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  // Pemetaan tombol menu -> aksi tombol header asli (klik tombolnya)
+  const map = { 'mm-sample': 'btn-sample', 'mm-template': 'btn-template', 'mm-ats': 'btn-ats', 'mm-reset': 'btn-reset' };
+  for (const [mmId, targetId] of Object.entries(map)) {
+    const src = document.getElementById(mmId);
+    const target = () => document.getElementById(targetId);
+    if (!src) continue;
+    src.addEventListener('click', () => { close(); target()?.click(); });
+  }
+})();

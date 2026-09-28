@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=11">
+<link rel="stylesheet" href="css/style.css?v=12">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -29,13 +29,21 @@
 <header class="topbar">
   <div class="logo">CV<span>Kita</span></div>
   <div class="topbar-actions">
-    <button id="btn-sample" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
-    <button id="btn-template" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> Template</button>
-    <button id="btn-ats" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek ATS</button>
-    <button id="btn-reset" class="btn ghost danger" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
-    <button id="btn-download" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> Unduh PDF (Gratis)</button>
+    <button id="btn-more" class="btn ghost btn-more" type="button" aria-label="Menu lainnya" aria-expanded="false">⋯</button>
+    <button id="btn-sample" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
+    <button id="btn-template" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> Template</button>
+    <button id="btn-ats" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek ATS</button>
+    <button id="btn-reset" class="btn ghost danger topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
+    <button id="btn-download" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> <span class="dl-label">Unduh PDF (Gratis)</span></button>
   </div>
 </header>
+<!-- Menu overflow mobile: berisi aksi sekunder -->
+<div id="more-menu" class="more-menu hidden">
+  <button id="mm-sample" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
+  <button id="mm-template" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> Template</button>
+  <button id="mm-ats" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek ATS</button>
+  <button id="mm-reset" class="btn ghost danger" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
+</div>
 
 <div id="template-panel" class="template-panel hidden">
   <p>Pilih template (semua lolos ATS):</p>
@@ -155,6 +163,6 @@
 
 <script src="js/premium.js?v=5"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=9"></script>
+<script src="js/app.js?v=10"></script>
 </body>
 </html>

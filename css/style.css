@@ -49,6 +49,18 @@ a{color:var(--brand-dark)}
 .logo span{color:var(--brand)}
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 
+/* Header mobile ringkas: aksi sekunder di menu ⋯ (audit: header terlalu penuh) */
+.btn-more{display:inline-flex;align-items:center;justify-content:center;width:44px;font-size:1.2rem;font-weight:400;min-height:44px;padding:0}
+.more-menu{position:fixed;top:58px;right:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.14);padding:8px;display:flex;flex-direction:column;gap:4px;z-index:60;min-width:180px}
+.more-menu .btn{width:100%;justify-content:flex-start;text-align:left}
+@media(min-width:920px){
+  .btn-more,.more-menu{display:none}
+}
+@media(max-width:919px){
+  .topbar-extra{display:none}
+  .dl-label{display:none} /* label pendek "Unduh PDF" di mobile */
+}
+
 .template-panel{background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
 .template-panel p{font-size:.85rem;color:var(--muted);margin-bottom:8px}
 .tpl-row{display:flex;gap:8px;flex-wrap:wrap}
@@ -208,7 +220,7 @@ body.has-sticky{padding-bottom:64px}
   .topbar{padding:8px 12px}
   .topbar-actions{gap:6px}
   .btn{padding:10px 12px}
-  #btn-download{width:100%}
+  #btn-download{width:auto} /* satu baris: logo + ⋯ + Unduh PDF */
   #cv-paper{padding:20px 16px;font-size:.78rem}
   .hero-title{font-size:1.55rem}
 }
