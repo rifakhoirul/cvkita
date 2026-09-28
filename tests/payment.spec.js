@@ -11,8 +11,10 @@ test.describe('Halaman pembayaran Midtrans', () => {
 
   test('dua paket harga tampil dengan tombol beli', async ({ page }) => {
     await page.goto('/pay.html');
+    await expect(page.locator('#btn-buy-9')).toBeVisible();
     await expect(page.locator('#btn-buy-19')).toBeVisible();
     await expect(page.locator('#btn-buy-39')).toBeVisible();
+    await expect(page.locator('.paybox')).toContainText('Rp 9.900');
     await expect(page.locator('.paybox')).toContainText('Rp 19.000');
     await expect(page.locator('.paybox')).toContainText('Rp 39.000');
   });

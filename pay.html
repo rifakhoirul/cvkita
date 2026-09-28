@@ -12,14 +12,24 @@
 <body>
 <header class="topbar"><div class="logo">CV<span>Kita</span></div></header>
 <main style="max-width:640px;margin:24px auto;padding:0 16px">
-  <h2>Aktivasi Premium — Rp 19.000 sekali bayar</h2>
+  <h2>Aktivasi Premium — sekali bayar, bukan langganan</h2>
   <p style="line-height:1.8;margin:12px 0">Bayar sekali, langsung aktif otomatis.
   QRIS, GoPay, ShopeePay, atau transfer bank — semua bisa, lewat Midtrans.</p>
 
   <div class="paybox" id="paybox">
     <div class="pay-item">
       <div>
-        <b>Booster CVKita</b>
+        <b>Coba Dulu</b> <span style="background:#fef3c7;color:#92400e;font-size:.72rem;padding:2px 8px;border-radius:999px">termurah</span>
+        <p style="font-size:.86rem;color:#5b6478;margin:4px 0 0">AI rewrite 1× — pas untuk mencoba sebelum yakin</p>
+      </div>
+      <div style="text-align:right">
+        <b style="font-size:1.05rem">Rp 9.900</b><br>
+        <button class="btn" id="btn-buy-9" style="margin-top:6px;min-height:44px">Beli</button>
+      </div>
+    </div>
+    <div class="pay-item" style="border-top:1px solid #e5e7eb;margin-top:14px;padding-top:14px">
+      <div>
+        <b>Booster CVKita</b> <span style="background:#ffedd5;color:#9a3412;font-size:.72rem;padding:2px 8px;border-radius:999px">paling laris</span>
         <p style="font-size:.86rem;color:#5b6478;margin:4px 0 0">AI rewrite 3× + 2 template premium + cover letter</p>
       </div>
       <div style="text-align:right">
@@ -113,6 +123,7 @@
     });
   }
 
+  document.getElementById('btn-buy-9').addEventListener('click', function () { buy(9900); });
   document.getElementById('btn-buy-19').addEventListener('click', function () { buy(19000); });
   document.getElementById('btn-buy-39').addEventListener('click', function () { buy(39000); });
 })();
