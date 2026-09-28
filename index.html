@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CVKita — Bikin CV Lolos ATS untuk Fresh Graduate Indonesia</title>
 <meta name="description" content="Buat CV profesional dan lolos ATS dalam 5 menit. Gratis, tanpa watermark, dirancang khusus untuk fresh graduate Indonesia.">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 <header class="topbar">
@@ -38,22 +38,23 @@
   <ul id="ats-tips"></ul>
 </div>
 
-<div id="paywall" class="paywall hidden">
+<div id="paywall" class="paywall hidden" role="dialog" aria-modal="true" aria-label="Fitur Premium">
   <div class="paywall-card">
-    <h3>✨ Buka Fitur Premium — Rp 19.000</h3>
+    <button id="btn-close-paywall" class="paywall-close" type="button" aria-label="Tutup">&times;</button>
+    <h3>✨ Buka Fitur Premium</h3>
     <p>Sekali bayar, bukan langganan. PDF gratis selamanya tetap.</p>
     <ul>
-      <li>✨ AI rewrite bullet point & ringkasan (3x per CV)</li>
+      <li>✨ AI rewrite bullet point & ringkasan</li>
       <li>🎨 2 template premium (Executive &amp; Tech)</li>
       <li>📄 Cover letter otomatis</li>
     </ul>
     <p class="paywall-cta">Sudah bayar? Masukkan kode aktivasi:</p>
     <div class="aktivasi-row">
-      <input id="aktivasi-kode" placeholder="BOOST-XXXX-XXXX" autocomplete="off">
+      <input id="aktivasi-kode" placeholder="CVK-XXXX-XXXX" autocomplete="off">
       <button id="btn-aktivasi" class="btn primary" type="button">Aktivasi</button>
     </div>
     <p id="aktivasi-error" class="aktivasi-error hidden">Kode tidak valid. Cek lagi atau hubungi kami.</p>
-    <p class="paywall-belum">Belum bayar? Scan QRIS di halaman pembayaran → <a href="/pay.html">cara pembayaran</a></p>
+    <p class="paywall-belum">Mulai dari <b>Rp 9.900</b> sekali bayar → <a href="/pay.html">lihat paket</a></p>
   </div>
 </div>
 
@@ -123,8 +124,8 @@
   <button id="btn-download-sticky" class="btn primary" type="button">⬇️ Unduh PDF</button>
 </div>
 
-<script src="js/premium.js?v=3"></script>
+<script src="js/premium.js?v=4"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=5"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>

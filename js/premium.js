@@ -36,3 +36,23 @@ function showPaywall() {
   $('#paywall').classList.remove('hidden');
   $('#paywall').scrollIntoView({ behavior: 'smooth' });
 }
+
+// Bug 2026-09-28: paywall tidak bisa ditutup — user terjebak di modal.
+function closePaywall() {
+  $('#paywall').classList.add('hidden');
+}
+
+(function wirePaywallClose() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const pw = document.getElementById('paywall');
+    if (!pw) return;
+    const btn = document.getElementById('btn-close-paywall');
+    if (btn) btn.addEventListener('click', closePaywall);
+    // Klik area gelap di luar kartu juga menutup
+    pw.addEventListener('click', (e) => { if (e.target === pw) closePaywall(); });
+    // Escape keyboard
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !pw.classList.contains('hidden')) closePaywall();
+    });
+  });
+})();

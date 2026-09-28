@@ -28,6 +28,10 @@ button{cursor:pointer;font-family:inherit}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
 .btn.add{background:#eef2ff;color:#303fb3;margin-top:6px} /* #4356c9 digelapkan → kontras ≥ 4.5:1 */
 .btn.del{background:#fff1f0;color:#c11c1c;border:1px solid #ffd6d3;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
+/* AI & Hapus di dalam entry: beri jarak antar tombol (keluhan user 28/9) */
+.entry .btn.ai,.entry .btn.del{display:inline-block;margin-right:8px}
+.entry .btn.del:last-child{margin-right:0}
+.entry .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .btn.danger{border-color:#ffd6d3;color:#c11c1c}
 .btn.danger:hover{background:#fff1f0}
 
@@ -157,6 +161,9 @@ body.has-sticky{padding-bottom:64px}
 .aktivasi-error{color:#c11c1c;font-size:.85rem;margin-top:8px}
 .paywall-belum{font-size:.85rem;color:var(--muted);margin-top:12px}
 .paywall-belum a{color:var(--accent-dark)}
+.paywall-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:none;background:transparent;font-size:1.6rem;line-height:1;color:var(--muted);cursor:pointer;border-radius:50%}
+.paywall-close:hover{background:#f1f5f9;color:var(--text)}
+.paywall-card{position:relative}
 
 /* Mobile 360px: topbar & preview menyusut agar form tetap prioritas */
 @media(max-width:420px){
