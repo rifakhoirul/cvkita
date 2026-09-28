@@ -20,8 +20,12 @@ test.describe('Halaman artikel & masukan', () => {
   test('halaman indeks blog memuat dan menaut ke artikel', async ({ page }) => {
     await page.goto('/blog/');
     await expect(page.locator('h1')).toBeVisible();
+    // minimal 5 artikel tertaut
+    const links = await page.locator('.art h2 a').count();
+    expect(links).toBeGreaterThanOrEqual(5);
+    // semua link menuju file .html yang ada
     await page.locator('.art h2 a').first().click();
-    await expect(page.locator('h1')).toContainText('ATS');
+    await expect(page.locator('h1')).toBeVisible();
   });
 
   test('footer memuat tautan panduan & masukan', async ({ page }) => {

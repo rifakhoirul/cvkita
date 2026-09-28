@@ -76,6 +76,10 @@ a{color:var(--brand-dark)}
 .hero-eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-dark);margin-bottom:6px}
 .hero-title{font-family:var(--font-accent),Georgia,serif;font-size:clamp(1.7rem,6vw,2.4rem);line-height:1.15;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
 .hero-title em{font-style:italic;color:var(--brand-dark)}
+/* Batch-1 UX: tombol contoh di awal form, ATS di bawah preview */
+.sample-top{margin-bottom:14px;width:100%}
+.ats-below{margin-top:12px;width:100%}
+.btn-ai-ringkasan{margin-top:10px}
 /* Facts bar: satu baris ringkas menggantikan sub + badge privasi + tips */
 .hero-facts{display:flex;align-items:center;gap:6px;margin-top:10px;color:var(--muted);font-size:.8rem}
 .hero-facts .ic{flex:none;color:var(--ok)}

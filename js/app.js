@@ -56,7 +56,7 @@ function entryHTML(key, data = {}) {
   const aiBtn = key === 'pengalaman'
     ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve dengan AI</button>'
     : '';
-  return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del>Hapus</button></div>`;
+  return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Hapus</button></div>`;
 }
 
 function renderList(key, items = [{}]) {
@@ -147,8 +147,8 @@ document.addEventListener('click', e => {
     localStorage.setItem(TPL_KEY, tpl);
     render();
   }
-  if (e.target.classList.contains('btn-ai')) {
-    handleAiRewrite(e.target);
+  if (e.target.classList.contains('btn-ai') || e.target.closest('.btn-ai-ringkasan')) {
+    handleAiRewrite(e.target.closest('.btn-ai-ringkasan') || e.target);
   }
   if (e.target.id === 'btn-aktivasi') {
     const code = $('#aktivasi-kode').value;
@@ -186,7 +186,7 @@ document.addEventListener('click', e => {
       location.reload();
     }
   }
-  if (e.target.id === 'btn-sample') {
+  if (e.target.id === 'btn-sample' || e.target.id === 'btn-sample-top') {
     if (!confirm('Isi CV dengan contoh? Data yang sudah kamu tulis akan diganti.')) return;
     const SAMPLE = {
       fields: {
@@ -224,7 +224,7 @@ document.addEventListener('click', e => {
     localStorage.setItem(KEY, JSON.stringify(SAMPLE));
     location.reload();
   }
-  if (e.target.id === 'btn-ats') {
+  if (e.target.id === 'btn-ats' || e.target.id === 'btn-ats-preview') {
     const { score, tips } = atsScore();
     $('#ats-score').textContent = score;
     $('#ats-tips').innerHTML = tips.length
@@ -262,6 +262,33 @@ function atsScore() {
 }
 
 async function handleAiRewrite(btn) {
+  // Tombol AI ringkasan: rewrite field ringkasan dari data yang sudah diisi
+  if (btn.id === 'btn-ai-ringkasan') {
+    if (!isPremium()) { showPaywall(); return; }
+    const ta = document.querySelector('[name="ringkasan"]');
+    const nama = (document.querySelector('[name="nama"]')?.value || '').trim();
+    const headline = (document.querySelector('[name="headline"]')?.value || '').trim();
+    const btnLabel = btn.innerHTML;
+    btn.innerHTML = '⏳ Menulis ulang...';
+    btn.disabled = true;
+    try {
+      const { result } = await aiRewrite({
+        mode: 'ringkasan',
+        posisi: headline,
+        organisasi: nama,
+        deskripsi: ta.value,
+      });
+      ta.value = result;
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      btn.innerHTML = '✓ Ditingkatkan';
+    } catch (err) {
+      alert(err.message);
+      btn.innerHTML = btnLabel;
+    } finally {
+      btn.disabled = false;
+    }
+    return;
+  }
   if (!isPremium()) { showPaywall(); return; }
   const entry = btn.closest('.entry');
   const posisi = entry.querySelector('[name="pengalaman.posisi"]')?.value || '';

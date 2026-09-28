@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=16">
+<link rel="stylesheet" href="css/style.css?v=17">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -100,6 +100,9 @@
     </div>
 
     <form id="cv-form">
+      <!-- Tombol Contoh di awal form: user blank page bisa langsung lihat hasil -->
+      <button id="btn-sample-top" class="btn ghost sample-top" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Isi dengan contoh</button>
+
       <details open><summary>1. Data Diri</summary>
         <label>Nama lengkap<input name="nama" placeholder="mis: Rania Putri Andini" required></label>
         <label>Headline<input name="headline" placeholder="mis: Fresh Graduate Sistem Informasi"></label>
@@ -108,6 +111,7 @@
         <label>Kota<input name="kota" placeholder="mis: Jakarta"></label>
         <label>Link portofolio<input name="linkedin" placeholder="LinkedIn / GitHub / portofolio"></label>
         <label>Ringkasan<textarea name="ringkasan" rows="3" placeholder="2–3 kalimat: siapa kamu, lulusan apa, apa yang kamu cari"></textarea></label>
+        <button id="btn-ai-ringkasan" class="btn ai btn-ai-ringkasan" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Improve ringkasan dengan AI</button>
       </details>
 
       <details open><summary>2. Pendidikan</summary>
@@ -142,6 +146,8 @@
       <span class="preview-note">Hasil cetak mengikuti kertas A4</span>
     </div>
     <div id="cv-paper" class="tpl-classic"></div>
+    <!-- Cek ATS tepat di bawah preview: user lihat skor → perbaiki → unduh -->
+    <button id="btn-ats-preview" class="btn ghost ats-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek Skor ATS</button>
     <!-- Unduh langsung di bawah preview (tampil hanya di mobile) -->
     <button id="btn-download-preview" class="btn primary dl-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> Unduh PDF (Gratis)</button>
   </section>
@@ -166,6 +172,6 @@
 
 <script src="js/premium.js?v=5"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=12"></script>
+<script src="js/app.js?v=13"></script>
 </body>
 </html>
