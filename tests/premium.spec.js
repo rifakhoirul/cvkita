@@ -31,7 +31,7 @@ test('klik AI rewrite tanpa lisensi menampilkan paywall dengan harga', async ({ 
   await mockApi(page);
   await page.locator('#pengalaman-list .btn-ai').first().click();
   await expect(page.locator('#paywall')).toBeVisible();
-  await expect(page.locator('#paywall')).toContainText('Rp 19.000');
+  await expect(page.locator('#paywall')).toContainText('Rp 9.900');
 });
 
 

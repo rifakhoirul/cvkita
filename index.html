@@ -5,17 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CVKita — Bikin CV Lolos ATS untuk Fresh Graduate Indonesia</title>
 <meta name="description" content="Buat CV profesional dan lolos ATS dalam 5 menit. Gratis, tanpa watermark, dirancang khusus untuk fresh graduate Indonesia.">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
+<!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3z" fill="currentColor"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.2 0 2-.9 2-2 0-.6-.2-1-.6-1.4-.3-.4-.6-.8-.6-1.4 0-1.1.9-2 2-2h2.2A4.9 4.9 0 0021 10c-.5-4-4.4-7-9-7zm-5 9a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-4a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16v1.5H4V20zm2-6h3v5H6v-5zm5-6h3v11h-3V8zm5-4h3v15h-3V4z" fill="currentColor"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zM6 8h12l-1 13H7L6 8zm4 2v9h1.5v-9H10zm3 0v9h1.5v-9H13z" fill="currentColor"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M11 3h2v9.2l3.1-3.1 1.4 1.4L12 16 6.5 10.5l1.4-1.4L11 12.2V3zM5 19h14v2H5v-2z" fill="currentColor"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-4 12.7c.6.5 1 1.4 1 2.3h6c0-.9.4-1.8 1-2.3A7 7 0 0012 2zM9.5 18h5v1.5a2.5 2.5 0 01-5 0V18z" fill="currentColor"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2zm8 1.5V8h4.5L14 3.5zM8 11h8v1.5H8V11zm0 4h8v1.5H8V15z" fill="currentColor"/></symbol>
+  <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 7l4.5 4L12 4l4.5 7L21 7l-1.5 12h-15L3 7z" fill="currentColor"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.4 5L12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4L12 13.4 6.4 19 5 17.6 10.6 12 5 6.4 6.4 5z" fill="currentColor"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M12 5c5 0 9 4.5 9 7s-4 7-9 7-9-4.5-9-7 4-7 9-7zm0 3a4 4 0 100 8 4 4 0 000-8z" fill="currentColor"/></symbol>
+</svg>
+
+<!-- ===== Header ===== -->
 <header class="topbar">
   <div class="logo">CV<span>Kita</span></div>
   <div class="topbar-actions">
-    <button id="btn-sample" class="btn ghost" type="button">✨ Contoh</button>
-    <button id="btn-template" class="btn ghost" type="button">🎨 Template</button>
-    <button id="btn-ats" class="btn ghost" type="button">📊 Cek ATS</button>
-    <button id="btn-reset" class="btn ghost danger" type="button">🗑️ Reset</button>
-    <button id="btn-download" class="btn primary" type="button">⬇️ Unduh PDF (Gratis)</button>
+    <button id="btn-sample" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
+    <button id="btn-template" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> Template</button>
+    <button id="btn-ats" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek ATS</button>
+    <button id="btn-reset" class="btn ghost danger" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
+    <button id="btn-download" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> Unduh PDF (Gratis)</button>
   </div>
 </header>
 
@@ -25,8 +43,8 @@
     <button class="tpl-btn" data-tpl="classic">Classic</button>
     <button class="tpl-btn" data-tpl="modern">Modern</button>
     <button class="tpl-btn" data-tpl="minimal">Minimal</button>
-    <button class="tpl-btn locked" data-tpl="executive">👑 Executive</button>
-    <button class="tpl-btn locked" data-tpl="tech">👑 Tech</button>
+    <button class="tpl-btn locked" data-tpl="executive"><svg class="ic" aria-hidden="true"><use href="#i-crown"></use></svg> Executive</button>
+    <button class="tpl-btn locked" data-tpl="tech"><svg class="ic" aria-hidden="true"><use href="#i-crown"></use></svg> Tech</button>
   </div>
 </div>
 
@@ -38,15 +56,16 @@
   <ul id="ats-tips"></ul>
 </div>
 
+<!-- ===== Paywall ===== -->
 <div id="paywall" class="paywall hidden" role="dialog" aria-modal="true" aria-label="Fitur Premium">
   <div class="paywall-card">
-    <button id="btn-close-paywall" class="paywall-close" type="button" aria-label="Tutup">&times;</button>
-    <h3>✨ Buka Fitur Premium</h3>
+    <button id="btn-close-paywall" class="paywall-close" type="button" aria-label="Tutup"><svg class="ic" aria-hidden="true"><use href="#i-close"></use></svg></button>
+    <h3><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Buka Fitur Premium</h3>
     <p>Sekali bayar, bukan langganan. PDF gratis selamanya tetap.</p>
     <ul>
-      <li>✨ AI rewrite bullet point & ringkasan</li>
-      <li>🎨 2 template premium (Executive &amp; Tech)</li>
-      <li>📄 Cover letter otomatis</li>
+      <li><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> AI rewrite bullet point &amp; ringkasan</li>
+      <li><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> 2 template premium (Executive &amp; Tech)</li>
+      <li><svg class="ic" aria-hidden="true"><use href="#i-doc"></use></svg> Cover letter otomatis</li>
     </ul>
     <p class="paywall-cta">Sudah bayar? Masukkan kode aktivasi:</p>
     <div class="aktivasi-row">
@@ -60,19 +79,26 @@
 
 <main class="workspace">
   <section class="form-side">
+    <div class="hero">
+      <p class="hero-eyebrow">Untuk fresh graduate Indonesia</p>
+      <h1 class="hero-title">CV yang <em>dibaca</em> mesin, <em>dihargai</em> manusia.</h1>
+      <p class="hero-sub">Isi form di bawah — CV rapi &amp; lolos ATS jadi dalam 5 menit. Gratis, tanpa watermark.</p>
+    </div>
+
     <div class="hint-card">
-      💡 <b>Tips:</b> Isi semua yang relevan — organisasi, magang, project, kompetisi. Fresh graduate tidak wajib punya "pengalaman kerja". CV otomatis tersimpan di perangkatmu.
+      <svg class="ic" aria-hidden="true"><use href="#i-bulb"></use></svg>
+      <div><b>Tips:</b> Isi semua yang relevan — organisasi, magang, project, kompetisi. Fresh graduate tidak wajib punya "pengalaman kerja". CV otomatis tersimpan di perangkatmu.</div>
     </div>
 
     <form id="cv-form">
       <details open><summary>1. Data Diri</summary>
-        <input name="nama" placeholder="Nama lengkap" required>
-        <input name="headline" placeholder="Headline, mis: Fresh Graduate Teknik Informatika">
-        <input name="email" type="email" placeholder="Email">
-        <input name="telepon" placeholder="No. WhatsApp: 08xx-xxxx-xxxx">
-        <input name="kota" placeholder="Kota, mis: Jakarta">
-        <input name="linkedin" placeholder="Link LinkedIn / GitHub / Portofolio">
-        <textarea name="ringkasan" rows="3" placeholder="Ringkasan singkat 2–3 kalimat: siapa kamu, lulusan apa, apa yang kamu cari"></textarea>
+        <label>Nama lengkap<input name="nama" placeholder="mis: Rania Putri Andini" required></label>
+        <label>Headline<input name="headline" placeholder="mis: Fresh Graduate Sistem Informasi"></label>
+        <label>Email<input name="email" type="email" placeholder="nama@email.com"></label>
+        <label>No. WhatsApp<input name="telepon" placeholder="08xx-xxxx-xxxx"></label>
+        <label>Kota<input name="kota" placeholder="mis: Jakarta"></label>
+        <label>Link portofolio<input name="linkedin" placeholder="LinkedIn / GitHub / portofolio"></label>
+        <label>Ringkasan<textarea name="ringkasan" rows="3" placeholder="2–3 kalimat: siapa kamu, lulusan apa, apa yang kamu cari"></textarea></label>
       </details>
 
       <details open><summary>2. Pendidikan</summary>
@@ -91,17 +117,21 @@
       </details>
 
       <details open><summary>5. Keahlian</summary>
-        <textarea name="keahlian" rows="3" placeholder="Pisahkan dengan koma: Python, Excel, Figma, Public Speaking"></textarea>
-        <textarea name="bahasa" rows="2" placeholder="Bahasa: Indonesia (Native), Inggris (Profesional)"></textarea>
+        <label>Keahlian<textarea name="keahlian" rows="3" placeholder="Pisahkan dengan koma: Python, Excel, Figma, Public Speaking"></textarea></label>
+        <label>Bahasa<textarea name="bahasa" rows="2" placeholder="Indonesia (Native), Inggris (Profesional)"></textarea></label>
       </details>
 
-      <details open><summary>6. Prestasi & Sertifikasi</summary>
-        <textarea name="prestasi" rows="3" placeholder="Satu per baris: Juara 2 Lomba Karya Tulis Ilmiah Nasional 2025"></textarea>
+      <details open><summary>6. Prestasi &amp; Sertifikasi</summary>
+        <label>Prestasi<textarea name="prestasi" rows="3" placeholder="Satu per baris: Juara 2 Lomba Karya Tulis Ilmiah Nasional 2025"></textarea></label>
       </details>
     </form>
   </section>
 
   <section class="preview-side">
+    <div class="preview-head">
+      <span class="preview-label"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg> Preview CV</span>
+      <span class="preview-note">Hasil cetak mengikuti kertas A4</span>
+    </div>
     <div id="cv-paper" class="tpl-classic"></div>
   </section>
 </main>
@@ -117,15 +147,14 @@
   </div>
 </footer>
 
-<!-- Sticky download bar: hasil CV terlihat setelah user mulai mengisi.
-     Muncul hanya di layar sempit (mobile), hilang saat mode cetak. -->
+<!-- Sticky download bar: muncul setelah user mulai mengisi (mobile saja). -->
 <div id="sticky-download" class="sticky-download hidden">
-  <span class="sd-label">Hasil CV kamu ada di bawah 👇</span>
-  <button id="btn-download-sticky" class="btn primary" type="button">⬇️ Unduh PDF</button>
+  <span class="sd-label">Hasil CV kamu ada di bawah</span>
+  <button id="btn-download-sticky" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Unduh PDF</button>
 </div>
 
-<script src="js/premium.js?v=4"></script>
+<script src="js/premium.js?v=5"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=9"></script>
 </body>
 </html>

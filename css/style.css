@@ -1,212 +1,238 @@
 /* ============================================================
-   CVKita — style.css
-   Prinsip desain: mobile-first, kontras WCAG AA, semua template
-   CV satu kolom & ATS-friendly.
+   CVKita — style.css v10 (redesign 2026-09-28)
+   Design tokens:
+     --ink    #16202e  teks utama
+     --muted  #5b6478  teks sekunder
+     --brand  #ea580c  oranye merek (HANYA untuk CTA utama & aksen hero)
+     --bg     #f6f5f1  latar hangat netral
+     --line   #e6e3da  garis
+   Tipografi: Plus Jakarta Sans (UI) + Newsreader italic (aksen hero)
+   Prinsip: mobile-first; WCAG AA; oranye disiplin; ATS-safe.
    ============================================================ */
 
 :root{
-  /* Oranye #f97316 = warna merek CVKita, dipakai konsisten di
-     logo, CTA, dan aksen. accent-dark untuk hover agar kontras
-     teks putih di atasnya tetap ≥ 4.5:1 (WCAG AA). */
-  --bg:#f3f5f9; --card:#fff; --ink:#1a2233; --muted:#5b6478;
-  --accent:#f97316; --accent-dark:#ea580c; --line:#e3e7f0;
+  --bg:#f6f5f1; --card:#fff; --ink:#16202e; --muted:#5b6478;
+  --brand:#ea580c; --brand-dark:#c2410c; --brand-soft:#fff1e7;
+  --line:#e6e3da; --ok:#047857; --err:#b91c1c;
+  --font-ui:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-accent:'Newsreader',Georgia,serif;
+  /* Alias lama agar JS/template lama tetap jalan */
+  --accent:var(--brand); --accent-dark:var(--brand-dark); --text:var(--ink);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--ink);line-height:1.5}
 button{cursor:pointer;font-family:inherit}
+a{color:var(--brand-dark)}
 
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;gap:8px;flex-wrap:wrap}
-.logo{font-size:1.25rem;font-weight:800}
-.logo span{color:var(--accent)}
-.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+/* Ikon SVG: ukuran seragam, ikut warna teks */
+.ic{width:1.05em;height:1.05em;vertical-align:-0.18em;fill:currentColor}
 
-/* Touch target: semua tombol minimal 44px tinggi (pedoman aksesibilitas
-   mobile). Font 0.9rem bukan 0.85 agar tetap terbaca di layar 360px. */
-.btn{border:none;border-radius:8px;padding:11px 16px;min-height:44px;font-size:.9rem;font-weight:600}
-.btn.primary{background:var(--accent);color:#fff}
-.btn.primary:hover{background:var(--accent-dark)}
+/* ===== Tombol ===== */
+.btn{border:none;border-radius:10px;padding:11px 16px;min-height:44px;font-size:.9rem;font-weight:700;transition:background .15s,box-shadow .15s}
+.btn.primary{background:var(--brand);color:#fff;box-shadow:0 1px 3px rgba(234,88,12,.35)}
+.btn.primary:hover{background:var(--brand-dark)}
+.btn.primary:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.btn.add{background:#eef2ff;color:#303fb3;margin-top:6px} /* #4356c9 digelapkan → kontras ≥ 4.5:1 */
-.btn.del{background:#fff1f0;color:#c11c1c;border:1px solid #ffd6d3;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
-/* AI & Hapus di dalam entry: beri jarak antar tombol (keluhan user 28/9) */
+.btn.ghost:hover{background:#fff}
+.btn.add{background:var(--brand-soft);color:var(--brand-dark);margin-top:6px}
+.btn.del{background:#fef2f2;color:var(--err);border:1px solid #fecaca;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
+/* Jarak tombol AI/Hapus dalam entry */
 .entry .btn.ai,.entry .btn.del{display:inline-block;margin-right:8px}
 .entry .btn.del:last-child{margin-right:0}
 .entry .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.btn.danger{border-color:#ffd6d3;color:#c11c1c}
-.btn.danger:hover{background:#fff1f0}
+.btn.danger{border-color:#fecaca;color:var(--err)}
+.btn.danger:hover{background:#fef2f2}
+
+/* ===== Header ===== */
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;gap:8px;flex-wrap:wrap}
+.logo{font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
+.logo span{color:var(--brand)}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 
 .template-panel{background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
 .template-panel p{font-size:.85rem;color:var(--muted);margin-bottom:8px}
 .tpl-row{display:flex;gap:8px;flex-wrap:wrap}
-.tpl-btn{flex:1;min-width:96px;padding:12px 10px;min-height:44px;border:2px solid var(--line);border-radius:8px;background:#fafbfd;font-weight:600;font-size:.85rem}
-.tpl-btn.active{border-color:var(--accent);color:var(--accent-dark)}
-.tpl-btn.locked{opacity:.6}
+.tpl-btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;min-height:44px;font-size:.88rem;font-weight:600}
+.tpl-btn.active{border-color:var(--brand);color:var(--brand-dark);background:var(--brand-soft)}
+.tpl-btn.locked{opacity:.75}
 /* .paywall pakai display:flex, jadi harus dikalahkan eksplisit oleh .hidden */
 .hidden,.paywall.hidden{display:none}
 
+/* ===== Hero (signature halaman) ===== */
+.hero{padding:6px 2px 14px}
+.hero-eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-dark);margin-bottom:6px}
+.hero-title{font-family:var(--font-accent),Georgia,serif;font-size:clamp(1.7rem,6vw,2.4rem);line-height:1.15;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.hero-title em{font-style:italic;color:var(--brand-dark)}
+.hero-sub{color:var(--muted);font-size:.95rem;max-width:46ch}
+
+/* ===== Tips: netral, tidak menyaingi CTA ===== */
+.hint-card{display:flex;gap:8px;align-items:flex-start;background:#f1efe9;border:1px solid var(--line);color:var(--muted);font-size:.8rem;padding:10px 12px;border-radius:10px;margin-bottom:14px}
+.hint-card .ic{color:#b45309;flex:none;margin-top:2px}
+
+/* ===== Form ===== */
+#cv-form details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+#cv-form summary{padding:13px 14px;min-height:44px;font-weight:700;font-size:.9rem;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
+#cv-form summary::-webkit-details-marker{display:none}
+#cv-form summary::after{content:'';width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-right:4px;transition:transform .15s}
+#cv-form details[open] summary::after{transform:rotate(225deg);margin-top:6px}
+#cv-form details[open] summary{border-bottom:1px solid var(--line)}
+#cv-form details>*:not(summary){margin:8px 14px;width:calc(100% - 28px)}
+
+/* Label permanen di atas field (audit: placeholder-only buruk utk aksesibilitas) */
+#cv-form label{display:block;font-size:.78rem;font-weight:700;color:var(--muted)}
+#cv-form label input,#cv-form label textarea{margin-top:4px}
+input,textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:1rem;font-family:inherit;background:#fbfaf7;color:var(--ink);margin-bottom:2px}
+input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
+::placeholder{color:#98a0b0;opacity:1;font-weight:400}
+
+.repeat-list .entry{border:1px dashed var(--line);border-radius:10px;padding:10px;margin-bottom:10px}
+.repeat-list .entry input,.repeat-list .entry textarea{width:100%;margin-bottom:8px}
+
+/* ===== Workspace & preview ===== */
 .workspace{display:grid;grid-template-columns:1fr;gap:16px;padding:16px;max-width:1100px;margin:0 auto}
 @media(min-width:920px){.workspace{grid-template-columns:1fr 1fr;align-items:start}}
 
-.hint-card{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:.8rem;padding:10px 12px;border-radius:8px;margin-bottom:12px}
-#cv-form details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
-#cv-form summary{padding:13px 14px;min-height:44px;font-weight:700;font-size:.9rem;cursor:pointer}
-#cv-form details[open] summary{border-bottom:1px solid var(--line)}
-#cv-form details>*:not(summary){margin:10px 14px;width:calc(100% - 28px)}
-/* Input 1rem (16px) mencegah auto-zoom di iOS & nyaman diketik di Android kentang. */
-input,textarea{border:1px solid var(--line);border-radius:8px;padding:11px;font-size:1rem;font-family:inherit;background:#fafbfd;color:var(--ink)}
-input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--accent)}
-.repeat-list .entry{border:1px dashed var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
-.repeat-list .entry input,.repeat-list .entry textarea{width:100%;margin-bottom:8px}
-
 .preview-side{position:sticky;top:66px}
-/* Variabel turunan per template (di-override blok template di bawah) —
-   memakai variabel agar selektor ID #cv-paper tidak 'menang' atas class template. */
+.preview-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.preview-label{font-weight:700;font-size:.85rem;color:var(--muted)}
+.preview-note{font-size:.72rem;color:#98a0b0}
+
+/* ============================================================
+   CV PAPER — preview A4. Variabel turunan per template
+   (selektor ID #cv-paper 'menang' atas class template, makanya
+   template meng-override via variabel, bukan properti langsung).
+   ============================================================ */
 #cv-paper{--cv-font:inherit;--cv-ink:#1a2233;--cv-h1-font:inherit;--cv-h1-color:var(--cv-ink);--cv-h1-size:1.45rem;--cv-h1-weight:800;--cv-h1-spacing:.3px;--cv-h2-color:var(--cv-ink);--cv-h2-border:currentColor;--cv-h2-transform:none;--cv-h2-spacing:1px;--cv-h2-weight:700;--cv-sub:#5b6478;--cv-tag-bg:#f1f4fa;--cv-tag-border:#e3e7f0;--cv-tag-ink:var(--cv-ink);background:#fff;min-height:840px;box-shadow:0 2px 16px rgba(20,30,60,.12);border-radius:4px;padding:36px 32px;font-size:.82rem;line-height:1.5;font-family:var(--cv-font);color:var(--cv-ink)}
 #cv-paper h1{font-size:var(--cv-h1-size);letter-spacing:var(--cv-h1-spacing);font-weight:var(--cv-h1-weight);color:var(--cv-h1-color);font-family:var(--cv-h1-font)}
-/* Heading CV memakai text-transform:none — ATS gagal membaca heading yang
-   di-spasi per huruf ("E X P E R I E N C E"), jadi letter-spacing hanya 1px. */
+/* Heading CV text-transform:none — ATS gagal membaca heading ber-spasi ("E X P E R I E N C E") */
 #cv-paper h2{font-size:.95rem;letter-spacing:var(--cv-h2-spacing);text-transform:var(--cv-h2-transform);font-weight:var(--cv-h2-weight);color:var(--cv-h2-color);border-bottom:2px solid var(--cv-h2-border);padding-bottom:3px;margin:18px 0 8px}
 #cv-paper .meta{color:var(--cv-sub);font-size:.8rem;margin-top:4px}
 #cv-paper .item{margin-bottom:10px}
-/* item-head pakai flex dua span — di PDF hasil print tetap tampil sebagai
-   dua teks berurutan (bukan tabel/text box), aman untuk parser ATS. */
+/* item-head flex dua span — di PDF tetap teks berurutan, aman parser ATS */
 #cv-paper .item-head{display:flex;justify-content:space-between;font-weight:700}
 #cv-paper .item-sub{color:var(--cv-sub);font-style:italic}
 #cv-paper ul{margin:4px 0 0 18px}
-/* Skill tags: hanya span inline ber-border tipis — ATS tetap membaca teksnya
-   karena bukan tabel, text box, atau ikon grafis. */
+/* Skill tags: span inline ber-border tipis — ATS tetap membaca teksnya */
 #cv-paper .skill-tags span{display:inline-block;background:var(--cv-tag-bg);border:1px solid var(--cv-tag-border);color:var(--cv-tag-ink);border-radius:5px;padding:2px 8px;margin:2px 4px 2px 0;font-size:.78rem}
 
 /* ============================================================
-   TEMPLATE CV
-   Semua template: SATU KOLOM (tanpa float/flex kolom ganda),
-   heading standar (h1/h2), font standar, warna teks kontras tinggi.
-   Parser ATS membaca urutan DOM secara linear — struktur markup
-   tidak pernah diubah oleh template, hanya tipografi & warna.
+   TEMPLATE CV — SATU KOLOM, heading standar, kontras tinggi.
+   Parser ATS membaca DOM linear; template hanya mengubah tipografi.
    ============================================================ */
 
-/* Classic — sans-serif netral, hitam pekat. Kontras maksimal (≥ 12:1),
-   paling aman untuk parser ATS paling ketat. */
+/* Classic — sans netral, hitam pekat, kontras maksimal */
 #cv-paper.tpl-classic{--cv-ink:#111;--cv-sub:#444}
 
-/* Modern — biru tua kantor (bukan biru terang); kontras ≥ 7:1.
-   Aksen hanya di garis heading: teks berwarna terang sering gagal OCR ATS. */
+/* Modern — biru tua kantor, kontras ≥ 7:1, aksen hanya garis heading */
 #cv-paper.tpl-modern{--cv-ink:#0f3d5c;--cv-sub:#33566b;--cv-h1-color:#0f3d5c;--cv-h2-border:#1273a6;--cv-h2-color:#0f3d5c;--cv-tag-bg:#e7f3fa;--cv-tag-border:#bcdff0;--cv-tag-ink:#0f3d5c}
 
-/* Minimal — sans ringan, banyak whitespace. Ukuran huruf tetap ≥ .82rem:
-   ATS dan rekruter sama-sama kesulitan dengan teks terlalu kecil. */
+/* Minimal — ringan, banyak whitespace, huruf ≥ .82rem */
 #cv-paper.tpl-minimal{--cv-ink:#222;--cv-sub:#555;--cv-h1-weight:400;--cv-h1-spacing:2px;--cv-h2-border:#bbb;--cv-h2-weight:400;--cv-h2-spacing:2px;--cv-tag-bg:#f6f6f6;--cv-tag-border:#ddd;--cv-tag-ink:#222}
 
-/* Executive — PREMIUM. Serif Georgia (font standar bawaan OS, aman ATS
-   karena bukan webfont dekoratif). Nuansa formal untuk korporat/bank.
-   Warna charcoal tetap gelap agar mesin ATS membacanya seperti hitam. */
-#cv-paper.tpl-executive{--cv-font:Georgia,'Times New Roman',serif;--cv-ink:#111827;--cv-sub:#374151;--cv-h1-font:Georgia,serif;--cv-h1-size:1.55rem;--cv-h1-spacing:.5px;--cv-h2-font-family:Georgia,serif;--cv-h2-color:#1f2937;--cv-h2-border:#374151;--cv-h2-size:1rem;--cv-h2-spacing:.5px;--cv-h2-transform:uppercase;--cv-tag-bg:transparent;--cv-tag-border:#374151;--cv-tag-ink:#111827}
-#cv-paper.tpl-executive h2{font-family:Georgia,serif;font-size:var(--cv-h2-size)} /* uppercase 1 kata pendek aman: ATS membaca karakter, bukan spacing */
+/* Executive — PREMIUM. Serif Georgia (font OS, aman ATS). */
+#cv-paper.tpl-executive{--cv-font:Georgia,'Times New Roman',serif;--cv-ink:#111827;--cv-sub:#374151;--cv-h1-font:Georgia,serif;--cv-h1-size:1.55rem;--cv-h1-spacing:.5px;--cv-h2-color:#1f2937;--cv-h2-border:#374151;--cv-h2-size:1rem;--cv-h2-spacing:.5px;--cv-h2-transform:uppercase;--cv-tag-bg:transparent;--cv-tag-border:#374151;--cv-tag-ink:#111827}
+#cv-paper.tpl-executive h2{font-family:Georgia,serif;font-size:var(--cv-h2-size)}
 
-/* Tech — PREMIUM. Sans-serif sistem + aksen indigo gelap (#312e81, kontras
-   ≥ 9:1) — nuansa engineering tanpa mengorbankan parseability. Heading
-   dipisah lewat warna & garis tipis, bukan letter-spacing besar. */
+/* Tech — PREMIUM. Sans sistem + aksen indigo gelap (kontras ≥ 9:1). */
 #cv-paper.tpl-tech{--cv-ink:#1e293b;--cv-sub:#475569;--cv-h1-size:1.5rem;--cv-h1-spacing:0;--cv-h2-color:#312e81;--cv-h2-border:#c7d2fe;--cv-h2-spacing:.3px;--cv-tag-bg:#eef2ff;--cv-tag-border:#c7d2fe;--cv-tag-ink:#312e81}
 
+/* ===== Footer ===== */
 .footer{text-align:center;color:var(--muted);font-size:.75rem;padding:20px}
 .footer-links{margin-top:10px}
-.footer-links a{color:var(--brand);text-decoration:none;font-weight:600;margin:0 6px;min-height:44px;display:inline-flex;align-items:center}
+.footer-links a{color:var(--muted);text-decoration:none;font-weight:600;margin:0 6px;min-height:44px;display:inline-flex;align-items:center}
 .footer-links a:hover{text-decoration:underline}
 
-/* Form feedback — modal ringan tanpa dependensi.
-   #feedback-modal adalah overlay-nya; .fb-box kotak dialognya. */
+/* ===== Feedback modal ===== */
 #feedback-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
 .fb-box{background:#fff;border-radius:14px;padding:22px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);max-height:90vh;overflow:auto}
-.fb-box h3{margin:0 0 6px;color:#1f2937}
+.fb-box h3{margin:0 0 6px;color:var(--ink)}
 .fb-sub{font-size:.85rem;color:#6b7280;margin-bottom:12px}
-.fb-box textarea{width:100%;border:1px solid #d1d5db;border-radius:8px;padding:10px;font:inherit;font-size:1rem;resize:vertical}
+.fb-box textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:10px;font:inherit;font-size:1rem;resize:vertical}
 .fb-count{text-align:right;font-size:.75rem;color:#9ca3af;margin:4px 0 12px}
 .fb-actions{display:flex;gap:10px;justify-content:flex-end}
-.fb-btn{padding:10px 18px;border-radius:8px;border:0;font-weight:700;cursor:pointer;min-height:44px}
+.fb-btn{padding:10px 18px;border-radius:10px;border:0;font-weight:700;cursor:pointer;min-height:44px}
 .fb-ghost{background:#f3f4f6;color:#374151}
 .fb-primary{background:var(--brand);color:#fff}
-/* Halaman pembayaran */
+.fb-status{font-size:.85rem;color:var(--ok);margin-top:10px;min-height:1.2em}
+
+/* ===== Halaman pembayaran ===== */
 .paybox{display:grid;gap:14px}
-/* Kartu tier vertikal: head → deskripsi → baris harga+tombol (rapi di mobile) */
-.pay-item.tier{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fff}
-.tier-popular{border-color:#f97316;box-shadow:0 2px 12px rgba(249,115,22,.10)}
+.pay-item.tier{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--card)}
+.tier-popular{border-color:var(--brand);box-shadow:0 2px 12px rgba(234,88,12,.10)}
 .tier-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tier-desc{font-size:.86rem;color:#5b6478;margin:6px 0 12px;line-height:1.6}
+.tier-desc{font-size:.86rem;color:var(--muted);margin:6px 0 12px;line-height:1.6}
 .tier-buy{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .tier-price{font-size:1.15rem;font-weight:700}
 .badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
-.badge-muted{background:#f1f5f9;color:#475569}
-.badge-hot{background:#ffedd5;color:#9a3412}
-@media(min-width:560px){
-  /* Desktop: 3 kartu berdampingan */
-  .paybox{grid-template-columns:repeat(3,1fr)}
-}
+.badge-muted{background:#f1efe9;color:#475569}
+.badge-hot{background:var(--brand-soft);color:var(--brand-dark)}
+@media(min-width:560px){.paybox{grid-template-columns:repeat(3,1fr)}}
 
-/* Sticky download bar (mobile): muncul setelah user mengisi sesuatu.
-   Desktop tidak butuh — preview selalu terlihat berdampingan dengan form. */
+/* ===== Sticky download bar (mobile) ===== */
 .sticky-download{position:fixed;left:0;right:0;bottom:0;z-index:900;
   display:none;align-items:center;justify-content:space-between;gap:10px;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-  background:#fff;border-top:1px solid #e5e7eb;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+  background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08)}
 .sticky-download.show{display:flex}
-.sticky-download .sd-label{font-size:.82rem;color:#374151;font-weight:600}
+.sticky-download .sd-label{font-size:.82rem;color:var(--ink);font-weight:600}
 @media(min-width:900px){.sticky-download{display:none!important}}
-/* Ruang ekstra di bawah footer agar bar tidak menutupi konten terakhir */
 body.has-sticky{padding-bottom:64px}
-.fb-status{font-size:.85rem;color:#059669;margin-top:10px;min-height:1.2em}
 
+/* ===== Paywall ===== */
+.paywall{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.paywall-card{position:relative;background:var(--card);border-radius:14px;padding:20px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.paywall-card h3{font-size:1.05rem;margin-bottom:8px}
+.paywall-card ul{margin:10px 0 10px 4px;font-size:.9rem;line-height:1.8;list-style:none}
+.paywall-card ul li{margin-bottom:2px}
+.paywall-card ul .ic{color:var(--brand-dark);margin-right:4px}
+.paywall-cta{font-size:.85rem;color:var(--muted);margin-top:8px}
+.aktivasi-row{display:flex;gap:8px;margin-top:6px}
+.aktivasi-row input{flex:1;min-width:0}
+.aktivasi-error{color:var(--err);font-size:.85rem;margin-top:8px}
+.paywall-belum{font-size:.85rem;color:var(--muted);margin-top:12px}
+.paywall-belum a{color:var(--brand-dark)}
+.paywall-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.paywall-close .ic{width:1.4em;height:1.4em}
+.paywall-close:hover{background:#f1efe9;color:var(--ink)}
+
+/* Panel ATS */
 .ats-panel{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px}
-.ats-head{display:flex;align-items:baseline;gap:6px;font-size:.9rem}
-.ats-head strong{font-size:1.6rem;color:var(--accent-dark)} /* oranye murni #f97316 di atas putih < 3:1; dipakai varian gelap untuk teks penting */
+.ats-head{display:flex;align-items:baseline;gap:6px;font-size:.9rem;font-weight:700}
+.ats-head strong{font-size:1.6rem;color:var(--brand-dark)} /* oranye murni di putih < 3:1; varian gelap utk teks penting */
 .ats-max{color:var(--muted);font-size:.85rem}
 #ats-tips{margin:8px 0 0 18px;font-size:.85rem;color:var(--muted)}
 #ats-tips li{margin-bottom:3px}
 
-/* Paywall */
-.paywall{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
-.paywall-card{background:var(--card);border-radius:12px;padding:20px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25)}
-.paywall-card h3{font-size:1.05rem;margin-bottom:8px}
-.paywall-card ul{margin:10px 0 10px 18px;font-size:.9rem;line-height:1.7}
-.paywall-card ul li{margin-bottom:2px}
-.paywall-cta{font-size:.85rem;color:var(--muted);margin-top:8px}
-.aktivasi-row{display:flex;gap:8px;margin-top:6px}
-.aktivasi-row input{flex:1;min-width:0}
-.aktivasi-error{color:#c11c1c;font-size:.85rem;margin-top:8px}
-.paywall-belum{font-size:.85rem;color:var(--muted);margin-top:12px}
-.paywall-belum a{color:var(--accent-dark)}
-.paywall-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:none;background:transparent;font-size:1.6rem;line-height:1;color:var(--muted);cursor:pointer;border-radius:50%}
-.paywall-close:hover{background:#f1f5f9;color:var(--text)}
-.paywall-card{position:relative}
-
-/* Mobile 360px: topbar & preview menyusut agar form tetap prioritas */
+/* Mobile 360px: CTA utama full-width, preview menyusut */
 @media(max-width:420px){
   .topbar{padding:8px 12px}
   .topbar-actions{gap:6px}
   .btn{padding:10px 12px}
-  #btn-download{width:100%} /* CTA utama full-width agar mudah dijangkau ibu jari */
+  #btn-download{width:100%}
   #cv-paper{padding:20px 16px;font-size:.78rem}
+  .hero-title{font-size:1.55rem}
 }
 
 /* ============================================================
-   PRINT — target: PDF 1 halaman rapi & terbaca mesin ATS.
-   Aturan ATS: info penting TIDAK boleh di header/footer halaman,
-   jadi seluruh UI aplikasi disembunyikan, hanya #cv-paper dicetak.
+   PRINT — hanya #cv-paper. Konten penting di body dokumen
+   (bukan header/footer halaman yang sering di-skip ATS).
    ============================================================ */
 @media print{
-  .topbar,.template-panel,.form-side,.footer,.hint-card,.ats-panel,.paywall,.btn,#feedback-modal,#sticky-download{display:none!important}
+  .topbar,.template-panel,.form-side,.footer,.hero,.hint-card,.preview-head,.ats-panel,.paywall,.btn,#feedback-modal,#sticky-download{display:none!important}
   body{background:#fff}
   .workspace{display:block;padding:0;max-width:none}
   .preview-side{position:static}
-  /* Bayangan & radius hanya untuk layar — di PDF jadi artefak abu-abu
-     yang mengganggu parser. */
+  /* Bayangan & radius jadi artefak abu-abu di PDF */
   #cv-paper{box-shadow:none;border-radius:0;min-height:auto;padding:0;width:100%}
-  /* Ukuran cetak tetap ≥ 10pt setara agar rekruter & OCR tidak kesulitan. */
   #cv-paper{font-size:11pt}
   #cv-paper h1{font-size:20pt}
   #cv-paper h2{font-size:12pt}
-  /* Page break tidak boleh memotong satu item pengalaman jadi 2 halaman. */
   #cv-paper .item{page-break-inside:avoid}
-  /* 14mm margin: cukup untuk printer rumahan, dan konten tetap di body
-     dokumen — bukan di area header/footer halaman yang sering di-skip ATS. */
+  /* 14mm: cukup untuk printer rumahan, konten tetap di body dokumen */
   @page{margin:14mm}
+}
+
+/* Hormati preferensi reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
 }

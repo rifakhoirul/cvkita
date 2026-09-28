@@ -54,7 +54,7 @@ function entryHTML(key, data = {}) {
       : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}">`
   ).join('');
   const aiBtn = key === 'pengalaman'
-    ? '<button type="button" class="btn ai btn-ai">✨ Improve dengan AI</button>'
+    ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve dengan AI</button>'
     : '';
   return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del>Hapus</button></div>`;
 }
