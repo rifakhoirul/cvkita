@@ -124,6 +124,18 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--accent)}
 /* Halaman pembayaran */
 .paybox{border:1px solid #e5e7eb;border-radius:12px;padding:18px;background:#fff}
 .pay-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+
+/* Sticky download bar (mobile): muncul setelah user mengisi sesuatu.
+   Desktop tidak butuh — preview selalu terlihat berdampingan dengan form. */
+.sticky-download{position:fixed;left:0;right:0;bottom:0;z-index:900;
+  display:none;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  background:#fff;border-top:1px solid #e5e7eb;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.sticky-download.show{display:flex}
+.sticky-download .sd-label{font-size:.82rem;color:#374151;font-weight:600}
+@media(min-width:900px){.sticky-download{display:none!important}}
+/* Ruang ekstra di bawah footer agar bar tidak menutupi konten terakhir */
+body.has-sticky{padding-bottom:64px}
 .fb-status{font-size:.85rem;color:#059669;margin-top:10px;min-height:1.2em}
 
 .ats-panel{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px}
@@ -161,7 +173,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--accent)}
    jadi seluruh UI aplikasi disembunyikan, hanya #cv-paper dicetak.
    ============================================================ */
 @media print{
-  .topbar,.template-panel,.form-side,.footer,.hint-card,.ats-panel,.paywall,.btn,#feedback-modal{display:none!important}
+  .topbar,.template-panel,.form-side,.footer,.hint-card,.ats-panel,.paywall,.btn,#feedback-modal,#sticky-download{display:none!important}
   body{background:#fff}
   .workspace{display:block;padding:0;max-width:none}
   .preview-side{position:static}

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Fitur baru: Reset & Export/Import', () => {
+test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
@@ -14,47 +14,54 @@ test.describe('Fitur baru: Reset & Export/Import', () => {
     await expect(page.locator('[name="nama"]')).toHaveValue('');
   });
 
-  test('tombol Export mengunduh file JSON berisi data', async ({ page }) => {
-    await page.fill('[name="nama"]', 'Budi Export');
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.click('#btn-export'),
-    ]);
-    expect(download.suggestedFilename()).toMatch(/\.json$/);
-    const path = await download.path();
-    const fs = await import('fs');
-    const data = JSON.parse(fs.readFileSync(path, 'utf8'));
-    expect(data.fields.nama).toBe('Budi Export');
+  test('tombol Backup/Import SUDAH DIHAPUS dari UI', async ({ page }) => {
+    // Feedback pemilik: orang awam bingung dengan Backup/Import.
+    await expect(page.locator('#btn-export')).toHaveCount(0);
+    await expect(page.locator('#file-import')).toHaveCount(0);
   });
 
-  test('Import JSON memuat data ke form dan preview', async ({ page }) => {
-    const payload = {
-      fields: { nama: 'Siti Import', keahlian: 'Figma' },
-      lists: { pendidikan: [{ sekolah: 'UI', gelar: 'S1', periode: '2021-2025' }] },
-    };
-    await page.setInputFiles('#file-import', {
-      name: 'cv.json',
-      mimeType: 'application/json',
-      buffer: Buffer.from(JSON.stringify(payload)),
-    });
-    await expect(page.locator('#cv-paper h1')).toHaveText('Siti Import');
-    await expect(page.locator('#cv-paper h2', { hasText: 'Education' })).toBeVisible();
+  test('tombol Contoh mengisi seluruh CV dengan data contoh', async ({ page }) => {
+    page.on('dialog', d => d.accept());
+    await page.click('#btn-sample');
+    // Setelah reload, preview harus menampilkan nama contoh
+    await expect(page.locator('#cv-paper h1')).toHaveText('Rania Putri Andini');
+    await expect(page.locator('[name="headline"]')).toHaveValue(/Sistem Informasi/);
+    await expect(page.locator('[name="keahlian"]')).toHaveValue(/SQL/);
+    await expect(page.locator('#cv-paper')).toContainText('Universitas Indonesia');
+    await expect(page.locator('#cv-paper')).toContainText('Magang — Data Analyst');
   });
-});
 
-test.describe('Fitur baru: ATS Score', () => {
-  test('menampilkan skor ATS dan saran ketika data minimal', async ({ page }) => {
-    await page.goto('/');
+  test('Contoh dibatalkan bila user tidak setuju', async ({ page }) => {
+    page.on('dialog', d => d.dismiss());
+    await page.click('#btn-sample');
+    // Tidak reload — preview tetap kosong
+    await expect(page.locator('#cv-paper h1')).toHaveText('Nama Kamu');
+  });
+
+  test('sticky download bar MUNCUL di mobile setelah nama diisi', async ({ page, viewport }) => {
+    test.skip(viewport && viewport.width >= 900, 'hanya relevan di layar sempit');
+    await expect(page.locator('#sticky-download')).toBeHidden();
+    await page.fill('[name="nama"]', 'Budi Sticky');
+    await expect(page.locator('#sticky-download')).toBeVisible();
+    await expect(page.locator('.sd-label')).toContainText('di bawah');
+  });
+
+  test('sticky download bar TIDAK muncul di desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.fill('[name="nama"]', 'Budi Desktop');
+    await expect(page.locator('#sticky-download')).toBeHidden();
+  });
+
+  test('skor ATS tetap jalan setelah perubahan', async ({ page }) => {
     await page.fill('[name="nama"]', 'Budi');
     await page.click('#btn-ats');
     await expect(page.locator('#ats-panel')).toBeVisible();
-    const score = await page.locator('#ats-score').textContent();
-    expect(parseInt(score)).toBeGreaterThanOrEqual(0);
-    expect(parseInt(score)).toBeLessThanOrEqual(100);
+    const score = parseInt(await page.locator('#ats-score').textContent());
+    expect(score).toBeGreaterThanOrEqual(0);
+    expect(score).toBeLessThanOrEqual(100);
   });
 
   test('skor naik ketika profil lebih lengkap', async ({ page }) => {
-    await page.goto('/');
     await page.fill('[name="nama"]', 'Budi');
     await page.click('#btn-ats');
     const low = parseInt(await page.locator('#ats-score').textContent());

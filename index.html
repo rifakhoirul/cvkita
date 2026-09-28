@@ -11,11 +11,9 @@
 <header class="topbar">
   <div class="logo">CV<span>Kita</span></div>
   <div class="topbar-actions">
+    <button id="btn-sample" class="btn ghost" type="button">✨ Contoh</button>
     <button id="btn-template" class="btn ghost" type="button">🎨 Template</button>
     <button id="btn-ats" class="btn ghost" type="button">📊 Cek ATS</button>
-    <button id="btn-export" class="btn ghost" type="button">💾 Backup</button>
-    <label class="btn ghost" for="file-import" style="display:inline-flex;align-items:center">📂 Import</label>
-    <input type="file" id="file-import" accept=".json" hidden>
     <button id="btn-reset" class="btn ghost danger" type="button">🗑️ Reset</button>
     <button id="btn-download" class="btn primary" type="button">⬇️ Unduh PDF (Gratis)</button>
   </div>
@@ -113,12 +111,20 @@
     <a href="/blog/">Panduan Karier</a> ·
     <a href="/blog/apa-itu-ats.html">Apa itu ATS?</a> ·
     <a href="/pay.html">Aktivasi AI Rewrite</a> ·
+    <a href="/terms.html">Syarat &amp; Ketentuan</a> ·
     <a href="#" onclick="window.__cvkitaFeedback && window.__cvkitaFeedback(); return false;">Kirim Masukan</a>
   </div>
 </footer>
 
+<!-- Sticky download bar: hasil CV terlihat setelah user mulai mengisi.
+     Muncul hanya di layar sempit (mobile), hilang saat mode cetak. -->
+<div id="sticky-download" class="sticky-download hidden">
+  <span class="sd-label">Hasil CV kamu ada di bawah 👇</span>
+  <button id="btn-download-sticky" class="btn primary" type="button">⬇️ Unduh PDF</button>
+</div>
+
 <script src="js/premium.js?v=3"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

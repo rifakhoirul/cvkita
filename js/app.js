@@ -169,20 +169,57 @@ document.addEventListener('click', e => {
         $('#aktivasi-error').classList.remove('hidden');
       });
   }
-  if (e.target.id === 'btn-download') window.print();
+  if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky') window.print();
+  // Sticky bar: muncul begitu ada minimal satu field terisi (hanya mobile via CSS)
+  const sticky = document.getElementById('sticky-download');
+  if (sticky && (e.target.name === 'nama' || e.target.name === 'headline')) {
+    const ada = (e.target.value || '').trim().length > 0;
+    sticky.classList.toggle('show', ada);
+    document.body.classList.toggle('has-sticky', ada);
+  }
   if (e.target.id === 'btn-reset') {
     if (confirm('Hapus semua data CV? Tindakan ini tidak bisa dibatalkan.')) {
       localStorage.removeItem(KEY);
       location.reload();
     }
   }
-  if (e.target.id === 'btn-export') {
-    const blob = new Blob([localStorage.getItem(KEY) || '{}'], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'cvkita-backup.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
+  if (e.target.id === 'btn-sample') {
+    if (!confirm('Isi CV dengan contoh? Data yang sudah kamu tulis akan diganti.')) return;
+    const SAMPLE = {
+      fields: {
+        nama: 'Rania Putri Andini',
+        headline: 'Fresh Graduate — Sistem Informasi',
+        email: 'rania.putri@email.com',
+        telepon: '0812-3456-7890',
+        linkedin: 'linkedin.com/in/raniaputri',
+        kota: 'Jakarta',
+        ringkasan: 'Lulusan baru Sistem Informasi dengan pengalaman magang 6 bulan di bidang data analysis. Terbiasa dengan SQL, Excel, dan visualisasi data. Siap berkontribusi di tim yang berfokus pada pengambilan keputusan berbasis data.',
+        keahlian: 'SQL, Excel, Looker Studio, Python (pandas), Figma',
+        bahasa: 'Indonesia (Native), Inggris (Profesional)',
+        prestasi: 'Finalis Lomba Data Analysis Nasional 2023 — Top 10 dari 250 tim'
+      },
+      lists: {
+        pendidikan: [{
+          sekolah: 'Universitas Indonesia',
+          gelar: 'S1 Sistem Informasi — IPK 3.65 (Cum Laude)',
+          periode: '2021 – 2025'
+        }],
+        pengalaman: [{
+          posisi: 'Magang — Data Analyst',
+          organisasi: 'PT Teknologi Nusantara, Jakarta',
+          periode: 'Jul – Des 2024',
+          deskripsi: 'Menganalisis data penjualan 12 bulan terakhir menggunakan SQL dan Excel, menghasilkan insight yang dipakai tim marketing untuk 3 kampanye.\nMembangun dashboard visualisasi di Looker Studio yang dipakai harian oleh 15 anggota tim.\nMenyusun laporan mingguan otomatis yang menghemat 4 jam kerja manual per minggu.'
+        }],
+        project: [{
+          nama: 'Sistem Informasi Inventaris Kampus (Skripsi)',
+          peran: 'Ketua Tim — 3 orang, 2024',
+          deskripsi: 'Merancang dan membangun aplikasi inventaris berbasis web untuk laboratorium fakultas.\nMengurangi waktu pencatatan stok dari 3 jam menjadi 20 menit per minggu.',
+          link: 'github.com/rania/inventaris'
+        }]
+      }
+    };
+    localStorage.setItem(KEY, JSON.stringify(SAMPLE));
+    location.reload();
   }
   if (e.target.id === 'btn-ats') {
     const { score, tips } = atsScore();
@@ -196,22 +233,7 @@ document.addEventListener('click', e => {
 });
 
 document.addEventListener('change', e => {
-  if (e.target.id === 'file-import') {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const data = JSON.parse(reader.result);
-        if (!data || typeof data !== 'object') throw new Error('format');
-        localStorage.setItem(KEY, JSON.stringify(data));
-        location.reload();
-      } catch {
-        alert('File tidak valid. Gunakan file backup (.json) dari CVKita.');
-      }
-    };
-    reader.readAsText(file);
-  }
+  // handler import dihapus — tombol Backup/Import dihapus sesuai feedback pemilik.
 });
 
 function atsScore() {
