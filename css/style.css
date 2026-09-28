@@ -58,7 +58,8 @@ a{color:var(--brand-dark)}
 }
 @media(max-width:919px){
   .topbar-extra{display:none}
-  .dl-label{display:none} /* label pendek "Unduh PDF" di mobile */
+  #btn-download{display:none} /* mobile: unduh cukup di bawah preview + sticky bar */
+  .dl-label{display:none}
 }
 
 .template-panel{background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
