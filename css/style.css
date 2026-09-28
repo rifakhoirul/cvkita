@@ -78,8 +78,8 @@ a{color:var(--brand-dark)}
 .hero-title em{font-style:italic;color:var(--brand-dark)}
 .hero-sub{color:var(--muted);font-size:.95rem;max-width:46ch}
 /* Jaminan privasi: kekhawatiran #1 saat mengisi data diri online */
-.hero-privacy{display:flex;align-items:flex-start;gap:6px;margin-top:10px;padding:8px 11px;background:#eef7f1;border:1px solid #c6e6d3;border-radius:10px;color:#166534;font-size:.8rem;line-height:1.5}
-.hero-privacy .ic{flex:none;margin-top:2px}
+.hero-privacy{display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;background:#eef7f1;border:1px solid #c6e6d3;border-radius:10px;color:#166534;font-size:.8rem;line-height:1.45}
+.hero-privacy .ic{flex:none}
 
 /* ===== Tips: netral, tidak menyaingi CTA ===== */
 .hint-card{display:flex;gap:8px;align-items:flex-start;background:#f1efe9;border:1px solid var(--line);color:var(--muted);font-size:.8rem;padding:10px 12px;border-radius:10px;margin-bottom:14px}
