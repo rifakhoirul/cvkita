@@ -23,6 +23,14 @@
     const f = data.fields || {};
     set('nama', f.nama); set('headline', f.headline); set('email', f.email);
     set('phone', f.phone); set('city', f.city); set('ringkasan', f.ringkasan);
+    // Keahlian: array skills dari AI → textarea dipisah koma
+    if (Array.isArray(data.skills) && data.skills.length) {
+      const keahlian = document.querySelector('[name="keahlian"]');
+      if (keahlian) {
+        keahlian.value = data.skills.map(s => String(s).trim()).filter(Boolean).join(', ');
+        keahlian.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
     // Trigger render + persist
     document.dispatchEvent(new Event('input', { bubbles: true }));
     ['nama', 'headline', 'email', 'phone', 'city', 'ringkasan'].forEach(n => {

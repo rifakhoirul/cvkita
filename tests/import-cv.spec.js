@@ -21,6 +21,7 @@ test('impor sukses → baris pendidikan & pengalaman ikut ter-render (regresi: d
         { posisi: 'Chairperson', perusahaan: 'KMP Bandung', periode: '2019', bullets: ['Pimpin 80 orang'] },
       ],
       projects: [{ nama: 'CVKita', deskripsi: 'Web CV builder', link: '' }],
+      skills: ['SQL', 'Excel', 'Public Speaking'],
     }),
   }));
   // siapkan file PDF dummy lalu picu change
@@ -33,6 +34,8 @@ test('impor sukses → baris pendidikan & pengalaman ikut ter-render (regresi: d
   await expect(page.locator('#pendidikan-list .entry')).toHaveCount(1);
   await expect(page.locator('#pengalaman-list .entry')).toHaveCount(2);
   await expect(page.locator('#pendidikan-list input[name="pendidikan.sekolah"]')).toHaveValue('Universitas Padjadjaran');
+  // Keahlian terisi dari skills (dipisah koma)
+  await expect(page.locator('[name="keahlian"]')).toHaveValue('SQL, Excel, Public Speaking');
 });
 
 test('file bukan PDF terlalu kecil → status error tampil, tidak crash', async ({ page }) => {
