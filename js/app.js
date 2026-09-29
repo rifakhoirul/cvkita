@@ -313,6 +313,15 @@ async function handleAiRewrite(btn) {
 
 // Init
 (function init() {
+  // QA 2026-09-29: auto-aktivasi dari pay.html (?kode=CVK-...) — user tidak perlu
+  // menyalin kode manual setelah bayar.
+  try {
+    const urlKode = new URLSearchParams(location.search).get('kode');
+    if (urlKode && /^[A-Z0-9-]{8,40}$/i.test(urlKode)) {
+      localStorage.setItem(LICENSE_KEY, urlKode.trim().toUpperCase());
+      history.replaceState(null, '', location.pathname);
+    }
+  } catch { /* URLSearchParams tidak tersedia */ }
   const data = loadData();
   Object.keys(SECTIONS).forEach(k => renderList(k, (data.lists && data.lists[k]) || [{}]));
   Object.entries(data.fields || {}).forEach(([n, v]) => {

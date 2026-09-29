@@ -93,9 +93,11 @@
       if (window.snap) {
         window.snap.pay(res.body.token, {
           onSuccess: function () {
+            // QA 2026-09-29: tampilkan KODE LISENSI langsung + simpan otomatis.
+            // Dulu user hanya diberi order id dan disuruh menunggu "kiriman" yang tidak ada.
             status.style.color = '#059669';
-            status.innerHTML = 'Pembayaran berhasil! Simpan order <b>' + res.body.order_id +
-              '</b> — kode aktivasi dikirim otomatis. Masukkan kodenya di halaman utama.';
+            status.innerHTML = 'Pembayaran berhasil! Mengambil kode aktivasi...';
+            ambilKode(res.body.order_id, status);
           },
           onPending: function () {
             status.style.color = '#b45309';
@@ -123,6 +125,41 @@
       status.style.color = '#b91c1c';
       status.textContent = 'Tidak bisa menghubungi server. Periksa koneksi internet.';
     });
+  }
+
+  function ambilKode(orderId, statusEl) {
+    // Polling sampai webhook Midtrans menerbitkan lisensi (biasanya < 5 detik)
+    var attempts = 0;
+    function coba() {
+      attempts++;
+      fetch(API + '/api/license/by-order?order_id=' + encodeURIComponent(orderId))
+        .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, status: r.status, body: b }; }); })
+        .then(function (res) {
+          if (res.ok && res.body.code) {
+            statusEl.innerHTML =
+              '<b>Pembayaran berhasil! 🎉</b><br>' +
+              'Kode aktivasi kamu: <b style="font-size:1.15rem;letter-spacing:.05em">' + res.body.code + '</b><br>' +
+              '<button id="btn-simpan-otomatis" class="btn primary" style="margin-top:8px">Aktivasi Sekarang di Editor</button><br>' +
+              '<span style="font-size:.78rem">Kode juga tersimpan di halaman ini — screenshot ya, biar aman.</span>';
+            document.getElementById('btn-simpan-otomatis').addEventListener('click', function () {
+              window.location.href = '/?kode=' + encodeURIComponent(res.body.code);
+            });
+          } else if (res.status === 202 && attempts < 12) {
+            setTimeout(coba, 2500); // webhook belum masuk, cek lagi
+          } else if (attempts < 12) {
+            setTimeout(coba, 2500);
+          } else {
+            statusEl.style.color = '#b45309';
+            statusEl.innerHTML = 'Pembayaran berhasil, tetapi kode belum terbit otomatis.<br>' +
+              'Order: <b>' + orderId + '</b><br>Kirim order ini ke WhatsApp di bio — kami kirim kodenya manual.';
+          }
+        })
+        .catch(function () {
+          if (attempts < 12) setTimeout(coba, 2500);
+          else { statusEl.style.color = '#b91c1c'; statusEl.textContent = 'Koneksi terputus saat mengambil kode. Coba muat ulang halaman.'; }
+        });
+    }
+    coba();
   }
 
   document.getElementById('btn-buy-9').addEventListener('click', function () { buy(9900); });
