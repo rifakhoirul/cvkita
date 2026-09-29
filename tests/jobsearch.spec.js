@@ -48,9 +48,9 @@ test.describe('Cari Lowongan (premium)', () => {
     await page.fill('[name="headline"]', 'Fresh Graduate SI');
     await page.fill('[name="keahlian"]', 'SQL, Excel');
     await page.click('#btn-jobsearch');
-    await expect(page.locator('.js-cat')).toContainText('Data Analyst');
-    const links = page.locator('.js-links a');
-    expect(await links.count()).toBeGreaterThanOrEqual(6); // 2 query x 3 portal
-    await expect(page.locator('.js-remaining')).toContainText('2');
+    await expect(page.locator('.js-title')).toContainText('Data Analyst');
+    const links = page.locator('.js-portal');
+    expect(await links.count()).toBeGreaterThanOrEqual(8); // 2 query x 4 portal
+    await expect(page.locator('.js-note')).toContainText('2');
   });
 });

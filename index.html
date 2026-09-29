@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=18">
+<link rel="stylesheet" href="css/style.css?v=20">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -29,10 +29,10 @@
 <!-- ===== Header ===== -->
 <header class="topbar">
   <div class="logo">CV<span>Kita</span></div>
+  <span id="premium-badge" class="premium-badge hidden" title="Lisensi aktif"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Premium</span>
   <div class="topbar-actions">
     <button id="btn-more" class="btn ghost btn-more" type="button" aria-label="Menu lainnya" aria-expanded="false">⋯</button>
     <button id="btn-sample" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
-    <button id="btn-template" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> Template</button>
     <button id="btn-ats" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek ATS</button>
     <button id="btn-reset" class="btn ghost danger topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
     <button id="btn-download" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> <span class="dl-label">Unduh PDF (Gratis)</span></button>
@@ -41,20 +41,8 @@
 <!-- Menu overflow mobile: berisi aksi sekunder -->
 <div id="more-menu" class="more-menu hidden">
   <button id="mm-sample" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
-  <button id="mm-template" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-palette"></use></svg> Template</button>
   <button id="mm-ats" class="btn ghost" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek ATS</button>
   <button id="mm-reset" class="btn ghost danger" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
-</div>
-
-<div id="template-panel" class="template-panel hidden">
-  <p>Pilih template (semua lolos ATS):</p>
-  <div class="tpl-row">
-    <button class="tpl-btn" data-tpl="classic">Classic</button>
-    <button class="tpl-btn" data-tpl="modern">Modern</button>
-    <button class="tpl-btn" data-tpl="minimal">Minimal</button>
-    <button class="tpl-btn locked" data-tpl="executive"><svg class="ic" aria-hidden="true"><use href="#i-crown"></use></svg> Executive</button>
-    <button class="tpl-btn locked" data-tpl="tech"><svg class="ic" aria-hidden="true"><use href="#i-crown"></use></svg> Tech</button>
-  </div>
 </div>
 
 <div id="ats-panel" class="ats-panel hidden">
@@ -145,6 +133,18 @@
       <span class="preview-label"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg> Preview CV</span>
       <span class="preview-note">Hasil cetak mengikuti kertas A4</span>
     </div>
+    <!-- QA 2026-09-29: pilih template pindah ke sini (di atas preview) agar user
+         tidak perlu scroll ke atas untuk ganti template — preview langsung terlihat -->
+    <div id="template-panel" class="template-panel">
+      <p>Pilih template (semua lolos ATS):</p>
+      <div class="tpl-row">
+        <button class="tpl-btn" data-tpl="classic">Classic</button>
+        <button class="tpl-btn" data-tpl="modern">Modern</button>
+        <button class="tpl-btn" data-tpl="minimal">Minimal</button>
+        <button class="tpl-btn locked" data-tpl="executive"><svg class="ic" aria-hidden="true"><use href="#i-crown"></use></svg> Executive</button>
+        <button class="tpl-btn locked" data-tpl="tech"><svg class="ic" aria-hidden="true"><use href="#i-crown"></use></svg> Tech</button>
+      </div>
+    </div>
     <div id="cv-paper" class="tpl-classic"></div>
     <!-- Cek ATS tepat di bawah preview: user lihat skor → perbaiki → unduh -->
     <button id="btn-ats-preview" class="btn ghost ats-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek Skor ATS</button>
@@ -173,9 +173,10 @@
   <button id="btn-download-sticky" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Unduh PDF</button>
 </div>
 
-<script src="js/premium.js?v=5"></script>
-<script src="js/jobsearch.js?v=1"></script>
+<script src="js/premium.js?v=6"></script>
+<script src="js/quota-modal.js?v=1"></script>
+<script src="js/jobsearch.js?v=2"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=15"></script>
+<script src="js/app.js?v=16"></script>
 </body>
 </html>

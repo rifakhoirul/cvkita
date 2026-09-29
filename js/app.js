@@ -144,7 +144,6 @@ document.addEventListener('click', e => {
     e.target.closest('.entry').remove();
     saveData(); render();
   }
-  if (e.target.id === 'btn-template') $('#template-panel').classList.toggle('hidden');
   if (e.target.classList.contains('tpl-btn')) {
     const tpl = e.target.dataset.tpl;
     if (typeof PREMIUM_TEMPLATES !== 'undefined' && PREMIUM_TEMPLATES.includes(tpl) && !isPremium()) {
@@ -168,6 +167,7 @@ document.addEventListener('click', e => {
           localStorage.setItem(LICENSE_KEY, code.trim());
           document.querySelectorAll('.tpl-btn.locked').forEach(b => b.classList.remove('locked'));
           $('#paywall').classList.add('hidden');
+          if (typeof updatePremiumBadge === 'function') updatePremiumBadge();
         } else {
           $('#aktivasi-error').textContent = r.error || 'Kode tidak valid. Cek lagi atau hubungi kami.';
           $('#aktivasi-error').classList.remove('hidden');
@@ -260,6 +260,16 @@ function atsScore() {
   return { score: Math.min(score, 100), tips };
 }
 
+// QA 2026-09-29: error kuota -> modal aksi (beli/aktivasi), bukan alert polos.
+// Ganti semua `alert(err.message)` di handler AI dengan helper ini.
+function showAiError(message) {
+  if (/habis/i.test(message) && typeof window.__cvkitaQuotaExhausted === 'function') {
+    window.__cvkitaQuotaExhausted();
+    return;
+  }
+  alert(message);
+}
+
 async function handleAiRewrite(btn) {
   // Tombol AI ringkasan: rewrite field ringkasan dari data yang sudah diisi
   if (btn.id === 'btn-ai-ringkasan') {
@@ -281,7 +291,7 @@ async function handleAiRewrite(btn) {
       ta.dispatchEvent(new Event('input', { bubbles: true }));
       btn.innerHTML = '✓ Ditingkatkan';
     } catch (err) {
-      alert(err.message);
+      showAiError(err.message);
       btn.innerHTML = btnLabel;
     } finally {
       btn.disabled = false;
@@ -304,7 +314,7 @@ async function handleAiRewrite(btn) {
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     btn.textContent = '✓ Ditingkatkan';
   } catch (err) {
-    alert(err.message);
+    showAiError(err.message);
     btn.textContent = btnLabel;
   } finally {
     btn.disabled = false;
@@ -353,7 +363,7 @@ async function handleAiRewrite(btn) {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 
   // Pemetaan tombol menu -> aksi tombol header asli (klik tombolnya)
-  const map = { 'mm-sample': 'btn-sample', 'mm-template': 'btn-template', 'mm-ats': 'btn-ats', 'mm-reset': 'btn-reset' };
+  const map = { 'mm-sample': 'btn-sample', 'mm-ats': 'btn-ats', 'mm-reset': 'btn-reset' };
   for (const [mmId, targetId] of Object.entries(map)) {
     const src = document.getElementById(mmId);
     const target = () => document.getElementById(targetId);

@@ -46,7 +46,7 @@ test('kode aktivasi invalid menampilkan pesan error', async ({ page }) => {
 
 test('template premium terkunci sebelum aktivasi', async ({ page }) => {
   await mockApi(page);
-  await page.click('#btn-template');
+  await page.click('[data-tpl="classic"]');
   const premium = page.locator('.tpl-btn[data-tpl="executive"]');
   await expect(premium).toHaveClass(/locked/);
   await premium.click();
@@ -58,7 +58,7 @@ test('template premium bisa dipakai setelah aktivasi', async ({ page }) => {
   await page.locator('#pengalaman-list .btn-ai').first().click(); // buka paywall
   await page.fill('#aktivasi-kode', 'BOOST-TEST-123');
   await page.click('#btn-aktivasi');
-  await page.click('#btn-template');
+  await page.click('[data-tpl="classic"]');
   await page.click('.tpl-btn[data-tpl="executive"]');
   await expect(page.locator('#cv-paper')).toHaveClass(/tpl-executive/);
 });

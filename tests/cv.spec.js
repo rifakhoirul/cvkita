@@ -35,7 +35,7 @@ test('tombol hapus menghapus entri pengalaman', async ({ page }) => {
 });
 
 test('ganti template mengubah class preview', async ({ page }) => {
-  await page.click('#btn-template');
+  await page.click('[data-tpl="classic"]');
   await page.click('.tpl-btn[data-tpl="modern"]');
   await expect(page.locator('#cv-paper')).toHaveClass(/tpl-modern/);
 });

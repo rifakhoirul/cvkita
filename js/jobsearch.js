@@ -1,15 +1,33 @@
-// Fitur premium "Cari Lowongan" — batch-2.
-// Tombol di bawah preview. Premium: 1 klik = 1 kuota AI. Non-premium: paywall.
+// Fitur premium "Cari Lowongan" — QA redesign 2026-09-29:
+// hasil dikelompokkan per query sebagai KARTU dengan tombol portal per baris.
+// URL JobStreet pakai format /id/{slug}-jobs (format lama 404).
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('btn-jobsearch');
     const panel = document.getElementById('jobsearch-panel');
     if (!btn || !panel) return;
 
+    function escHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function cariUrl(portal, q) {
+      const slug = q.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const enc = encodeURIComponent(q);
+      switch (portal) {
+        case 'jobstreet': return `https://www.jobstreet.co.id/id/${slug}-jobs`;
+        case 'linkedin': return `https://www.linkedin.com/jobs/search/?keywords=${enc}`;
+        case 'kalibrr': return `https://www.kalibrr.com/id-ID/job-board/te/${slug}`;
+        case 'google': return `https://www.google.com/search?q=${enc}+jobs&ibp=htl;jobs`;
+        default: return '#';
+      }
+    }
+
     const PORTALS = [
-      { name: 'JobStreet', url: q => `https://www.jobstreet.co.id/id/job-search?q=${encodeURIComponent(q)}` },
-      { name: 'Glints', url: q => `https://glints.com/id/opportunities/jobs?query=${encodeURIComponent(q)}` },
-      { name: 'LinkedIn', url: q => `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}` },
+      { id: 'jobstreet', label: 'JobStreet', primary: true },
+      { id: 'linkedin', label: 'LinkedIn' },
+      { id: 'kalibrr', label: 'Kalibrr' },
+      { id: 'google', label: 'Google Jobs' },
     ];
 
     btn.addEventListener('click', async () => {
@@ -34,26 +52,32 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Gagal menghubungi AI. Coba lagi.');
-        const links = [];
-        (data.queries || []).forEach(q => {
-          PORTALS.forEach(p => {
-            links.push(`<li><a href="${p.url(q)}" target="_blank" rel="noopener">${p.name}: ${escHtml(q)}</a></li>`);
-          });
-        });
+
+        const category = escHtml(data.category || 'Rekomendasi Posisi');
+        const cards = (data.queries || []).map(q => {
+          const qe = escHtml(q);
+          const btns = PORTALS.map(p =>
+            `<a class="js-portal${p.primary ? ' primary' : ''}" href="${cariUrl(p.id, q)}" target="_blank" rel="noopener">${p.label} ↗</a>`
+          ).join('');
+          return `<div class="js-card"><div class="js-q">${qe}</div><div class="js-portal-row">${btns}</div></div>`;
+        }).join('');
+
         panel.innerHTML =
-          `<p class="js-cat">Rekomendasi posisi: <strong>${escHtml(data.category || '')}</strong></p>` +
-          `<ul class="js-links">${links.join('')}</ul>` +
-          (typeof data.remaining === 'number' ? `<p class="js-remaining">Sisa kuota AI: ${data.remaining}</p>` : '');
+          `<div class="js-head"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg>` +
+          `<span class="js-title">Posisi yang cocok: ${category}</span></div>` +
+          cards +
+          `<p class="js-note"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg> Pencarian terbuka di portal masing-masing. Sisa kuota AI: ${data.remaining ?? '-'}</p>`;
       } catch (err) {
-        panel.innerHTML = `<p class="js-error">${escHtml(err.message)}</p>`;
+        if (/habis/i.test(err.message) && window.__cvkitaQuotaExhausted) {
+          panel.innerHTML = '';
+          window.__cvkitaQuotaExhausted();
+        } else {
+          panel.innerHTML = `<p class="js-error">${escHtml(err.message)}</p>`;
+        }
       } finally {
         btn.innerHTML = label;
         btn.disabled = false;
       }
     });
-
-    function escHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    }
   });
 })();

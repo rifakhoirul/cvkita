@@ -42,8 +42,15 @@ function closePaywall() {
   $('#paywall').classList.add('hidden');
 }
 
+// QA 2026-09-29: badge "Premium" di header — indikator lisensi aktif.
+function updatePremiumBadge() {
+  const badge = document.getElementById('premium-badge');
+  if (badge) badge.classList.toggle('hidden', !isPremium());
+}
+
 (function wirePaywallClose() {
   document.addEventListener('DOMContentLoaded', () => {
+    updatePremiumBadge();
     const pw = document.getElementById('paywall');
     if (!pw) return;
     const btn = document.getElementById('btn-close-paywall');
