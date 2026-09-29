@@ -6,12 +6,12 @@ test.describe('Cari Lowongan (premium)', () => {
     await page.goto('/');
   });
 
-  test('tombol & panel ada di bawah preview, sebelum tombol unduh', async ({ page }) => {
+  test('tombol AI ada di bawah preview, setelah tombol unduh (fitur gratis dulu)', async ({ page }) => {
     const btn = page.locator('#btn-jobsearch');
     await expect(btn).toBeVisible();
     const orderOk = await btn.evaluate(el => {
       const dl = document.getElementById('btn-download-preview');
-      return !!(el.compareDocumentPosition(dl) & Node.DOCUMENT_POSITION_FOLLOWING);
+      return !!(dl.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
     });
     expect(orderOk).toBe(true);
   });

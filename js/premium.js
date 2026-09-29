@@ -43,9 +43,33 @@ function closePaywall() {
 }
 
 // QA 2026-09-29: badge "Premium" di header — indikator lisensi aktif.
-function updatePremiumBadge() {
+// 29 Sep: tampilkan juga sisa kuota AI di badge ( Premium · 3× ) — refresh tiap buka halaman.
+function updatePremiumBadge(quotaInfo) {
   const badge = document.getElementById('premium-badge');
-  if (badge) badge.classList.toggle('hidden', !isPremium());
+  if (badge) {
+    badge.classList.toggle('hidden', !isPremium());
+    if (isPremium()) {
+      if (typeof quotaInfo === 'number') {
+        badge.textContent = '';
+        badge.append('Premium · ' + quotaInfo + '×');
+      }
+      // Ambil sisa kuota terbaru dari server (tanpa memotong kuota)
+      const kode = localStorage.getItem(LICENSE_KEY);
+      if (kode && typeof verifyLicense === 'function') {
+        verifyLicense(kode).then(r => {
+          if (r && r.valid && typeof r.quota === 'number') {
+            badge.textContent = '';
+            badge.append('Premium · ' + r.quota + '×');
+          } else if (r && r.valid === false) {
+            badge.textContent = '';
+            badge.append('Premium');
+          }
+        }).catch(() => {});
+      }
+    } else {
+      badge.textContent = '';
+    }
+  }
   // Header emas saat premium aktif
   document.body.classList.toggle('premium-active', isPremium());
 }

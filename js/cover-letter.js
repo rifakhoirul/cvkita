@@ -56,8 +56,8 @@
           if (!v || !v.valid) {
             btn.innerHTML = label0; btn.disabled = false;
             localStorage.removeItem(LICENSE_KEY);
-            if (typeof window.__cvkitaQuotaModal === 'function') window.__cvkitaQuotaModal('Kode lisensimu tidak valid atau sudah habis. Masukkan kode lain.');
-            else alert('Kode lisensimu tidak valid atau sudah habis. Masukkan kode lain.');
+            if (typeof updatePremiumBadge === 'function') updatePremiumBadge();
+            showPaywall();
             return;
           }
         } catch {

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=34">
+<link rel="stylesheet" href="css/style.css?v=35">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -147,6 +147,7 @@
   </section>
 
   <section class="preview-side">
+    <hr class="section-divider">
     <div class="preview-head">
       <span class="preview-label"><svg class="ic" aria-hidden="true"><use href="#i-eye"></use></svg> Preview CV</span>
       <span class="preview-note">Hasil cetak mengikuti kertas A4</span>
@@ -170,14 +171,13 @@
     </button>
     <p id="share-pdf-status" class="import-status hidden" role="status"></p>
 
-    <!-- Cek ATS tepat di bawah preview: user lihat skor → perbaiki → unduh -->
+    <!-- Fitur gratis dulu: Cek ATS → Unduh PDF, lalu fitur AI premium di bawah -->
     <button id="btn-ats-preview" class="btn ghost ats-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek Skor ATS (Gratis)</button>
-    <!-- Fitur premium: rekomendasi lowongan dari isi CV -->
+    <button id="btn-download-preview" class="btn primary dl-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> Unduh PDF (Gratis)</button>
+    <!-- Fitur premium: rekomendasi lowongan & cover letter dari isi CV -->
     <button id="btn-jobsearch" class="btn ghost js-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Analisis Karier: Lowongan + SWOT (AI)</button>
     <button id="btn-cover-letter" class="btn ghost js-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-doc"></use></svg> Buat Cover Letter (AI)</button>
     <div id="jobsearch-panel" class="jobsearch-panel hidden"></div>
-    <!-- Unduh langsung di bawah preview (tampil hanya di mobile) -->
-    <button id="btn-download-preview" class="btn primary dl-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> Unduh PDF (Gratis)</button>
   </section>
 </main>
 
@@ -200,15 +200,15 @@
 </div>
 
 <script src="js/premium.js?v=7"></script>
-<script src="js/quota-modal.js?v=1"></script>
+<script src="js/quota-modal.js?v=2"></script>
 <script src="js/jobsearch.js?v=4"></script>
-<script src="js/cover-letter.js?v=2"></script>
+<script src="js/cover-letter.js?v=3"></script>
 <script src="js/analytics.js?v=2"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="js/share-pdf.js?v=2"></script>
 <script src="js/import-cv.js?v=5"></script>
 <script src="js/improve-all.js?v=2"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=26"></script>
+<script src="js/app.js?v=27"></script>
 </body>
 </html>

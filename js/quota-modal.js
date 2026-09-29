@@ -67,4 +67,19 @@
     m.classList.remove('hidden');
     m.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Toast ringan untuk pesan sukses/info (TIDAK menghalangi klik, beda dengan modal kuota habis)
+  window.__cvkitaQuotaModal = function (message) {
+    let t = document.getElementById('cvkita-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'cvkita-toast';
+      t.setAttribute('role', 'status');
+      document.body.appendChild(t);
+    }
+    t.textContent = message;
+    t.classList.add('show');
+    clearTimeout(t.__timer);
+    t.__timer = setTimeout(() => t.classList.remove('show'), 4000);
+  };
 })();

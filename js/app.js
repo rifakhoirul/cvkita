@@ -180,7 +180,11 @@ document.addEventListener('click', e => {
           localStorage.setItem(LICENSE_KEY, code.trim());
           document.querySelectorAll('.tpl-btn.locked').forEach(b => b.classList.remove('locked'));
           $('#paywall').classList.add('hidden');
-          if (typeof updatePremiumBadge === 'function') updatePremiumBadge();
+          if (typeof updatePremiumBadge === 'function') updatePremiumBadge(r.quota);
+          // Feedback jelas: sisa kuota langsung terlihat setelah aktivasi
+          if (typeof window.__cvkitaQuotaModal === 'function') {
+            window.__cvkitaQuotaModal(`✅ Premium aktif! Sisa kuota AI: ${r.quota}. Sisa kuota juga tampil di badge Premium di header.`);
+          }
         } else {
           $('#aktivasi-error').textContent = r.error || 'Kode tidak valid. Cek lagi atau hubungi kami.';
           $('#aktivasi-error').classList.remove('hidden');
