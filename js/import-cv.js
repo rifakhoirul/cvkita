@@ -54,7 +54,8 @@
     const file = el.file.files && el.file.files[0];
     if (!file) return;
     if (file.size > 4 * 1024 * 1024) { setStatus('File terlalu besar (maks 4 MB).', false); return; }
-    setStatus('Membaca CV…', true);
+    // Progress bar di index.html sudah berisi teks "Membaca CV…" — status text KOSONG saat busy agar tidak dobel
+    setStatus('', true);
     try {
       const buf = await file.arrayBuffer();
       let bin = '';
