@@ -21,8 +21,9 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
   });
 
   test('tombol Contoh mengisi seluruh CV dengan data contoh', async ({ page }) => {
-    page.on('dialog', d => d.accept());
+    // 30 Sep: modal pilih bidang dulu (IT / Non-IT / Marketing)
     await page.click('#btn-sample');
+    await page.click('[data-sample="it"]');
     // Setelah reload, preview harus menampilkan nama contoh
     await expect(page.locator('#cv-paper h1')).toHaveText('Rania Putri Andini');
     await expect(page.locator('[name="headline"]')).toHaveValue(/Sistem Informasi/);
@@ -31,10 +32,10 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
     await expect(page.locator('#cv-paper')).toContainText('Magang — Data Analyst');
   });
 
-  test('Contoh dibatalkan bila user tidak setuju', async ({ page }) => {
-    page.on('dialog', d => d.dismiss());
+  test('Contoh dibatalkan bila user menutup modal', async ({ page }) => {
     await page.click('#btn-sample');
-    // Tidak reload — preview tetap kosong
+    await page.click('#sample-cancel'); // modal tertutup, tidak ada reload
+    await expect(page.locator('#sample-modal')).toBeHidden();
     await expect(page.locator('#cv-paper h1')).toHaveText('Nama Kamu');
   });
 

@@ -20,9 +20,9 @@ test.describe('Penjelasan Skor ATS', () => {
 
   test('CV lengkap -> skor 100, pesan positif, tanpa tips', async ({ page }) => {
     await page.goto('/');
-    // klik sample (auto-confirm)
-    page.on('dialog', d => d.accept());
+    // klik sample -> pilih profil IT di modal
     await page.click('#btn-sample-top');
+    await page.click('[data-sample="it"]');
     await page.waitForURL(/.*/);
     await page.reload();
     await page.click('#btn-ats-preview');
