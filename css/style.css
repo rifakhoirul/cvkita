@@ -123,6 +123,20 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 @keyframes import-slide{0%{margin-left:-40%}100%{margin-left:100%}}
 .import-status{font-size:.8rem;margin-top:12px;margin-bottom:12px;color:var(--muted);line-height:1.5}
 .js-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+/* SWOT grid (Opsi A: gabung dengan job-search) */
+.swot-wrap{margin-top:14px}
+.swot-title{font-size:.9rem;font-weight:700;margin-bottom:8px}
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:480px){.swot-grid{grid-template-columns:1fr}}
+.swot-quad{border-radius:8px;padding:10px 12px;font-size:.78rem;line-height:1.5}
+.swot-quad h4{font-size:.75rem;margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
+.swot-quad ul{margin:0;padding-left:16px}
+.swot-quad li{margin-bottom:3px}
+.swot-s{background:#f0fdf4;border:1px solid #86efac}.swot-s h4{color:#15803d}
+.swot-w{background:#fef2f2;border:1px solid #fca5a5}.swot-w h4{color:#b91c1c}
+.swot-o{background:#eff6ff;border:1px solid #93c5fd}.swot-o h4{color:#1d4ed8}
+.swot-t{background:#fffbeb;border:1px solid #fcd34d}.swot-t h4{color:#b45309}
+.swot-cap{font-size:.72rem;color:var(--muted);margin-top:8px}
 .js-reason{font-size:.82rem;color:var(--sub);background:var(--brand-soft,#fff7ed);border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:8px 12px;margin:0 0 12px}
 .js-note{font-size:.75rem;color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:5px}
 /* Improve seluruh CV — tombol di akhir form + modal konfirmasi diff */

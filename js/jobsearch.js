@@ -63,11 +63,25 @@
         }).join('');
 
         const reason = escHtml(data.reason || '');
+        const swot = data.swot || null;
+        let swotHtml = '';
+        if (swot && (swot.s.length || swot.w.length || swot.o.length || swot.t.length)) {
+          const quad = (cls, label, items) =>
+            `<div class="swot-quad ${cls}"><h4>${label}</h4><ul>${items.map(i => `<li>${escHtml(i)}</li>`).join('')}</ul></div>`;
+          swotHtml =
+            `<div class="swot-grid">` +
+            quad('swot-s', '💪 Kekuatan', swot.s) +
+            quad('swot-w', '🎯 Perlu Ditambal', swot.w) +
+            quad('swot-o', '🚀 Peluang', swot.o) +
+            quad('swot-t', '⚠️ Ancaman', swot.t) +
+            `</div><p class="swot-cap">Analisis SWOT berdasarkan CV-mu — untuk posisi ${category}.</p>`;
+        }
         panel.innerHTML =
           `<div class="js-head"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg>` +
           `<span class="js-title">Posisi yang cocok: ${category}</span></div>` +
           (reason ? `<p class="js-reason">${reason}</p>` : '') +
           cards +
+          (swotHtml ? `<div class="swot-wrap"><h3 class="swot-title">📊 Analisis SWOT</h3>${swotHtml}</div>` : '') +
           `<p class="js-note"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg> Pencarian terbuka di portal masing-masing. Sisa kuota AI: ${data.remaining ?? '-'}</p>`;
       } catch (err) {
         if (/habis/i.test(err.message) && window.__cvkitaQuotaExhausted) {
