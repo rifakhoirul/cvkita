@@ -46,6 +46,8 @@ function closePaywall() {
 function updatePremiumBadge() {
   const badge = document.getElementById('premium-badge');
   if (badge) badge.classList.toggle('hidden', !isPremium());
+  // Header emas saat premium aktif
+  document.body.classList.toggle('premium-active', isPremium());
 }
 
 (function wirePaywallClose() {

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=27">
+<link rel="stylesheet" href="css/style.css?v=28">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -29,8 +29,10 @@
 
 <!-- ===== Header ===== -->
 <header class="topbar">
-  <div class="logo">CV<span>Kita</span></div>
-  <span id="premium-badge" class="premium-badge hidden" title="Lisensi aktif"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Premium</span>
+  <div class="logo-wrap">
+    <div class="logo">CV<span>Kita</span></div>
+    <span id="premium-badge" class="premium-badge hidden" title="Lisensi aktif"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Premium</span>
+  </div>
   <div class="topbar-actions">
     <button id="btn-more" class="btn ghost btn-more" type="button" aria-label="Menu lainnya" aria-expanded="false">⋯</button>
     <button id="btn-sample" class="btn ghost topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Contoh</button>
@@ -189,7 +191,7 @@
   <button id="btn-download-sticky" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Unduh PDF</button>
 </div>
 
-<script src="js/premium.js?v=6"></script>
+<script src="js/premium.js?v=7"></script>
 <script src="js/quota-modal.js?v=1"></script>
 <script src="js/jobsearch.js?v=2"></script>
 <script src="js/analytics.js?v=1"></script>

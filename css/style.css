@@ -47,6 +47,11 @@ a{color:var(--brand-dark)}
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;gap:8px;flex-wrap:wrap}
 .logo{font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
 .logo span{color:var(--brand)}
+/* Premium aktif: badge di samping logo + header berubah emas mencolok */
+.logo-wrap{display:flex;align-items:center;gap:8px}
+.premium-badge{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:700;color:#92400e;background:linear-gradient(135deg,#fde68a,#fbbf24);border:1px solid #d97706;border-radius:99px;padding:3px 9px;box-shadow:0 1px 4px rgba(217,119,6,.35)}
+.premium-badge .ic{width:11px;height:11px}
+body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);border-bottom-color:#fbbf24}
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 
 /* Header mobile ringkas: aksi sekunder di menu ⋯ (audit: header terlalu penuh) */
