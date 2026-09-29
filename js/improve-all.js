@@ -44,6 +44,7 @@
   }
 
   function showConfirm(before, after, onAccept) {
+    const esc = s => String(s).replace(/[&<>"/]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '/': '&#x2F;' }[c]));
     const modal = document.createElement('div');
     modal.className = 'improve-confirm';
     modal.innerHTML = `
@@ -59,7 +60,6 @@
           <button type="button" class="btn primary" data-yes>Terima hasil AI</button>
         </div>
       </div>`;
-    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     function preview(cv) {
       const lines = [];
       if (cv.fields && cv.fields.ringkasan) lines.push('Ringkasan: ' + cv.fields.ringkasan);

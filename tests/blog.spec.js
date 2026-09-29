@@ -21,10 +21,10 @@ test.describe('Halaman artikel & masukan', () => {
     await page.goto('/blog/');
     await expect(page.locator('h1')).toBeVisible();
     // minimal 5 artikel tertaut
-    const links = await page.locator('.art h2 a').count();
+    const links = await page.locator('.art a.art-link').count();
     expect(links).toBeGreaterThanOrEqual(5);
     // semua link menuju file .html yang ada
-    await page.locator('.art h2 a').first().click();
+    await page.locator('.art a.art-link').first().click();
     await expect(page.locator('h1')).toBeVisible();
   });
 

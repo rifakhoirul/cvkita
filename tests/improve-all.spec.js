@@ -61,5 +61,5 @@ test('kuota habis → modal kuota muncul (bukan alert polos)', async ({ page }) 
     body: JSON.stringify({ error: 'Kuota AI-mu sudah habis. Beli kode baru untuk lanjut.', quota: 0 }),
   }));
   await page.click('#btn-improve-all');
-  await expect(page.locator('#quota-modal, [class*="quota"]')).toBeVisible();
+  await expect(page.locator('#quota-modal')).toBeVisible();
 });
