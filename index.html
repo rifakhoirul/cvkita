@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=23">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -91,6 +91,9 @@
     <form id="cv-form">
       <!-- Tombol Contoh di awal form: user blank page bisa langsung lihat hasil -->
       <button id="btn-sample-top" class="btn ghost sample-top" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Isi dengan contoh</button>
+      <label class="import-cv" for="import-file">Punya CV lama? <strong>Impor PDF-mu</strong> — form terisi otomatis</label>
+      <input type="file" id="import-file" accept="application/pdf,.pdf" class="hidden">
+      <p id="import-status" class="import-status hidden" role="status"></p>
 
       <details open><summary>1. Data Diri</summary>
         <label>Nama lengkap<input name="nama" placeholder="mis: Rania Putri Andini" required></label>
@@ -182,6 +185,7 @@
 <script src="js/quota-modal.js?v=1"></script>
 <script src="js/jobsearch.js?v=2"></script>
 <script src="js/analytics.js?v=1"></script>
+<script src="js/import-cv.js?v=1"></script>
 <script src="js/feedback.js?v=1"></script>
 <script src="js/app.js?v=18"></script>
 </body>

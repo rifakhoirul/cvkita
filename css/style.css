@@ -101,6 +101,11 @@ a{color:var(--brand-dark)}
 .js-portal:hover{border-color:var(--brand);color:var(--brand-dark,#c2410c)}
 .js-portal.primary{background:var(--brand);border-color:var(--brand);color:#fff}
 .js-portal.primary:hover{background:var(--brand-dark,#c2410c);color:#fff}
+/* Impor CV PDF */
+.import-cv{display:block;font-size:.85rem;color:var(--muted);margin-top:10px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.import-cv strong{color:var(--ink)}
+.import-status{font-size:.8rem;margin-top:6px;color:var(--muted)}
+.import-status.import-busy::before{content:"⏳ "}
 .js-note{font-size:.75rem;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:5px}
 /* ATS breakdown per kategori */
 .ats-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
