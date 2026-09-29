@@ -115,7 +115,7 @@ a{color:var(--brand-dark)}
 .import-progress-track{height:5px;background:#f3f4f6;border-radius:99px;overflow:hidden}
 .import-progress-fill{height:100%;width:40%;background:var(--brand);border-radius:99px;animation:import-slide 1.2s ease-in-out infinite}
 @keyframes import-slide{0%{margin-left:-40%}100%{margin-left:100%}}
-.import-status{font-size:.8rem;margin-top:8px;color:var(--muted)}
+.import-status{font-size:.8rem;margin-top:12px;margin-bottom:12px;color:var(--muted);line-height:1.5}
 .js-note{font-size:.75rem;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:5px}
 /* ATS breakdown per kategori */
 .ats-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
