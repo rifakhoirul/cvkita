@@ -29,8 +29,8 @@ a{color:var(--brand-dark)}
 
 /* ===== Tombol ===== */
 .btn{border:none;border-radius:10px;padding:11px 16px;min-height:44px;font-size:.9rem;font-weight:700;transition:background .15s,box-shadow .15s}
-.btn.primary{background:var(--brand);color:#fff;box-shadow:0 1px 3px rgba(234,88,12,.35)}
-.btn.primary:hover{background:var(--brand-dark)}
+.btn.primary{background:var(--brand-dark);color:#fff;box-shadow:0 1px 3px rgba(194,65,12,.35)}
+.btn.primary:hover{background:#9a3412}
 .btn.primary:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{background:#fff}
@@ -49,8 +49,8 @@ a{color:var(--brand-dark)}
 /* Jarak tombol AI/Hapus dalam entry */
 .entry .btn.ai,.entry .btn.del{display:inline-block;margin-right:8px}
 /* Tombol AI premium: gradasi oranye mencolok (fitur berbayar harus kelihatan bernilai) */
-.btn.ai{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;box-shadow:0 2px 8px rgba(234,88,12,.35)}
-.btn.ai:hover{background:linear-gradient(135deg,#ea580c,#c2410c);box-shadow:0 3px 10px rgba(234,88,12,.45)}
+.btn.ai{background:linear-gradient(135deg,#ea580c,#c2410c);color:#fff;border:none;box-shadow:0 2px 8px rgba(194,65,12,.35)}
+.btn.ai:hover{background:linear-gradient(135deg,#c2410c,#9a3412);box-shadow:0 3px 10px rgba(194,65,12,.45)}
 .btn.ai:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .entry .btn.del:last-child{margin-right:0}
 .entry .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
@@ -59,7 +59,7 @@ a{color:var(--brand-dark)}
 
 /* ===== Header ===== */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;gap:8px;flex-wrap:wrap}
-.logo{font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
+.logo{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;display:inline-block;padding:7px 0;text-decoration:none}
 .logo span{color:var(--brand)}
 /* Premium aktif: badge di samping logo + header berubah emas mencolok */
 .logo-wrap{display:flex;align-items:center;gap:8px}
@@ -199,7 +199,7 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 input,textarea{display:block;width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:1rem;font-family:inherit;background:#fbfaf7;color:var(--ink);margin-bottom:0}
 textarea{padding:10px 11px;min-height:70px;resize:vertical}
 input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
-::placeholder{color:#98a0b0;opacity:1;font-weight:400}
+::placeholder{color:#6b7280;opacity:1;font-weight:400}
 
 .repeat-list .entry{border:1px dashed var(--line);border-radius:10px;padding:10px;margin-bottom:10px}
 .repeat-list .entry input,.repeat-list .entry textarea{width:100%;margin-bottom:8px}
@@ -211,7 +211,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .preview-side{position:sticky;top:66px}
 .preview-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .preview-label{font-weight:700;font-size:.85rem;color:var(--muted)}
-.preview-note{font-size:.72rem;color:#98a0b0}
+.preview-note{font-size:.72rem;color:#4b5563}
 /* Unduh di bawah preview: hanya mobile (desktop sudah berdampingan) */
 .dl-below{display:none;width:100%;margin-top:12px;min-height:48px}
 /* Tombol share PDF/WA: tampil setelah nama terisi (kalahkan display:none dasar, semua ukuran layar) */
@@ -302,7 +302,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .cl-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cl-remaining{font-size:.8rem;color:var(--muted)}
 .cl-close{position:absolute;top:10px;right:10px;border:none;background:none;font-size:1rem;cursor:pointer;color:var(--muted);min-width:36px;min-height:36px}
-.tier-price-old{font-size:.85rem;color:#9ca3af;text-decoration:line-through !important}
+.tier-price-old{font-size:.85rem;color:#6b7280;text-decoration:line-through !important}
 .tier-save{font-size:.62rem;font-weight:800;letter-spacing:.04em;color:#15803d;background:#dcfce7;border-radius:999px;padding:2px 8px}
 .badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
 .badge-muted{background:#f1efe9;color:#475569}

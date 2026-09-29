@@ -11,9 +11,9 @@
   :root{--brand:#f97316;--brand-soft:#fff7ed;--ink:#1f2937;--sub:#4b5563;--line:#e5e7eb}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);line-height:1.7}
-  header{background:var(--brand);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-  header .logo{font-weight:800;font-size:1.15rem;text-decoration:none;color:#fff}
-  header a.cta{background:#fff;color:var(--brand);padding:9px 18px;border-radius:8px;text-decoration:none;font-weight:700;min-height:44px;display:inline-flex;align-items:center}
+  header{background:#c2410c;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  header .logo{font-weight:800;font-size:1.15rem;text-decoration:none;color:#fff;display:inline-block;padding:10px 0}
+  header a.cta{background:#fff;color:#c2410c;padding:9px 18px;border-radius:8px;text-decoration:none;font-weight:700;min-height:44px;display:inline-flex;align-items:center}
   main{max-width:720px;margin:0 auto;padding:32px 20px 64px}
   h1{font-size:1.8rem;margin-bottom:18px}
   .art{border:1px solid var(--line);border-radius:12px;margin-bottom:16px;transition:border-color .15s,box-shadow .15s}
@@ -108,7 +108,7 @@
 
   <nav class="page-nav" id="page-nav" aria-label="Halaman blog"></nav>
 </main>
-<footer><a href="/">← Kembali ke CVKita</a></footer>
+<footer><a href="/" style="display:inline-block;padding:14px 6px">← Kembali ke CVKita</a></footer>
 
 <script>
 // Pagination sisi klien: 6 kartu per halaman (tanpa reload; semua artikel tetap di HTML untuk SEO)
