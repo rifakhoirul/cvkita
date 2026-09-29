@@ -133,6 +133,20 @@ document.addEventListener('input', e => {
     sticky.classList.toggle('show', ada);
     document.body.classList.toggle('has-sticky', ada);
   }
+  // QA 2026-09-29: share WhatsApp — muncul begitu nama terisi
+  if (e.target.name === 'nama') {
+    const wa = document.getElementById('btn-share-wa');
+    if (wa) {
+      const nama = (e.target.value || '').trim();
+      if (nama) {
+        const teks = `Aku barusan bikin CV gratis di CVKita (${nama}) — lolos ATS, tanpa watermark. Coba juga: https://cvkita.id/`;
+        wa.dataset.url = `https://wa.me/?text=${encodeURIComponent(teks)}`;
+        wa.style.display = '';
+      } else {
+        wa.style.display = 'none';
+      }
+    }
+  }
 });
 document.addEventListener('click', e => {
   if (e.target.dataset.add) {
@@ -177,6 +191,10 @@ document.addEventListener('click', e => {
         $('#aktivasi-error').textContent = 'Gagal memverifikasi. Cek koneksi internetmu.';
         $('#aktivasi-error').classList.remove('hidden');
       });
+  }
+  if (e.target.id === 'btn-share-wa') {
+    const url = e.target.dataset.url;
+    if (url) window.open(url, '_blank', 'noopener');
   }
   if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky' || e.target.closest && e.target.closest('#btn-download-preview')) window.print();
   if (e.target.id === 'btn-reset') {
