@@ -122,7 +122,9 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .import-progress-fill{height:100%;width:40%;background:var(--brand);border-radius:99px;animation:import-slide 1.2s ease-in-out infinite}
 @keyframes import-slide{0%{margin-left:-40%}100%{margin-left:100%}}
 .import-status{font-size:.8rem;margin-top:12px;margin-bottom:12px;color:var(--muted);line-height:1.5}
-.js-note{font-size:.75rem;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:5px}
+.js-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.js-reason{font-size:.82rem;color:var(--sub);background:var(--brand-soft,#fff7ed);border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:8px 12px;margin:0 0 12px}
+.js-note{font-size:.75rem;color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:5px}
 /* Improve seluruh CV — tombol di akhir form + modal konfirmasi diff */
 .improve-all-btn{width:100%;margin-top:14px;justify-content:center}
 .improve-confirm{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}

@@ -62,9 +62,11 @@
           return `<div class="js-card"><div class="js-q">${qe}</div><div class="js-portal-row">${btns}</div></div>`;
         }).join('');
 
+        const reason = escHtml(data.reason || '');
         panel.innerHTML =
           `<div class="js-head"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg>` +
           `<span class="js-title">Posisi yang cocok: ${category}</span></div>` +
+          (reason ? `<p class="js-reason">${reason}</p>` : '') +
           cards +
           `<p class="js-note"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg> Pencarian terbuka di portal masing-masing. Sisa kuota AI: ${data.remaining ?? '-'}</p>`;
       } catch (err) {
