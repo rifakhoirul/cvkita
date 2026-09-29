@@ -48,7 +48,7 @@ test.describe('Halaman pembayaran Midtrans', () => {
     await page.goto('/pay.html');
     const wa = page.locator('a.cs-wa');
     await expect(wa).toBeVisible();
-    await expect(wa).toHaveAttribute('href', /wa\.me\/62895628135638/);
+    await expect(wa).toHaveAttribute('href', /wa\.me\/6282118217075/);
     await expect(wa).not.toContainText(/\d{3}-\d{4}-\d{5}/); // nomor tidak ditampilkan sebagai teks
   });
 });
