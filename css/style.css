@@ -243,6 +243,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
   background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08)}
 .sticky-download.show{display:flex}
 .sticky-download .sd-label{font-size:.82rem;color:var(--ink);font-weight:600}
+.sticky-download .sd-scroll{font-size:.78rem;padding:8px 12px}
 @media(min-width:900px){.sticky-download{display:none!important}}
 body.has-sticky{padding-bottom:64px}
 

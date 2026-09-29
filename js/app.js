@@ -210,6 +210,10 @@ document.addEventListener('click', e => {
     if (url) window.open(url, '_blank', 'noopener');
   }
   if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky' || e.target.closest && e.target.closest('#btn-download-preview')) window.print();
+  if (e.target.id === 'btn-scroll-preview') {
+    const pv = document.getElementById('cv-preview') || document.getElementById('cv-paper');
+    pv?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
   if (e.target.id === 'btn-reset') {
     if (confirm('Hapus semua data CV? Tindakan ini tidak bisa dibatalkan.')) {
       localStorage.removeItem(KEY);
