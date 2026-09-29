@@ -102,6 +102,10 @@ a{color:var(--brand-dark)}
 .js-portal.primary{background:var(--brand);border-color:var(--brand);color:#fff}
 .js-portal.primary:hover{background:var(--brand-dark,#c2410c);color:#fff}
 .js-note{font-size:.75rem;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:5px}
+/* ATS breakdown per kategori */
+.ats-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.ats-cat{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem}
+.ats-cat strong{color:var(--brand-dark,#c2410c)}
 .jobsearch-panel{border:1px solid #fed7aa;background:#fffbeb}
 /* Facts bar: satu baris ringkas menggantikan sub + badge privasi + tips */
 .hero-facts{display:flex;align-items:center;gap:6px;margin-top:10px;color:var(--muted);font-size:.8rem}

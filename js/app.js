@@ -224,8 +224,15 @@ document.addEventListener('click', e => {
     location.reload();
   }
   if (e.target.id === 'btn-ats' || e.target.id === 'btn-ats-preview') {
-    const { score, tips } = atsScore();
+    const { score, tips, breakdown } = atsScore();
     $('#ats-score').textContent = score;
+    // Breakdown kategori: Identitas / Isi CV / Kekuatan
+    const catEl = document.getElementById('ats-breakdown');
+    if (catEl && breakdown) {
+      catEl.innerHTML = breakdown.map(b =>
+        `<div class="ats-cat"><span>${esc(b.nama)}</span><strong>${b.dapat}/${b.maks}</strong></div>`
+      ).join('');
+    }
     $('#ats-tips').innerHTML = tips.length
       ? tips.map(t => `<li>${esc(t)}</li>`).join('')
       : '<li>🎉 Mantap! CV-mu sudah ATS-friendly.</li>';
@@ -243,21 +250,42 @@ function atsScore() {
   const f = data.fields || {};
   const lists = data.lists || {};
   let score = 0;
-  const tips = [];
-  const add = (cond, pts, tip) => { if (cond) score += pts; else if (tip) tips.push(tip); };
+  // QA 2026-09-29: tiap cek punya kategori & bobot utk prioritas saran
+  const checks = [];
+  const add = (cond, pts, tip, cat) => {
+    checks.push({ cond, pts, tip, cat });
+    if (cond) score += pts;
+  };
 
-  add((f.nama || '').trim().length > 2, 10, 'Lengkapi nama lengkap');
-  add(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email || ''), 10, 'Tambahkan email yang valid (rekruter butuh ini)');
-  add((f.telepon || '').replace(/\D/g, '').length >= 9, 10, 'Tambahkan nomor telepon/WhatsApp yang valid');
-  add((f.ringkasan || '').split(/\s+/).filter(Boolean).length >= 15, 15, 'Tulis ringkasan minimal 15 kata: siapa kamu & apa yang dicari');
-  add((lists.pendidikan || []).some(p => (p.sekolah || '').trim()), 15, 'Tambahkan minimal 1 pendidikan');
-  add((lists.pengalaman || []).some(p => (p.posisi || '').trim() || (p.organisasi || '').trim()), 15, 'Tambahkan minimal 1 pengalaman: magang, organisasi, atau kerja');
-  add((f.keahlian || '').split(',').filter(s => s.trim()).length >= 3, 10, 'Sebutkan minimal 3 keahlian');
-  add((f.linkedin || '').trim().length > 5, 5, 'Tambahkan link LinkedIn/GitHub/portofolio');
-  add((f.prestasi || '').trim().length > 10, 5, 'Tambahkan prestasi atau sertifikasi (kalau ada)');
-  add((lists.pengalaman || []).some(p => (p.deskripsi || '').split('\n').filter(l => l.trim()).length >= 2), 5, 'Di pengalaman, tulis minimal 2 poin capaian (mulai dengan kata kerja)');
+  add((f.nama || '').trim().length > 2, 10, 'Lengkapi nama lengkap', 'Identitas');
+  add(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email || ''), 10, 'Tambahkan email yang valid (rekruter butuh ini)', 'Identitas');
+  add((f.telepon || '').replace(/\D/g, '').length >= 9, 10, 'Tambahkan nomor telepon/WhatsApp yang valid', 'Identitas');
+  add((f.linkedin || '').trim().length > 5, 5, 'Tambahkan link LinkedIn/GitHub/portofolio', 'Identitas');
+  add((f.ringkasan || '').split(/\s+/).filter(Boolean).length >= 15, 15, 'Tulis ringkasan minimal 15 kata: siapa kamu & apa yang dicari', 'Isi CV');
+  add((lists.pendidikan || []).some(p => (p.sekolah || '').trim()), 15, 'Tambahkan minimal 1 pendidikan', 'Isi CV');
+  add((lists.pengalaman || []).some(p => (p.posisi || '').trim() || (p.organisasi || '').trim()), 15, 'Tambahkan minimal 1 pengalaman: magang, organisasi, atau kerja', 'Isi CV');
+  add((f.keahlian || '').split(',').filter(s => s.trim()).length >= 3, 10, 'Sebutkan minimal 3 keahlian', 'Kekuatan');
+  add((f.prestasi || '').trim().length > 10, 5, 'Tambahkan prestasi atau sertifikasi (kalau ada)', 'Kekuatan');
+  add((lists.pengalaman || []).some(p => (p.deskripsi || '').split('\n').filter(l => l.trim()).length >= 2), 5, 'Di pengalaman, tulis minimal 2 poin capaian (mulai dengan kata kerja)', 'Kekuatan');
 
-  return { score: Math.min(score, 100), tips };
+  // Breakdown per kategori: dapat / maksimum
+  const CATS = ['Identitas', 'Isi CV', 'Kekuatan'];
+  const breakdown = CATS.map(cat => {
+    const rows = checks.filter(c => c.cat === cat);
+    return {
+      nama: cat,
+      dapat: rows.filter(r => r.cond).reduce((s, r) => s + r.pts, 0),
+      maks: rows.reduce((s, r) => s + r.pts, 0),
+    };
+  });
+
+  // Saran prioritas: poin yang hilang, terbesar dulu
+  const tips = checks
+    .filter(c => !c.cond && c.tip)
+    .sort((a, b) => b.pts - a.pts)
+    .map(c => `${c.tip} (+${c.pts} poin)`);
+
+  return { score: Math.min(score, 100), tips, breakdown };
 }
 
 // QA 2026-09-29: error kuota -> modal aksi (beli/aktivasi), bukan alert polos.
