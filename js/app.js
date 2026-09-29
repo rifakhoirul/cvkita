@@ -148,6 +148,8 @@ document.addEventListener('input', e => {
   }
   // QA 2026-09-29: share WhatsApp — muncul begitu nama terisi
   if (e.target.name === 'nama') {
+    const pdfBtn = document.getElementById('btn-share-pdf');
+    if (pdfBtn) pdfBtn.classList.toggle('show-share', !!(e.target.value || '').trim());
     const wa = document.getElementById('btn-share-wa');
     if (wa) {
       const nama = (e.target.value || '').trim();

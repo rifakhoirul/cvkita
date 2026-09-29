@@ -196,6 +196,8 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .preview-note{font-size:.72rem;color:#98a0b0}
 /* Unduh di bawah preview: hanya mobile (desktop sudah berdampingan) */
 .dl-below{display:none;width:100%;margin-top:12px;min-height:48px}
+/* Tombol share PDF/WA: tampil setelah nama terisi (kalahkan display:none dasar, semua ukuran layar) */
+.dl-below.show-share{display:flex;align-items:center;justify-content:center;gap:6px}
 @media(max-width:919px){.dl-below{display:flex;align-items:center;justify-content:center;gap:6px}}
 
 /* ============================================================
