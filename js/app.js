@@ -150,17 +150,6 @@ document.addEventListener('input', e => {
   if (e.target.name === 'nama') {
     const pdfBtn = document.getElementById('btn-share-pdf');
     if (pdfBtn) pdfBtn.classList.toggle('show-share', !!(e.target.value || '').trim());
-    const wa = document.getElementById('btn-share-wa');
-    if (wa) {
-      const nama = (e.target.value || '').trim();
-      if (nama) {
-        const teks = `Baru bikin CV ATS gratis di CVKita (${nama}), gampang banget tanpa ribet. Coba buat juga yuk: https://cvkita.id/`;
-        wa.dataset.url = `https://wa.me/?text=${encodeURIComponent(teks)}`;
-        wa.style.display = '';
-      } else {
-        wa.style.display = 'none';
-      }
-    }
   }
 });
 document.addEventListener('click', e => {
@@ -206,10 +195,6 @@ document.addEventListener('click', e => {
         $('#aktivasi-error').textContent = 'Gagal memverifikasi. Cek koneksi internetmu.';
         $('#aktivasi-error').classList.remove('hidden');
       });
-  }
-  if (e.target.id === 'btn-share-wa') {
-    const url = e.target.dataset.url;
-    if (url) window.open(url, '_blank', 'noopener');
   }
   if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky' || e.target.closest && e.target.closest('#btn-download-preview')) window.print();
   if (e.target.id === 'btn-scroll-preview') {
