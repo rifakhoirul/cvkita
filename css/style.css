@@ -48,6 +48,10 @@ a{color:var(--brand-dark)}
 .btn.del{background:#fef2f2;color:var(--err);border:1px solid #fecaca;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
 /* Jarak tombol AI/Hapus dalam entry */
 .entry .btn.ai,.entry .btn.del{display:inline-block;margin-right:8px}
+/* Tombol AI premium: gradasi oranye mencolok (fitur berbayar harus kelihatan bernilai) */
+.btn.ai{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;box-shadow:0 2px 8px rgba(234,88,12,.35)}
+.btn.ai:hover{background:linear-gradient(135deg,#ea580c,#c2410c);box-shadow:0 3px 10px rgba(234,88,12,.45)}
+.btn.ai:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .entry .btn.del:last-child{margin-right:0}
 .entry .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .btn.danger{border-color:#fecaca;color:var(--err)}
