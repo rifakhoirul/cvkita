@@ -40,7 +40,7 @@
         return;
       }
       const label = btn.innerHTML;
-      btn.innerHTML = '⏳ Mencari rekomendasi...';
+      btn.innerHTML = '⏳ Menganalisis kariermu...';
       btn.disabled = true;
       panel.classList.remove('hidden');
       panel.innerHTML = '<p class="js-loading">Menyiapkan rekomendasi lowongan…</p>';
