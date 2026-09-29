@@ -191,7 +191,7 @@ document.addEventListener('click', e => {
         $('#aktivasi-error').classList.remove('hidden');
       });
   }
-  if (e.target.id === 'btn-download' || e.target.id === 'btn-download-sticky' || e.target.closest && e.target.closest('#btn-download-preview')) window.print();
+  if (e.target.closest && e.target.closest('#btn-download, #btn-download-sticky, #btn-download-preview')) window.print();
   if (e.target.id === 'btn-scroll-preview') {
     const pv = document.getElementById('cv-preview') || document.getElementById('cv-paper');
     pv?.scrollIntoView({ behavior: 'smooth', block: 'start' });
