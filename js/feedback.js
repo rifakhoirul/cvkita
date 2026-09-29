@@ -51,14 +51,28 @@
       localStorage.setItem(key, JSON.stringify(all));
     } catch (e) { /* localStorage penuh/blokir — abaikan */ }
 
-    if (FORM_URL) {
-      // Buka form Google dengan jawaban terisi (ganti entry.XXXX sesuai field-mu)
-      window.open(FORM_URL, '_blank');
-      status.textContent = 'Terima kasih! Lengkapi di form yang terbuka.';
-    } else {
-      status.textContent = 'Terima kasih! Masukanmu tersimpan.';
-    }
-    setTimeout(close, 1400);
+    // Kirim ke server (disimpan KV + alert Telegram ke owner)
+    var btn = document.getElementById('fb-send');
+    btn.disabled = true;
+    fetch('https://cvkita-api.cvkita-rifakhoirul.workers.dev/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, page: location.pathname })
+    })
+    .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, b: b }; }); })
+    .then(function (res) {
+      if (res.ok) {
+        status.textContent = 'Terima kasih! Masukanmu sudah terkirim.';
+        setTimeout(close, 1400);
+      } else {
+        btn.disabled = false;
+        status.textContent = res.b.error || 'Gagal mengirim. Coba lagi.';
+      }
+    })
+    .catch(function () {
+      btn.disabled = false;
+      status.textContent = 'Tidak bisa menghubungi server. Periksa koneksi internetmu.';
+    });
   }
 
   window.__cvkitaFeedback = function () {

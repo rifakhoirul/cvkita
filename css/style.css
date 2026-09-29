@@ -34,6 +34,16 @@ a{color:var(--brand-dark)}
 .btn.primary:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{background:#fff}
+/* Tombol aksi bawah preview: warna per fungsi agar mudah dibedakan (unduh = primary oranye) */
+#btn-ats-preview{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+#btn-ats-preview:hover{background:#dbeafe}
+#btn-ats-preview:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+#btn-jobsearch{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}
+#btn-jobsearch:hover{background:#ede9fe}
+#btn-jobsearch:focus-visible{outline:3px solid #c4b5fd;outline-offset:2px}
+#btn-cover-letter{background:#f0fdfa;border-color:#99f6e4;color:#0f766e}
+#btn-cover-letter:hover{background:#ccfbf1}
+#btn-cover-letter:focus-visible{outline:3px solid #5eead4;outline-offset:2px}
 .btn.add{background:var(--brand-soft);color:var(--brand-dark);margin-top:6px}
 .btn.del{background:#fef2f2;color:var(--err);border:1px solid #fecaca;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
 /* Jarak tombol AI/Hapus dalam entry */
