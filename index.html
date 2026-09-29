@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=39">
+<link rel="stylesheet" href="css/style.css?v=40">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -54,6 +54,20 @@
   </div>
   <div id="ats-breakdown" class="ats-breakdown"></div>
   <ul id="ats-tips"></ul>
+</div>
+
+<!-- ===== Modal pilih contoh CV (masukan pengunjung 30 Sep: contoh non-IT) ===== -->
+<div id="sample-modal" class="paywall hidden" role="dialog" aria-modal="true" aria-label="Pilih contoh CV">
+  <div class="paywall-card">
+    <button id="sample-cancel" class="paywall-close" type="button" aria-label="Tutup"><svg class="ic" aria-hidden="true"><use href="#i-close"></use></svg></button>
+    <h3>Pilih contoh sesuai bidangmu</h3>
+    <p class="fb-sub">Semua contoh lolos ATS &amp; bisa kamu edit bebas.</p>
+    <div class="sample-opts">
+      <button class="btn primary" data-sample="it" type="button">💻 IT / Data</button>
+      <button class="btn ghost" data-sample="nonit" type="button">📊 Administrasi / Office</button>
+      <button class="btn ghost" data-sample="marketing" type="button">📈 Marketing / Sales</button>
+    </div>
+  </div>
 </div>
 
 <!-- ===== Paywall ===== -->
@@ -211,6 +225,6 @@
 <script src="js/import-cv.js?v=5"></script>
 <script src="js/improve-all.js?v=2"></script>
 <script src="js/feedback.js?v=2"></script>
-<script src="js/app.js?v=27"></script>
+<script src="js/app.js?v=28"></script>
 </body>
 </html>

@@ -210,41 +210,117 @@ document.addEventListener('click', e => {
     }
   }
   if (e.target.id === 'btn-sample' || e.target.id === 'btn-sample-top') {
-    if (!confirm('Isi CV dengan contoh? Data yang sudah kamu tulis akan diganti.')) return;
-    const SAMPLE = {
-      fields: {
-        nama: 'Rania Putri Andini',
-        headline: 'Fresh Graduate — Sistem Informasi',
-        email: 'rania.putri@email.com',
-        telepon: '0812-3456-7890',
-        linkedin: 'linkedin.com/in/raniaputri',
-        kota: 'Jakarta',
-        ringkasan: 'Lulusan baru Sistem Informasi dengan pengalaman magang 6 bulan di bidang data analysis. Terbiasa dengan SQL, Excel, dan visualisasi data. Siap berkontribusi di tim yang berfokus pada pengambilan keputusan berbasis data.',
-        keahlian: 'SQL, Excel, Looker Studio, Python (pandas), Figma',
-        bahasa: 'Indonesia (Native), Inggris (Profesional)',
-        prestasi: 'Finalis Lomba Data Analysis Nasional 2023 — Top 10 dari 250 tim'
+    // 30 Sep: masukan pengunjung "tambah contoh CV non-IT" -> modal pilih bidang
+    $('#sample-modal').classList.remove('hidden');
+  }
+  if (e.target.id === 'sample-cancel' || e.target.closest('#sample-cancel')) {
+    $('#sample-modal').classList.add('hidden');
+  }
+  if (e.target.dataset.sample) {
+    const SAMPLES = {
+      it: {
+        fields: {
+          nama: 'Rania Putri Andini',
+          headline: 'Fresh Graduate — Sistem Informasi',
+          email: 'rania.putri@email.com',
+          telepon: '0812-3456-7890',
+          linkedin: 'linkedin.com/in/raniaputri',
+          kota: 'Jakarta',
+          ringkasan: 'Lulusan baru Sistem Informasi dengan pengalaman magang 6 bulan di bidang data analysis. Terbiasa dengan SQL, Excel, dan visualisasi data. Siap berkontribusi di tim yang berfokus pada pengambilan keputusan berbasis data.',
+          keahlian: 'SQL, Excel, Looker Studio, Python (pandas), Figma',
+          bahasa: 'Indonesia (Native), Inggris (Profesional)',
+          prestasi: 'Finalis Lomba Data Analysis Nasional 2023 — Top 10 dari 250 tim'
+        },
+        lists: {
+          pendidikan: [{
+            sekolah: 'Universitas Indonesia',
+            gelar: 'S1 Sistem Informasi — IPK 3.65 (Cum Laude)',
+            periode: '2021 – 2025'
+          }],
+          pengalaman: [{
+            posisi: 'Magang — Data Analyst',
+            organisasi: 'PT Teknologi Nusantara, Jakarta',
+            periode: 'Jul – Des 2024',
+            deskripsi: 'Menganalisis data penjualan 12 bulan terakhir menggunakan SQL dan Excel, menghasilkan insight yang dipakai tim marketing untuk 3 kampanye.\nMembangun dashboard visualisasi di Looker Studio yang dipakai harian oleh 15 anggota tim.\nMenyusun laporan mingguan otomatis yang menghemat 4 jam kerja manual per minggu.'
+          }],
+          project: [{
+            nama: 'Sistem Informasi Inventaris Kampus (Skripsi)',
+            peran: 'Ketua Tim — 3 orang, 2024',
+            deskripsi: 'Merancang dan membangun aplikasi inventaris berbasis web untuk laboratorium fakultas.\nMengurangi waktu pencatatan stok dari 3 jam menjadi 20 menit per minggu.',
+            link: 'github.com/rania/inventaris'
+          }]
+        }
       },
-      lists: {
-        pendidikan: [{
-          sekolah: 'Universitas Indonesia',
-          gelar: 'S1 Sistem Informasi — IPK 3.65 (Cum Laude)',
-          periode: '2021 – 2025'
-        }],
-        pengalaman: [{
-          posisi: 'Magang — Data Analyst',
-          organisasi: 'PT Teknologi Nusantara, Jakarta',
-          periode: 'Jul – Des 2024',
-          deskripsi: 'Menganalisis data penjualan 12 bulan terakhir menggunakan SQL dan Excel, menghasilkan insight yang dipakai tim marketing untuk 3 kampanye.\nMembangun dashboard visualisasi di Looker Studio yang dipakai harian oleh 15 anggota tim.\nMenyusun laporan mingguan otomatis yang menghemat 4 jam kerja manual per minggu.'
-        }],
-        project: [{
-          nama: 'Sistem Informasi Inventaris Kampus (Skripsi)',
-          peran: 'Ketua Tim — 3 orang, 2024',
-          deskripsi: 'Merancang dan membangun aplikasi inventaris berbasis web untuk laboratorium fakultas.\nMengurangi waktu pencatatan stok dari 3 jam menjadi 20 menit per minggu.',
-          link: 'github.com/rania/inventaris'
-        }]
+      nonit: {
+        fields: {
+          nama: 'Dewi Anggraini',
+          headline: 'Fresh Graduate — Administrasi Bisnis',
+          email: 'dewi.anggraini@email.com',
+          telepon: '0813-9876-5432',
+          linkedin: 'linkedin.com/in/dewianggraini',
+          kota: 'Bandung',
+          ringkasan: 'Lulusan baru Administrasi Bisnis dengan pengalaman magang 6 bulan di bagian administrasi umum. Terbiasa mengelola dokumen, arsip, dan jadwal rapat, serta menguasai Microsoft Office (Word, Excel, PowerPoint). Teliti, cepat belajar, dan siap mendukung operasional kantor.',
+          keahlian: 'Microsoft Office (Word, Excel, PowerPoint), Pengarsipan Dokumen, Penjadwalan, Correspondence, Canva',
+          bahasa: 'Indonesia (Native), Inggris (Aktif)',
+          prestasi: 'Juara 2 Lomba Keterampilan Administrasi Tingkat Kota 2023'
+        },
+        lists: {
+          pendidikan: [{
+            sekolah: 'Universitas Padjadjaran',
+            gelar: 'D3 Administrasi Bisnis — IPK 3.58',
+            periode: '2022 – 2025'
+          }],
+          pengalaman: [{
+            posisi: 'Magang — Staf Administrasi',
+            organisasi: 'PT Cahaya Mandiri, Bandung',
+            periode: 'Feb – Jul 2024',
+            deskripsi: 'Mengelola arsip dokumen 200+ surat masuk/keluar per bulan dengan sistem filing digital sehingga pencarian dokumen 2x lebih cepat.\nMenyusun notulen dan jadwal rapat untuk 4 divisi secara rutin.\nMembantu proses rekap data kehadiran dan laporan bulanan karyawan.'
+          }],
+          project: [{
+            nama: 'Digitalisasi Arsip Kampus (Proyek Akhir)',
+            peran: 'Anggota Tim — 2 orang, 2024',
+            deskripsi: 'Mendigitalisasi arsip kertas unit kegiatan mahasiswa ke sistem spreadsheet terstruktur.\nMengurangi waktu pencarian dokumen dari 15 menit menjadi 3 menit.',
+            link: ''
+          }]
+        }
+      },
+      marketing: {
+        fields: {
+          nama: 'Bima Saputra',
+          headline: 'Fresh Graduate — Manajemen Pemasaran',
+          email: 'bima.saputra@email.com',
+          telepon: '0812-7788-9900',
+          linkedin: 'linkedin.com/in/bimasaputra',
+          kota: 'Surabaya',
+          ringkasan: 'Lulusan baru Manajemen (Pemasaran) dengan pengalaman magang 5 bulan di tim digital marketing. Terbiasa mengelola media sosial, membuat konten promosi, dan membaca performa iklan. Berkomunikasi aktif dan tertarik pada strategi penjualan berbasis data.',
+          keahlian: 'Digital Marketing, Media Sosial (IG/TikTok), Copywriting, Canva, Google Analytics Dasar, Komunikasi & Negosiasi',
+          bahasa: 'Indonesia (Native), Inggris (Aktif)',
+          prestasi: 'Top Seller Campaign Produk UMKM Kampus 2024 — penjualan tertinggi dari 30 tim'
+        },
+        lists: {
+          pendidikan: [{
+            sekolah: 'Universitas Airlangga',
+            gelar: 'S1 Manajemen — IPK 3.52',
+            periode: '2021 – 2025'
+          }],
+          pengalaman: [{
+            posisi: 'Magang — Digital Marketing',
+            organisasi: 'CV Sinar Retail, Surabaya',
+            periode: 'Agu – Des 2024',
+            deskripsi: 'Mengelola akun Instagram & TikTok toko dengan pertumbuhan followers 40% dalam 4 bulan.\nMenulis caption & skenario video promosi yang meningkatkan engagement rata-rata 2x.\nMembantu menjalankan iklan berbayar dengan budget Rp 3 juta/bulan dan melaporkan performanya mingguan.'
+          }],
+          project: [{
+            nama: 'Campaign Produk UMKM Kampus',
+            peran: 'Ketua Tim — 4 orang, 2024',
+            deskripsi: 'Merancang strategi promosi lengkap (konten, harga, channel) untuk produk UMKM lokal.\nMencapai penjualan tertinggi dibanding 30 tim peserta program.',
+            link: ''
+          }]
+        }
       }
     };
-    localStorage.setItem(KEY, JSON.stringify(SAMPLE));
+    const sample = SAMPLES[e.target.dataset.sample];
+    if (!sample) return;
+    localStorage.setItem(KEY, JSON.stringify(sample));
     location.reload();
   }
   if (e.target.id === 'btn-ats' || e.target.id === 'btn-ats-preview') {
