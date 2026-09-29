@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://cvkita.id/blog/">
 <meta name="robots" content="index,follow">
 <style>
-  :root{--brand:#f97316;--ink:#1f2937;--sub:#4b5563;--line:#e5e7eb}
+  :root{--brand:#f97316;--brand-soft:#fff7ed;--ink:#1f2937;--sub:#4b5563;--line:#e5e7eb}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);line-height:1.7}
   header{background:var(--brand);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
@@ -16,12 +16,19 @@
   header a.cta{background:#fff;color:var(--brand);padding:9px 18px;border-radius:8px;text-decoration:none;font-weight:700;min-height:44px;display:inline-flex;align-items:center}
   main{max-width:720px;margin:0 auto;padding:32px 20px 64px}
   h1{font-size:1.8rem;margin-bottom:18px}
-  .art{border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px;transition:border-color .15s}
-  .art:hover{border-color:var(--brand)}
-  .art h2{font-size:1.2rem;margin-bottom:6px}
-  .art h2 a{color:var(--ink);text-decoration:none}
-  .art h2 a:hover{color:var(--brand)}
+  .art{border:1px solid var(--line);border-radius:12px;margin-bottom:16px;transition:border-color .15s,box-shadow .15s}
+  .art:hover{border-color:var(--brand);box-shadow:0 3px 10px rgba(249,115,22,.12)}
+  /* Seluruh kartu bisa diklik: link membungkus judul + deskripsi (lebih intuitif) */
+  .art-link{display:block;padding:20px;color:inherit;text-decoration:none}
+  .art h2{font-size:1.2rem;margin-bottom:6px;color:var(--ink)}
+  .art:hover h2{color:var(--brand)}
   .art p{color:var(--sub);font-size:.94rem}
+  .art-link::after{content:"Baca →";display:inline-block;margin-top:10px;font-size:.82rem;font-weight:700;color:var(--brand)}
+  /* Pagination */
+  .page-nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:28px;flex-wrap:wrap}
+  .page-nav button{min-height:44px;min-width:44px;padding:9px 14px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;color:var(--ink)}
+  .page-nav button:hover{border-color:var(--brand);color:var(--brand)}
+  .page-nav button[aria-current="page"]{background:var(--brand);border-color:var(--brand);color:#fff}
   footer{border-top:1px solid var(--line);padding:20px;text-align:center;color:var(--sub);font-size:.85rem}
 </style>
 </head>
@@ -34,48 +41,111 @@
   <h1>Panduan CV &amp; Lamaran Kerja</h1>
   <p style="color:var(--sub);margin-bottom:28px">Artikel praktis untuk fresh graduate Indonesia yang sedang melamar kerja — langsung bisa dipraktikkan.</p>
 
-  <div class="art">
-    <h2><a href="/blog/contoh-cv-fresh-graduate.html">Contoh CV Fresh Graduate yang Lolos HRD (Template + Tips 2026)</a></h2>
-    <p>Struktur CV yang benar per bagian, contoh bullet point buruk vs baik, dan 6 kesalahan umum yang bikin CV kamu terlewat.</p>
+  <div id="art-list">
+    <div class="art">
+      <a class="art-link" href="/blog/contoh-cv-fresh-graduate.html">
+        <h2>Contoh CV Fresh Graduate yang Lolos HRD (Template + Tips 2026)</h2>
+        <p>Struktur CV yang benar per bagian, contoh bullet point buruk vs baik, dan 6 kesalahan umum yang bikin CV kamu terlewat.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/cv-tanpa-pengalaman.html">
+        <h2>CV Tanpa Pengalaman Kerja? 7 Cara Isi CV Saat Baru Lulus</h2>
+        <p>Organisasi, magang, project kuliah, freelance — semuanya sah di CV. Cara menuliskannya agar terlihat profesional.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/bullet-point-cv.html">
+        <h2>Cara Menulis Bullet Point CV yang Bikin HRD Berhenti Scroll</h2>
+        <p>Rumus Action + Hasil + Angka, 8 contoh before/after dari konteks Indonesia, dan 15 kata kerja aksi yang kuat.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/hard-skill-soft-skill.html">
+        <h2>Hard Skills vs Soft Skills di CV: Mana yang Harus Ditulis? (Contoh)</h2>
+        <p>Contoh hard skills dengan tool konkret, cara menulis soft skills yang terbukti — bukan klaim "team player" generik.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/apa-itu-ats.html">
+        <h2>Apa Itu ATS? Kenapa CV Kamu Ditolak Sebelum Dibaca HRD</h2>
+        <p>75% CV digugurkan sistem ATS sebelum manusia membacanya. Kenali cara kerjanya, 7 kesalahan yang bikin CV gugur, dan cara memperbaikinya.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/cv-ats-friendly-checklist.html">
+        <h2>CV ATS-Friendly: Checklist Lengkap Sebelum Kirim Lamaran</h2>
+        <p>Checklist 12 poin, format file &amp; font yang aman, dan kesalahan format yang bikin CV ditolak mesin ATS.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/email-lamaran-kerja.html">
+        <h2>Contoh Email Lamaran Kerja yang Ditanggapi HRD (Template)</h2>
+        <p>Struktur email lamaran + 2 template siap pakai, dan kesalahan fatal seperti subject kosong atau lupa lampiran.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/contoh-cover-letter.html">
+        <h2>Contoh Cover Letter: Surat Lamaran yang Dibaca HRD</h2>
+        <p>Struktur 4 paragraf (hook, nilai, proof, penutup) + contoh penuh untuk fresh graduate dan yang berpengalaman.</p>
+      </a>
+    </div>
+
+    <div class="art">
+      <a class="art-link" href="/blog/cv-bahasa-inggris.html">
+        <h2>Format CV Bahasa Inggris untuk Fresh Graduate Indonesia</h2>
+        <p>Kapan perlu CV Inggris, struktur standar internasional, dan kosakata translate istilah Indonesia yang benar.</p>
+      </a>
+    </div>
   </div>
 
-  <div class="art">
-    <h2><a href="/blog/cv-tanpa-pengalaman.html">CV Tanpa Pengalaman Kerja? 7 Cara Isi CV Saat Baru Lulus</a></h2>
-    <p>Organisasi, magang, project kuliah, freelance — semuanya sah di CV. Cara menuliskannya agar terlihat profesional.</p>
-  </div>
-
-  <div class="art">
-    <h2><a href="/blog/bullet-point-cv.html">Cara Menulis Bullet Point CV yang Bikin HRD Berhenti Scroll</a></h2>
-    <p>Rumus Action + Hasil + Angka, 8 contoh before/after dari konteks Indonesia, dan 15 kata kerja aksi yang kuat.</p>
-  </div>
-
-  <div class="art">
-    <h2><a href="/blog/hard-skill-soft-skill.html">Hard Skills vs Soft Skills di CV: Mana yang Harus Ditulis? (Contoh)</a></h2>
-    <p>Contoh hard skills dengan tool konkret, cara menulis soft skills yang terbukti — bukan klaim "team player" generik.</p>
-  </div>
-
-  <div class="art">
-    <h2><a href="/blog/apa-itu-ats.html">Apa Itu ATS? Kenapa CV Kamu Ditolak Sebelum Dibaca HRD</a></h2>
-    <p>75% CV digugurkan sistem ATS sebelum manusia membacanya. Kenali cara kerjanya, 7 kesalahan yang bikin CV gugur, dan cara memperbaikinya.</p>
-  </div>
-
-  <div class="art">
-    <h2><a href="/blog/cv-ats-friendly-checklist.html">CV ATS-Friendly: Checklist Lengkap Sebelum Kirim Lamaran</a></h2>
-    <p>Checklist 12 poin, format file & font yang aman, dan kesalahan format yang bikin CV ditolak mesin ATS.</p>
-  </div>
-  <div class="art">
-    <h2><a href="/blog/email-lamaran-kerja.html">Contoh Email Lamaran Kerja yang Ditanggapi HRD (Template)</a></h2>
-    <p>Struktur email lamaran + 2 template siap pakai, dan kesalahan fatal seperti subject kosong atau lupa lampiran.</p>
-  </div>
-  <div class="art">
-    <h2><a href="/blog/contoh-cover-letter.html">Contoh Cover Letter: Surat Lamaran yang Dibaca HRD</a></h2>
-    <p>Struktur 4 paragraf (hook, nilai, proof, penutup) + contoh penuh untuk fresh graduate dan yang berpengalaman.</p>
-  </div>
-  <div class="art">
-    <h2><a href="/blog/cv-bahasa-inggris.html">Format CV Bahasa Inggris untuk Fresh Graduate Indonesia</a></h2>
-    <p>Kapan perlu CV Inggris, struktur standar internasional, dan kosakata translate istilah Indonesia yang benar.</p>
-  </div>
+  <nav class="page-nav" id="page-nav" aria-label="Halaman blog"></nav>
 </main>
 <footer><a href="/">← Kembali ke CVKita</a></footer>
+
+<script>
+// Pagination sisi klien: 6 kartu per halaman (tanpa reload; semua artikel tetap di HTML untuk SEO)
+(function () {
+  var PER_PAGE = 6;
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#art-list .art'));
+  var total = cards.length;
+  var pages = Math.max(1, Math.ceil(total / PER_PAGE));
+  var nav = document.getElementById('page-nav');
+  var current = 1;
+
+  function show(page) {
+    current = page;
+    cards.forEach(function (c, i) {
+      var onPage = i >= (page - 1) * PER_PAGE && i < page * PER_PAGE;
+      c.style.display = onPage ? '' : 'none';
+    });
+    renderNav();
+    if (window.scrollY > 200) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderNav() {
+    if (pages <= 1) { nav.style.display = 'none'; return; }
+    nav.innerHTML = '';
+    for (var p = 1; p <= pages; p++) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = p;
+      b.setAttribute('data-page', String(p));
+      if (p === current) b.setAttribute('aria-current', 'page');
+      b.addEventListener('click', function () { show(Number(this.getAttribute('data-page'))); });
+      nav.appendChild(b);
+    }
+  }
+
+  show(1);
+})();
+</script>
 </body>
 </html>
