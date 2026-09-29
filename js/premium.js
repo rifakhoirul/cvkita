@@ -3,7 +3,7 @@
 const LICENSE_KEY = 'cvkita_license_v1';
 // Semua template premium harus terdaftar di sini, apa pun yang ada di tombol
 // template panel (index.html). Kalau tidak, tombolnya bisa dipakai gratis.
-const PREMIUM_TEMPLATES = ['executive', 'tech'];
+const PREMIUM_TEMPLATES = ['executive', 'tech', 'creative', 'elegant'];
 
 const isPremium = () => !!localStorage.getItem(LICENSE_KEY);
 

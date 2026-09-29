@@ -254,6 +254,14 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 #cv-paper.tpl-executive{--cv-font:Georgia,'Times New Roman',serif;--cv-ink:#111827;--cv-sub:#374151;--cv-h1-font:Georgia,serif;--cv-h1-size:1.55rem;--cv-h1-spacing:.5px;--cv-h2-color:#1f2937;--cv-h2-border:#374151;--cv-h2-size:1rem;--cv-h2-spacing:.5px;--cv-h2-transform:uppercase;--cv-tag-bg:transparent;--cv-tag-border:#374151;--cv-tag-ink:#111827}
 #cv-paper.tpl-executive h2{font-family:Georgia,serif;font-size:var(--cv-h2-size)}
 
+/* Creative — PREMIUM. Aksen teal gelap (kontras ≥ 8:1), tags rounded penuh. */
+#cv-paper.tpl-creative{--cv-ink:#134e4a;--cv-sub:#3f5b58;--cv-h1-color:#134e4a;--cv-h2-color:#0f766e;--cv-h2-border:#99f6e4;--cv-h2-spacing:.3px;--cv-tag-bg:#f0fdfa;--cv-tag-border:#99f6e4;--cv-tag-ink:#134e4a}
+#cv-paper.tpl-creative h2{letter-spacing:.3px}
+
+/* Elegant — PREMIUM. Serif klasik + maroon gelap (kontras ≥ 9:1), heading uppercase tipis. */
+#cv-paper.tpl-elegant{--cv-font:Georgia,'Times New Roman',serif;--cv-ink:#1f1717;--cv-sub:#4a3f3f;--cv-h1-font:Georgia,serif;--cv-h1-size:1.55rem;--cv-h1-color:#7f1d1d;--cv-h2-color:#7f1d1d;--cv-h2-border:#e7c8c8;--cv-h2-size:1rem;--cv-h2-spacing:.8px;--cv-h2-transform:uppercase;--cv-tag-bg:#fdf6f6;--cv-tag-border:#e7c8c8;--cv-tag-ink:#7f1d1d}
+#cv-paper.tpl-elegant h2{font-family:Georgia,serif;font-size:var(--cv-h2-size)}
+
 /* Tech — PREMIUM. Sans sistem + aksen indigo gelap (kontras ≥ 9:1). */
 #cv-paper.tpl-tech{--cv-ink:#1e293b;--cv-sub:#475569;--cv-h1-size:1.5rem;--cv-h1-spacing:0;--cv-h2-color:#312e81;--cv-h2-border:#c7d2fe;--cv-h2-spacing:.3px;--cv-tag-bg:#eef2ff;--cv-tag-border:#c7d2fe;--cv-tag-ink:#312e81}
 
