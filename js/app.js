@@ -146,11 +146,6 @@ document.addEventListener('input', e => {
     sticky.classList.toggle('show', ada);
     document.body.classList.toggle('has-sticky', ada);
   }
-  // QA 2026-09-29: share WhatsApp — muncul begitu nama terisi
-  if (e.target.name === 'nama') {
-    const pdfBtn = document.getElementById('btn-share-pdf');
-    if (pdfBtn) pdfBtn.classList.toggle('show-share', !!(e.target.value || '').trim());
-  }
 });
 document.addEventListener('click', e => {
   if (e.target.dataset.add) {
