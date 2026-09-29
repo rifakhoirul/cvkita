@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=23">
+<link rel="stylesheet" href="css/style.css?v=24">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -89,8 +89,20 @@
     <form id="cv-form">
       <!-- Tombol Contoh di awal form: user blank page bisa langsung lihat hasil -->
       <button id="btn-sample-top" class="btn ghost sample-top" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Isi dengan contoh</button>
-      <label class="import-cv" for="import-file">Punya CV lama? <strong>Impor PDF-mu</strong> — form terisi otomatis</label>
+      <!-- Fitur unggulan: impor CV PDF — dibuat menonjol sebagai kartu utama -->
+      <label class="import-cv" for="import-file">
+        <svg class="ic import-cv-ic" aria-hidden="true"><use href="#i-sparkle"></use></svg>
+        <span class="import-cv-txt">
+          <strong>Punya CV lama? Impor PDF-mu</strong>
+          <small>Form terisi otomatis dalam beberapa detik — gratis</small>
+        </span>
+        <span class="import-cv-badge">PDF</span>
+      </label>
       <input type="file" id="import-file" accept="application/pdf,.pdf" class="hidden">
+      <div id="import-progress" class="import-progress hidden" role="status" aria-live="polite">
+        <div class="import-progress-txt">Membaca CV…</div>
+        <div class="import-progress-track"><div class="import-progress-fill"></div></div>
+      </div>
       <p id="import-status" class="import-status hidden" role="status"></p>
 
       <details open><summary>1. Data Diri</summary>
@@ -183,7 +195,7 @@
 <script src="js/quota-modal.js?v=1"></script>
 <script src="js/jobsearch.js?v=2"></script>
 <script src="js/analytics.js?v=1"></script>
-<script src="js/import-cv.js?v=3"></script>
+<script src="js/import-cv.js?v=4"></script>
 <script src="js/feedback.js?v=1"></script>
 <script src="js/app.js?v=19"></script>
 </body>

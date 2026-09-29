@@ -4,14 +4,15 @@
   const el = {
     file: document.getElementById('import-file'),
     status: document.getElementById('import-status'),
+    progress: document.getElementById('import-progress'),
   };
   if (!el.file) return;
 
   function setStatus(msg, busy) {
+    if (el.progress) el.progress.classList.toggle('hidden', !busy);
     if (!el.status) return;
     el.status.textContent = msg || '';
     el.status.classList.toggle('hidden', !msg);
-    el.status.classList.toggle('import-busy', !!busy);
   }
 
   function apply(data) {
