@@ -53,13 +53,24 @@ function updatePremiumBadge(quotaInfo) {
         badge.textContent = '';
         badge.append('Premium · ' + quotaInfo + '×');
       }
-      // Ambil sisa kuota terbaru dari server (tanpa memotong kuota)
+      // Ambil sisa kuota terbaru dari server (tanpa memotong kuota).
+      // 30 Sep: cache 5 menit di localStorage — tiap reload halaman tidak boleh
+      // memanggil /api/verify (makan kuota KV rate-limit di server).
       const kode = localStorage.getItem(LICENSE_KEY);
-      if (kode && typeof verifyLicense === 'function') {
+      const CACHE_KEY = 'cvkita_quota_cache';
+      let cached = null;
+      try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch {}
+      const fresh = cached && (Date.now() - cached.t < 5 * 60 * 1000);
+      if (typeof quotaInfo !== 'number' && fresh && typeof cached.q === 'number') {
+        badge.textContent = '';
+        badge.append('Premium · ' + cached.q + '×');
+      }
+      if (kode && typeof verifyLicense === 'function' && !fresh) {
         verifyLicense(kode).then(r => {
           if (r && r.valid && typeof r.quota === 'number') {
             badge.textContent = '';
             badge.append('Premium · ' + r.quota + '×');
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ q: r.quota, t: Date.now() })); } catch {}
           } else if (r && r.valid === false) {
             badge.textContent = '';
             badge.append('Premium');
