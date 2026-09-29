@@ -29,8 +29,14 @@
       const input = document.querySelector(`[name="${n}"]`);
       if (input) input.dispatchEvent(new Event('input', { bubbles: true }));
     });
-    // Pendidikan / pengalaman / skills / projects: isi ringkas via localStorage bila loader tersedia
-    if (window.__cvkitaApplyImport) window.__cvkitaApplyImport(data);
+    // Pendidikan / pengalaman / project: render baris dinamis via app.js
+    if (window.__cvkitaRenderLists) {
+      window.__cvkitaRenderLists({
+        pendidikan: (data.pendidikan || []).map(p => ({ sekolah: p.sekolah, gelar: p.gelar || p.jurusan, periode: p.periode, detail: p.detail })),
+        pengalaman: (data.pengalaman || []).map(p => ({ posisi: p.posisi, organisasi: p.perusahaan || p.organisasi, periode: p.periode, deskripsi: (p.bullets || p.deskripsi || []).join('\\n') })),
+        project: (data.projects || data.project || []).map(p => ({ nama: p.nama, peran: p.peran || p.periode, deskripsi: (p.bullets || p.deskripsi || []).join ? [].concat(p.bullets || p.deskripsi).join('\\n') : (p.deskripsi || ''), link: p.link })),
+      });
+    }
     setStatus('✓ CV terimpor! Periksa & lengkapi datanya di bawah.');
     document.getElementById('cv-preview')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

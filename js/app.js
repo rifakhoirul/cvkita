@@ -62,6 +62,19 @@ function entryHTML(key, data = {}) {
 function renderList(key, items = [{}]) {
   $(`#${key}-list`).innerHTML = items.map(d => entryHTML(key, d)).join('');
 }
+// QA 2026-09-29: diekspos untuk fitur Impor CV (import-cv.js) — render hasil ekstraksi AI
+window.__cvkitaRenderLists = function (lists) {
+  Object.keys(SECTIONS).forEach(k => {
+    const items = (lists && lists[k]) || [];
+    const norm = items.map(d => {
+      const o = {};
+      SECTIONS[k].fields.forEach(f => { o[f.n] = d[f.n] !== undefined ? String(d[f.n]) : (d[f.alt] || ''); });
+      return o;
+    }).filter(o => Object.values(o).some(v => (v || '').trim()));
+    renderList(k, norm.length ? norm : [{}]);
+  });
+  saveData(); render();
+};
 function collectList(key) {
   return [...$(`#${key}-list`).querySelectorAll('.entry')].map(e => {
     const d = {};
