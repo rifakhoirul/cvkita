@@ -192,6 +192,9 @@ document.addEventListener('click', e => {
       });
   }
   if (e.target.closest && e.target.closest('#btn-download, #btn-download-sticky, #btn-download-preview')) window.print();
+  if (e.target.id === 'btn-ats-close') {
+    $('#ats-panel').classList.add('hidden');
+  }
   if (e.target.id === 'btn-scroll-preview') {
     const pv = document.getElementById('cv-preview') || document.getElementById('cv-paper');
     pv?.scrollIntoView({ behavior: 'smooth', block: 'start' });

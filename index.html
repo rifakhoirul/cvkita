@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=33">
+<link rel="stylesheet" href="css/style.css?v=34">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -47,6 +47,7 @@
 </div>
 
 <div id="ats-panel" class="ats-panel hidden">
+  <button id="btn-ats-close" class="ats-close" type="button" aria-label="Tutup skor ATS">✕</button>
   <div class="ats-head">
     <span>Skor ATS kamu:</span>
     <strong id="ats-score">0</strong><span class="ats-max">/100</span>
@@ -173,6 +174,7 @@
     <button id="btn-ats-preview" class="btn ghost ats-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chart"></use></svg> Cek Skor ATS</button>
     <!-- Fitur premium: rekomendasi lowongan dari isi CV -->
     <button id="btn-jobsearch" class="btn ghost js-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Analisis Karier: Lowongan + SWOT (AI)</button>
+    <button id="btn-cover-letter" class="btn ghost js-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-doc"></use></svg> Buat Cover Letter (AI)</button>
     <div id="jobsearch-panel" class="jobsearch-panel hidden"></div>
     <!-- Unduh langsung di bawah preview (tampil hanya di mobile) -->
     <button id="btn-download-preview" class="btn primary dl-below" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> Unduh PDF (Gratis)</button>
@@ -200,12 +202,13 @@
 <script src="js/premium.js?v=7"></script>
 <script src="js/quota-modal.js?v=1"></script>
 <script src="js/jobsearch.js?v=4"></script>
+<script src="js/cover-letter.js?v=1"></script>
 <script src="js/analytics.js?v=2"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="js/share-pdf.js?v=2"></script>
 <script src="js/import-cv.js?v=5"></script>
 <script src="js/improve-all.js?v=2"></script>
 <script src="js/feedback.js?v=1"></script>
-<script src="js/app.js?v=25"></script>
+<script src="js/app.js?v=26"></script>
 </body>
 </html>

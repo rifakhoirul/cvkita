@@ -151,6 +151,8 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .improve-diff pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:.78rem;background:#f9fafb;border:1px solid var(--line);border-radius:8px;padding:10px;margin:0;max-height:260px;overflow:auto}
 .improve-diff div:last-child pre{background:#fff7ed;border-color:#fdba74}
 .improve-confirm-actions{display:flex;gap:10px;margin-top:14px;justify-content:flex-end;flex-wrap:wrap}
+.ats-close{position:absolute;top:8px;right:8px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:.95rem;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center}
+.ats-panel{position:relative}
 .ats-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
 .ats-cat{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem}
 .ats-cat strong{color:var(--brand-dark,#c2410c)}
@@ -265,9 +267,18 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .tier-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .tier-desc{font-size:.86rem;color:var(--muted);margin:6px 0 12px;line-height:1.6}
 .tier-buy{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.tier-price{font-size:1.15rem;font-weight:700}
+.tier-buy .tier-price{margin-left:0;text-align:left}
+.tier-price{font-size:1.15rem;font-weight:700;text-align:left}
 .promo-strip{margin:14px 0 6px;padding:10px 14px;border-radius:10px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;font-size:.85rem;color:#9a3412;line-height:1.5}
 .tier-pricing{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+/* Cover Letter modal */
+.cl-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:1000}
+.cl-card{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:85vh;overflow:auto;padding:20px;position:relative}
+.cl-card h3{margin:0 0 12px;font-size:1.05rem}
+.cl-text{white-space:pre-wrap;font-family:inherit;font-size:.92rem;line-height:1.7;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px;margin:0 0 14px}
+.cl-actions{display:flex;align-items:center;gap:12px}
+.cl-remaining{font-size:.8rem;color:var(--muted)}
+.cl-close{position:absolute;top:10px;right:10px;border:none;background:none;font-size:1rem;cursor:pointer;color:var(--muted);min-width:36px;min-height:36px}
 .tier-price-old{font-size:.85rem;color:#9ca3af;text-decoration:line-through !important}
 .tier-save{font-size:.62rem;font-weight:800;letter-spacing:.04em;color:#15803d;background:#dcfce7;border-radius:999px;padding:2px 8px}
 .badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}

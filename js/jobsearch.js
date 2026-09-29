@@ -31,7 +31,13 @@
     ];
 
     btn.addEventListener('click', async () => {
-      if (typeof isPremium === 'function' && !isPremium()) { showPaywall(); return; }
+      if (typeof isPremium === 'function' && !isPremium()) {
+        // Jangan sisakan panel/loading saat paywall muncul
+        panel.classList.add('hidden');
+        panel.innerHTML = '';
+        showPaywall();
+        return;
+      }
       const form = document.getElementById('cv-form');
       const headline = (form.querySelector('[name="headline"]')?.value || '').trim();
       const skills = (form.querySelector('[name="keahlian"]')?.value || '').trim();
@@ -65,9 +71,16 @@
         const reason = escHtml(data.reason || '');
         const swot = data.swot || null;
         let swotHtml = '';
+        if (swot) {
+          swot.s = (swot.s || []).filter(Boolean);
+          swot.w = (swot.w || []).filter(Boolean);
+          swot.o = (swot.o || []).filter(Boolean);
+          swot.t = (swot.t || []).filter(Boolean);
+        }
         if (swot && (swot.s.length || swot.w.length || swot.o.length || swot.t.length)) {
-          const quad = (cls, label, items) =>
-            `<div class="swot-quad ${cls}"><h4>${label}</h4><ul>${items.map(i => `<li>${escHtml(i)}</li>`).join('')}</ul></div>`;
+          const quad = (cls, label, items) => items.length
+            ? `<div class="swot-quad ${cls}"><h4>${label}</h4><ul>${items.map(i => `<li>${escHtml(i)}</li>`).join('')}</ul></div>`
+            : '';
           swotHtml =
             `<div class="swot-grid">` +
             quad('swot-s', '💪 Kekuatan', swot.s) +

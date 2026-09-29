@@ -44,8 +44,11 @@ test.describe('Halaman pembayaran Midtrans', () => {
     await expect(page.locator('#pay-status')).toContainText(/Gagal/i);
   });
 
-  test('cara manual tetap tersedia sebagai cadangan', async ({ page }) => {
+  test('customer support WhatsApp tersedia (hyperlink, tanpa nomor tampil)', async ({ page }) => {
     await page.goto('/pay.html');
-    await expect(page.locator('details summary')).toContainText(/manual/i);
+    const wa = page.locator('a.cs-wa');
+    await expect(wa).toBeVisible();
+    await expect(wa).toHaveAttribute('href', /wa\.me\/62895628135638/);
+    await expect(wa).not.toContainText(/\d{3}-\d{4}-\d{5}/); // nomor tidak ditampilkan sebagai teks
   });
 });
