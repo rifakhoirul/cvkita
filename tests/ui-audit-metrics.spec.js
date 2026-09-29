@@ -3,7 +3,11 @@
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 
-const OUT = '/tmp/ui-audit';
+const OUT = process.env.UI_AUDIT_OUT || '/tmp/ui-audit';
+fs.mkdirSync(OUT, { recursive: true }); // CI tidak punya folder ini — jangan ENOENT
+
+// Alat audit manual (bukan test produk) — skip di CI
+if (process.env.CI) test.skip(true, 'audit tool hanya untuk lokal');
 
 const AUDIT_JS = `(() => {
   const parseColor = (c) => {

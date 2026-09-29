@@ -1,6 +1,10 @@
 // UI Audit: ambil screenshot semua halaman + state penting untuk audit menyeluruh
 import { test, expect } from '@playwright/test';
 import path from 'path';
+import fs from 'fs';
+
+// Alat audit manual (bukan test produk) — skip di CI, folder output mungkin tak tersedia
+if (process.env.CI) test.skip(true, 'audit tool hanya untuk lokal');
 
 const OUT = '/tmp/ui-audit';
 const S = (p) => path.join(OUT, p);
