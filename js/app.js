@@ -152,7 +152,7 @@ document.addEventListener('input', e => {
     if (wa) {
       const nama = (e.target.value || '').trim();
       if (nama) {
-        const teks = `Aku barusan bikin CV gratis di CVKita (${nama}) — lolos ATS, tanpa watermark. Coba juga: https://cvkita.id/`;
+        const teks = `Baru bikin CV ATS gratis di CVKita (${nama}), gampang banget tanpa ribet. Coba buat juga yuk: https://cvkita.id/`;
         wa.dataset.url = `https://wa.me/?text=${encodeURIComponent(teks)}`;
         wa.style.display = '';
       } else {
