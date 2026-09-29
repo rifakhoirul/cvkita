@@ -276,7 +276,11 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .cl-card{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:85vh;overflow:auto;padding:20px;position:relative}
 .cl-card h3{margin:0 0 12px;font-size:1.05rem}
 .cl-text{white-space:pre-wrap;font-family:inherit;font-size:.92rem;line-height:1.7;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px;margin:0 0 14px}
-.cl-actions{display:flex;align-items:center;gap:12px}
+.cl-ask-note{font-size:.82rem;color:var(--muted);margin:0 0 12px}
+.cl-field{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:10px}
+.cl-field input{display:block;width:100%;margin-top:4px;min-height:42px;border:1px solid var(--line);border-radius:8px;padding:0 12px;font-size:.92rem;font-family:inherit}
+.cl-field input:focus{outline:2px solid var(--brand);outline-offset:0;border-color:var(--brand)}
+.cl-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cl-remaining{font-size:.8rem;color:var(--muted)}
 .cl-close{position:absolute;top:10px;right:10px;border:none;background:none;font-size:1rem;cursor:pointer;color:var(--muted);min-width:36px;min-height:36px}
 .tier-price-old{font-size:.85rem;color:#9ca3af;text-decoration:line-through !important}

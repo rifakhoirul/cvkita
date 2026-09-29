@@ -8,8 +8,63 @@
 
     function val(n) { return (document.querySelector(`#cv-form [name="${n}"]`)?.value || '').trim(); }
 
+    // Modal kecil: tanya perusahaan & posisi tujuan (keduanya boleh dikosongkan)
+    function tanyaTujuan() {
+      return new Promise(resolve => {
+        const m = document.createElement('div');
+        m.className = 'cl-modal cl-ask';
+        m.innerHTML = `
+          <div class="cl-card" role="dialog" aria-modal="true" aria-label="Tujuan lamaran">
+            <button class="cl-close" type="button" aria-label="Tutup">✕</button>
+            <h3>✉️ Mau melamar ke mana?</h3>
+            <p class="cl-ask-note">Opsional — kalau diisi, cover letter lebih spesifik & personal.</p>
+            <label class="cl-field">Perusahaan
+              <input id="cl-perusahaan" placeholder="mis: PT Maju Jaya" autocomplete="off">
+            </label>
+            <label class="cl-field">Posisi
+              <input id="cl-posisi" placeholder="mis: Data Analyst" autocomplete="off">
+            </label>
+            <div class="cl-actions">
+              <button class="btn primary cl-go" type="button">Buat Cover Letter</button>
+              <button class="btn ghost cl-cancel" type="button">Batal</button>
+            </div>
+          </div>`;
+        document.body.appendChild(m);
+        const close = (val) => { m.remove(); resolve(val); };
+        m.querySelector('.cl-close').addEventListener('click', () => close(null));
+        m.querySelector('.cl-cancel').addEventListener('click', () => close(null));
+        m.addEventListener('click', e => { if (e.target === m) close(null); });
+        m.querySelector('.cl-go').addEventListener('click', () => close({
+          perusahaan: m.querySelector('#cl-perusahaan').value.trim(),
+          posisi: m.querySelector('#cl-posisi').value.trim(),
+        }));
+        m.querySelector('#cl-perusahaan').focus();
+      });
+    }
+
     btn.addEventListener('click', async () => {
-      if (typeof isPremium === 'function' && !isPremium()) { showPaywall(); return; }
+      // Cek kode lisensi PALING AWAL: harus ada & valid di server
+      // sebelum menanyakan perusahaan/posisi (verifikasi tidak memotong kuota).
+      const kode = (localStorage.getItem(LICENSE_KEY) || '').trim();
+      if (!kode) { showPaywall(); return; }
+      if (typeof verifyLicense === 'function') {
+        const label0 = btn.innerHTML;
+        btn.innerHTML = '⏳ Memeriksa kode...';
+        btn.disabled = true;
+        try {
+          const v = await verifyLicense(kode);
+          if (!v || !v.valid) {
+            btn.innerHTML = label0; btn.disabled = false;
+            localStorage.removeItem(LICENSE_KEY);
+            if (typeof window.__cvkitaQuotaModal === 'function') window.__cvkitaQuotaModal('Kode lisensimu tidak valid atau sudah habis. Masukkan kode lain.');
+            else alert('Kode lisensimu tidak valid atau sudah habis. Masukkan kode lain.');
+            return;
+          }
+        } catch {
+          // jaringan gagal — jangan blokir, biarkan endpoint utk yang memvalidasi final
+        }
+        btn.innerHTML = label0; btn.disabled = false;
+      }
       const nama = val('nama');
       if (!nama) {
         if (typeof window.__cvkitaQuotaModal === 'function') window.__cvkitaQuotaModal('Isi dulu nama lengkap di CV-mu, lalu coba lagi.');
@@ -17,9 +72,10 @@
         return;
       }
 
-      // Tanya tujuan lamaran (bisa dilewati)
-      const perusahaan = prompt('Perusahaan yang dituju (boleh dikosongkan):') || '';
-      const posisi = prompt('Posisi yang dilamar (boleh dikosongkan):') || '';
+      // Modal tujuan lamaran (pengganti prompt bawaan browser — tampilan konsisten)
+      const tujuan = await tanyaTujuan();
+      if (!tujuan) return; // batal
+      const { perusahaan, posisi } = tujuan;
 
       const label = btn.innerHTML;
       btn.innerHTML = '⏳ Menulis cover letter...';
