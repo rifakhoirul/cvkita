@@ -22,7 +22,7 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
 
   test('tombol Contoh mengisi seluruh CV dengan data contoh', async ({ page }) => {
     // 30 Sep: modal pilih bidang dulu (IT / Non-IT / Marketing)
-    await page.click('#btn-sample');
+    await page.click('#btn-sample-top');
     await page.click('[data-sample="it"]');
     // Setelah reload, preview harus menampilkan nama contoh
     await expect(page.locator('#cv-paper h1')).toHaveText('Rania Putri Andini');
@@ -33,7 +33,7 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
   });
 
   test('Contoh dibatalkan bila user menutup modal', async ({ page }) => {
-    await page.click('#btn-sample');
+    await page.click('#btn-sample-top');
     await page.click('#sample-cancel'); // modal tertutup, tidak ada reload
     await expect(page.locator('#sample-modal')).toBeHidden();
     await expect(page.locator('#cv-paper h1')).toHaveText('Nama Kamu');
@@ -55,7 +55,7 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
 
   test('skor ATS tetap jalan setelah perubahan', async ({ page }) => {
     await page.fill('[name="nama"]', 'Budi');
-    await page.click('#btn-ats');
+    await page.click('#btn-ats-preview');
     await expect(page.locator('#ats-panel')).toBeVisible();
     const score = parseInt(await page.locator('#ats-score').textContent());
     expect(score).toBeGreaterThanOrEqual(0);
@@ -64,7 +64,7 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
 
   test('skor naik ketika profil lebih lengkap', async ({ page }) => {
     await page.fill('[name="nama"]', 'Budi');
-    await page.click('#btn-ats');
+    await page.click('#btn-ats-preview');
     const low = parseInt(await page.locator('#ats-score').textContent());
 
     await page.fill('[name="email"]', 'budi@mail.com');
@@ -72,7 +72,7 @@ test.describe('Fitur: Reset, Contoh, Sticky Download', () => {
     await page.fill('[name="ringkasan"]', 'Fresh graduate yang bersemangat');
     await page.fill('[name="keahlian"]', 'Python, SQL, Excel');
     await page.click('[data-add="pengalaman"]');
-    await page.click('#btn-ats');
+    await page.click('#btn-ats-preview');
     const high = parseInt(await page.locator('#ats-score').textContent());
     expect(high).toBeGreaterThan(low);
   });

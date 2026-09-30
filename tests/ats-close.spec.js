@@ -9,7 +9,7 @@ test('panel ATS bisa ditutup dengan tombol ✕', async ({ page }) => {
     document.querySelector('[name="ringkasan"]').value = 'Fresh graduate siap belajar analisis data nyata di industri.';
   });
   // buka panel ATS
-  await page.locator('#btn-ats').click();
+  await page.locator('#btn-ats-preview').click();
   await expect(page.locator('#ats-panel')).toBeVisible();
   // tutup
   await page.locator('#btn-ats-close').click();
