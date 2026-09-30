@@ -297,7 +297,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .tier-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .tier-desc{font-size:.86rem;color:var(--muted);margin:6px 0 12px;line-height:1.6}
 .tier-buy{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.tier-buy .tier-price{margin-left:0;text-align:left}
+/* Owner 30 Sep: harga coret + HEMAT + harga baru = satu kolom align kiri, tombol Beli di kanan */
 .tier-price{font-size:1.15rem;font-weight:700;text-align:left}
 .promo-strip{margin:14px 0 6px;padding:10px 14px;border-radius:10px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;font-size:.85rem;color:#9a3412;line-height:1.5}
 .tier-pricing{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
@@ -387,6 +387,16 @@ body.has-sticky{padding-bottom:64px}
   /* 14mm: cukup untuk printer rumahan, konten tetap di body dokumen */
   @page{margin:14mm}
 }
+
+/* ===== Footer halaman bayar — spacing rapi & konsisten (masukan owner 30 Sep) ===== */
+.pay-footer{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.pay-help{font-size:.88rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}
+.pay-help .cs-wa{display:inline-block;padding:12px 4px;color:var(--brand-dark)}
+#pay-status{min-height:1.4em;font-size:.9rem;color:#059669;margin:0}
+.pay-noscript{color:#b91c1c;font-size:.88rem;margin:0}
+.pay-back{margin-top:2px}
+.pay-tos{font-size:.82rem;color:#6b7280;line-height:1.7;max-width:420px;margin:0}
+.pay-tos a{display:inline-block;padding:12px 4px;color:var(--brand-dark);font-weight:600}
 
 /* Hormati preferensi reduced motion */
 @media(prefers-reduced-motion:reduce){

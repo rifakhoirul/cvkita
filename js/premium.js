@@ -85,6 +85,28 @@ function updatePremiumBadge(quotaInfo) {
   document.body.classList.toggle('premium-active', isPremium());
 }
 
+// Nama tampilan template premium (urutan = urutan
+// di PREMIUM_TEMPLATES). Tambah entri di sini + PREMIUM_TEMPLATES saat menambah template.
+const TPL_LABELS = {
+  executive: 'Executive',
+  tech: 'Tech',
+  creative: 'Creative',
+  elegant: 'Elegant',
+};
+
+// Copy marketing tidak boleh menyalin angka manual — selalu render dari sumber ini
+// supaya tulisan di halaman tidak tertinggal saat template ditambah/dikurangi.
+(function renderTemplateCopy() {
+  const apply = () => {
+    const uniq = [...new Set(PREMIUM_TEMPLATES)];
+    document.querySelectorAll('[data-tpl-count]').forEach(el => { el.textContent = String(uniq.length); });
+    const names = uniq.map(t => TPL_LABELS[t] || t).join(', ');
+    document.querySelectorAll('[data-tpl-names]').forEach(el => { el.textContent = names; });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+})();
+
 (function wirePaywallClose() {
   document.addEventListener('DOMContentLoaded', () => {
     updatePremiumBadge();

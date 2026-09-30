@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aktivasi Premium — CVKita</title>
   <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="css/style.css?v=38">
+<link rel="stylesheet" href="css/style.css?v=43">
 <!-- Midtrans Snap (production) -->
 <script src="https://app.midtrans.com/snap/snap.js"
         data-client-key="Mid-client-JC5qOJTb6L0NNrp8"></script>
@@ -14,7 +14,7 @@
 <header class="topbar"><a class="logo" href="/" style="text-decoration:none;color:inherit" aria-label="CVKita — kembali ke halaman utama">CV<span>Kita</span></a></header>
 <main style="max-width:640px;margin:24px auto;padding:0 16px">
   <h2>Aktivasi Premium — sekali bayar, bukan langganan</h2>
-  <p style="line-height:1.8;margin:12px 0">Bayar sekali, langsung aktif otomatis.
+  <p style="line-height:1.8;margin:12px 0"><strong>Kuota AI bisa dipakai untuk fitur apa pun — kamu yang pilih.</strong><br>Bayar sekali, langsung aktif otomatis.
   Bisa lewat <b>GoPay</b> atau transfer <b>Virtual Account</b> (BCA, BNI, BRI, Mandiri) — prosesnya otomatis lewat Midtrans.</p>
 
   <div class="paybox" id="paybox">
@@ -23,13 +23,13 @@
         <b>Coba Dulu</b>
         <span class="badge badge-muted">TERMURAH</span>
       </div>
-      <p class="tier-desc">AI rewrite 1× atau Analisis Karier: Lowongan + SWOT 1× — pas untuk mencoba sebelum yakin</p>
+      <p class="tier-desc">1× pemakaian AI — pilih sendiri: rewrite CV, analisis karier + SWOT, atau cover letter. Pas untuk mencoba sebelum yakin.</p>
       <div class="tier-buy">
         <div class="tier-pricing">
           <span class="tier-price-old">Rp 19.900</span>
           <span class="tier-save">HEMAT 50%</span>
+          <span class="tier-price">Rp 9.900</span>
         </div>
-        <span class="tier-price">Rp 9.900</span>
         <button class="btn primary" id="btn-buy-9" style="min-height:44px">Beli</button>
       </div>
     </div>
@@ -38,13 +38,13 @@
         <b>Booster CVKita</b>
         <span class="badge badge-hot">PALING LARIS</span>
       </div>
-      <p class="tier-desc">AI rewrite 3× + Analisis Karier (Lowongan + SWOT) + 4 template premium + cover letter</p>
+      <p class="tier-desc">3× pemakaian AI, campur sesuka kamu (rewrite / analisis karier + SWOT / cover letter) + <span data-tpl-count>4</span> template premium.</p>
       <div class="tier-buy">
         <div class="tier-pricing">
           <span class="tier-price-old">Rp 29.000</span>
           <span class="tier-save">HEMAT 34%</span>
+          <span class="tier-price">Rp 19.000</span>
         </div>
-        <span class="tier-price">Rp 19.000</span>
         <button class="btn primary" id="btn-buy-19" style="min-height:44px">Beli</button>
       </div>
     </div>
@@ -52,30 +52,28 @@
       <div class="tier-head">
         <b>Paket Lamaran</b>
       </div>
-      <p class="tier-desc">Semua di Booster + AI rewrite 8× — untuk yang sedang melamar serius ke banyak tempat</p>
+      <p class="tier-desc">8× pemakaian AI, campur sesuka kamu + <span data-tpl-count>4</span> template premium — untuk yang sedang melamar serius ke banyak tempat.</p>
       <div class="tier-buy">
         <div class="tier-pricing">
           <span class="tier-price-old">Rp 59.000</span>
           <span class="tier-save">HEMAT 34%</span>
+          <span class="tier-price">Rp 39.000</span>
         </div>
-        <span class="tier-price">Rp 39.000</span>
         <button class="btn primary" id="btn-buy-39" style="min-height:44px">Beli</button>
       </div>
     </div>
   </div>
 
-  <p style="margin-top:18px;font-size:.88rem;color:#5b6478;line-height:1.7">
-    Ada kendala saat bayar? Chat customer support kami via
-    <a class="cs-wa" href="https://wa.me/6282118217075?text=Halo%20CVKita%2C%20saya%20ada%20kendala%20pembayaran" target="_blank" rel="noopener" style="display:inline-block;padding:12px 2px"><b>WhatsApp</b></a>.
-  </p>
-
-  <p id="pay-status" role="status" style="min-height:1.4em;font-size:.9rem;color:#059669;margin-top:10px"></p>
-  <noscript><p style="color:#b91c1c">Aktifkan JavaScript untuk melakukan pembayaran.</p></noscript>
-
-  <a href="/" class="btn primary" style="display:inline-block;text-decoration:none;margin-top:16px">← Kembali ke Editor</a>
-  <p style="font-size:.82rem;color:#6b7280;margin-top:14px;text-align:center">Dengan melakukan pembayaran, kamu menyetujui <a href="/terms.html" style="display:inline-block;padding:12px 4px;color:var(--brand-dark);font-weight:600">Syarat &amp; Ketentuan</a> CVKita.</p>
+  <div class="pay-footer">
+    <p class="pay-help">Ada kendala saat bayar? Chat customer support kami via <a class="cs-wa" href="https://wa.me/6282118217075?text=Halo%20CVKita%2C%20saya%20ada%20kendala%20pembayaran" target="_blank" rel="noopener"><b>WhatsApp</b></a>.</p>
+    <p id="pay-status" role="status"></p>
+    <noscript><p class="pay-noscript">Aktifkan JavaScript untuk melakukan pembayaran.</p></noscript>
+    <a href="/" class="btn primary pay-back">← Kembali ke Editor</a>
+    <p class="pay-tos">Dengan melakukan pembayaran, kamu menyetujui <a href="/terms.html">Syarat &amp; Ketentuan</a> CVKita.</p>
+  </div>
 </main>
 
+<script src="js/premium.js?v=10"></script>
 <script src="js/analytics.js?v=2"></script>
 <script>
 (function () {
