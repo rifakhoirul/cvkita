@@ -50,8 +50,8 @@ function entryHTML(key, data = {}) {
   const sec = SECTIONS[key];
   const fields = sec.fields.map(f =>
     f.textarea
-      ? `<textarea name="${key}.${f.n}" rows="3" placeholder="${f.p}">${data[f.n] || ''}</textarea>`
-      : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}">`
+      ? `<textarea name="${key}.${f.n}" rows="3" placeholder="${f.p}">${esc(data[f.n] || '')}</textarea>`
+      : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${esc(data[f.n] || '')}">`
   ).join('');
   const aiBtn = key === 'pengalaman'
     ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve / Translate</button>'
