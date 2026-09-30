@@ -16,3 +16,16 @@
     }).catch(() => {});
   } catch {}
 })();
+
+// checkout_click: dilacak per-klik (bukan per-hari) — event jarang, aman untuk KV.
+// Dipanggil dari pay.html saat user klik Beli.
+window.__cvkitaTrackCheckout = function () {
+  try {
+    fetch('https://cvkita-api.cvkita-rifakhoirul.workers.dev/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'checkout_click' }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+};

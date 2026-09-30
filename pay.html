@@ -74,7 +74,7 @@
 </main>
 
 <script src="js/premium.js?v=11"></script>
-<script src="js/analytics.js?v=2"></script>
+<script src="js/analytics.js?v=3"></script>
 <script>
 (function () {
   var API = 'https://cvkita-api.cvkita-rifakhoirul.workers.dev';
@@ -169,9 +169,11 @@
     coba();
   }
 
-  document.getElementById('btn-buy-9').addEventListener('click', function () { buy(9900); });
-  document.getElementById('btn-buy-19').addEventListener('click', function () { buy(19000); });
-  document.getElementById('btn-buy-39').addEventListener('click', function () { buy(39000); });
+  // analytics: setiap klik Beli tercatat (event jarang — aman KV)
+  function trackCheckout() { if (window.__cvkitaTrackCheckout) window.__cvkitaTrackCheckout(); }
+  document.getElementById('btn-buy-9').addEventListener('click', function () { trackCheckout(); buy(9900); });
+  document.getElementById('btn-buy-19').addEventListener('click', function () { trackCheckout(); buy(19000); });
+  document.getElementById('btn-buy-39').addEventListener('click', function () { trackCheckout(); buy(39000); });
 })();
 </script>
 </body>
