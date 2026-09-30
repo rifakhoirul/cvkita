@@ -55,6 +55,7 @@ function entryHTML(key, data = {}) {
   ).join('');
   const aiBtn = key === 'pengalaman'
     ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve dengan AI</button>'
+      + '<button type="button" class="btn ai btn-translate"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Translate ke English</button>'
     : '';
   return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Hapus</button></div>`;
 }
@@ -167,6 +168,10 @@ document.addEventListener('click', e => {
     e.target.classList.add('active');
     localStorage.setItem(TPL_KEY, tpl);
     render();
+  }
+  if (e.target.closest('.btn-translate')) {
+    handleTranslate(e.target.closest('.btn-translate'));
+    return;
   }
   if (e.target.classList.contains('btn-ai') || e.target.closest('.btn-ai-ringkasan')) {
     handleAiRewrite(e.target.closest('.btn-ai-ringkasan') || e.target);
@@ -444,6 +449,35 @@ async function handleAiRewrite(btn) {
   } catch (err) {
     showAiError(err.message);
     btn.textContent = btnLabel;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// Terjemahan CV ke bahasa Inggris (30 Sep) — 1 kuota AI per section.
+// Tombol ini menimpa isi field dengan hasil terjemahan (tanpa dialog confirm browser
+// supaya konsisten dengan tombol AI lain; user bisa undo dengan Ctrl+Z / tulis ulang).
+async function handleTranslate(btn) {
+  if (!isPremium()) { showPaywall(); return; }
+  const isRingkasan = btn.id === 'btn-translate-ringkasan';
+  const ta = isRingkasan
+    ? document.querySelector('[name="ringkasan"]')
+    : btn.closest('.entry')?.querySelector('[name="pengalaman.deskripsi"]');
+  if (!ta) return;
+  const teks = (ta.value || '').trim();
+  if (!teks) { showAiError('Isi dulu bagian ini sebelum diterjemahkan.'); return; }
+
+  const label = btn.innerHTML;
+  btn.innerHTML = '⏳ Menerjemahkan...';
+  btn.disabled = true;
+  try {
+    const { result } = await window.__cvkitaAiTranslate(teks);
+    ta.value = result;
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    btn.innerHTML = '✓ Diterjemahkan';
+  } catch (err) {
+    showAiError(err.message);
+    btn.innerHTML = label;
   } finally {
     btn.disabled = false;
   }

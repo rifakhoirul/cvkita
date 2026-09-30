@@ -32,6 +32,21 @@ async function aiRewrite(payload) {
   return res.json();
 }
 
+// Terjemahan CV ke bahasa Inggris — 1 kuota AI per section (30 Sep).
+async function aiTranslate(text) {
+  const res = await fetch(`${API_BASE}/api/translate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, target: 'en', license: localStorage.getItem(LICENSE_KEY) || '' }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Gagal menghubungi AI. Coba lagi.');
+  }
+  return res.json();
+}
+window.__cvkitaAiTranslate = aiTranslate;
+
 function showPaywall() {
   $('#paywall').classList.remove('hidden');
   $('#paywall').scrollIntoView({ behavior: 'smooth' });
