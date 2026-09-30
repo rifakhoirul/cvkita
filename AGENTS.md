@@ -37,7 +37,7 @@ versi = perubahan yang tidak live.
 - Urutan tombol preview sengaja: Cek ATS (Gratis) → Unduh PDF (Gratis) → Analisis Karier (AI)
   → Cover Letter (AI). Jangan ubah urutan tanpa diminta.
 - Copywriting Bahasa Indonesia santai (aku/kamu). Hero final: "Bikin CV simpel, cepat, nggak pake ribet."
-- WhatsApp CS resmi hanya `wa.me/6282118217075`, ditampilkan sebagai hyperlink tanpa nomor.
+- WhatsApp CS resmi hanya `wa.me/62895628135638` (0895-6281-35638), ditampilkan sebagai hyperlink tanpa nomor.
 - Fitur "Kirim PDF ke WhatsApp" sengaja DIHIDE (kualitas render jsPDF di bawah Unduh PDF).
   Kode di `js/share-pdf.js` + `tests-disabled/`. JANGAN hapus, JANGAN aktifkan tanpa diminta.
 
