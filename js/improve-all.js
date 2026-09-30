@@ -6,10 +6,13 @@
 
   function collectCV() {
     const f = {};
-    ['nama', 'headline', 'email', 'phone', 'city', 'keahlian', 'ringkasan', 'link'].forEach(n => {
-      const el = document.querySelector(`[name="${n}"]`);
-      if (el) f[n] = el.value;
-    });
+    // Nama field harus PERSIS sama dengan name= di index.html (bug lama: 'phone'/'city'/'link'
+    // tidak pernah cocok -> telepon, kota, linkedin, bahasa & prestasi tidak ikut ke AI).
+    ['nama', 'headline', 'email', 'telepon', 'kota', 'linkedin', 'keahlian', 'bahasa', 'ringkasan', 'prestasi']
+      .forEach(n => {
+        const el = document.querySelector(`[name="${n}"]`);
+        if (el) f[n] = el.value;
+      });
     const grab = key => [...document.querySelectorAll(`#${key}-list .entry`)].map(e => {
       const o = {};
       e.querySelectorAll('[name]').forEach(inp => { o[inp.name.split('.')[1]] = inp.value; });
@@ -21,7 +24,7 @@
   function applyResult(cv) {
     const set = (n, v) => { const el = document.querySelector(`[name="${n}"]`); if (el && v) el.value = v; };
     const f = cv.fields || {};
-    ['nama', 'headline', 'ringkasan', 'keahlian'].forEach(n => set(n, f[n]));
+    ['nama', 'headline', 'ringkasan', 'keahlian', 'bahasa', 'prestasi'].forEach(n => set(n, f[n]));
     const fill = (key, items) => {
       const list = document.getElementById(`${key}-list`);
       if (!list) return;
@@ -63,6 +66,7 @@
     function preview(cv) {
       const lines = [];
       if (cv.fields && cv.fields.ringkasan) lines.push('Ringkasan: ' + cv.fields.ringkasan);
+      if (cv.fields && cv.fields.prestasi) lines.push('Prestasi: ' + cv.fields.prestasi.split('\n')[0]);
       (cv.pengalaman || []).forEach(p => { if (p.deskripsi) lines.push(`${p.posisi || ''}: ${p.deskripsi.split('\n')[0]}`); });
       return lines.slice(0, 6).join('\n\n') || '(kosong)';
     }

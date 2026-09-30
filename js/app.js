@@ -53,7 +53,7 @@ function entryHTML(key, data = {}) {
       ? `<textarea name="${key}.${f.n}" rows="3" placeholder="${f.p}">${data[f.n] || ''}</textarea>`
       : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}">`
   ).join('');
-  const aiBtn = key === 'pengalaman'
+  const aiBtn = (key === 'pengalaman' || key === 'project')
     ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve / Translate</button>'
     : '';
   return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Hapus</button></div>`;
@@ -172,7 +172,7 @@ document.addEventListener('click', e => {
     handleTranslate(e.target.closest('.btn-translate'));
     return;
   }
-  const aiBtn = e.target.closest('.btn-ai, .btn-ai-ringkasan');
+  const aiBtn = e.target.closest('.btn-ai, .btn-ai-ringkasan, .btn-ai-prestasi');
   if (aiBtn) {
     handleAiButton(aiBtn);
   }
@@ -431,18 +431,41 @@ async function handleAiRewrite(btn) {
     }
     return;
   }
+  // Tombol AI Prestasi & Sertifikasi (textarea tunggal, bukan list berulang)
+  if (btn.id === 'btn-ai-prestasi') {
+    const ta = document.querySelector('[name="prestasi"]');
+    const btnLabel = btn.innerHTML;
+    btn.innerHTML = '⏳ Menulis ulang...';
+    btn.disabled = true;
+    try {
+      const { result, remaining } = await aiRewrite({ mode: 'prestasi', deskripsi: ta.value });
+      if (typeof window.__cvkitaSyncBadge === 'function') window.__cvkitaSyncBadge(remaining);
+      ta.value = result;
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      btn.innerHTML = '✓ Ditingkatkan';
+    } catch (err) {
+      showAiError(err.message);
+      btn.innerHTML = btnLabel;
+    } finally {
+      btn.disabled = false;
+    }
+    return;
+  }
   const entry = btn.closest('.entry');
-  const posisi = entry.querySelector('[name="pengalaman.posisi"]')?.value || '';
-  const organisasi = entry.querySelector('[name="pengalaman.organisasi"]')?.value || '';
-  const deskripsi = entry.querySelector('[name="pengalaman.deskripsi"]')?.value || '';
+  // Generalisasi: entri bisa dari pengalaman ATAU project (field name prefix beda)
+  const secName = entry.querySelector('[name="pengalaman.deskripsi"]') ? 'pengalaman' : 'project';
+  const mode = secName === 'project' ? 'project' : undefined;
+  const posisi = entry.querySelector(`[name="${secName}.posisi"], [name="${secName}.nama"]`)?.value || '';
+  const organisasi = entry.querySelector(`[name="${secName}.organisasi"], [name="${secName}.peran"]`)?.value || '';
+  const deskripsi = entry.querySelector(`[name="${secName}.deskripsi"]`)?.value || '';
 
   const btnLabel = btn.textContent;
   btn.textContent = '⏳ Menulis ulang...';
   btn.disabled = true;
   try {
-    const { result, remaining } = await aiRewrite({ posisi, organisasi, deskripsi });
+    const { result, remaining } = await aiRewrite({ mode, posisi, organisasi, deskripsi });
     if (typeof window.__cvkitaSyncBadge === 'function') window.__cvkitaSyncBadge(remaining);
-    const ta = entry.querySelector('[name="pengalaman.deskripsi"]');
+    const ta = entry.querySelector(`[name="${secName}.deskripsi"]`);
     ta.value = result;
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     btn.textContent = '✓ Ditingkatkan';
@@ -459,8 +482,10 @@ async function handleAiRewrite(btn) {
 // supaya konsisten dengan tombol AI lain; user bisa undo dengan Ctrl+Z / tulis ulang).
 async function handleTranslate(btn, opts = {}) {
   const ta = btn.closest('.entry')
-    ? btn.closest('.entry').querySelector('[name="pengalaman.deskripsi"]')
-    : document.querySelector('[name="ringkasan"]');
+    ? btn.closest('.entry').querySelector('[name="pengalaman.deskripsi"], [name="project.deskripsi"]')
+    : btn.id === 'btn-ai-prestasi'
+      ? document.querySelector('[name="prestasi"]')
+      : document.querySelector('[name="ringkasan"]');
   if (!ta) return;
   const teks = (ta.value || '').trim();
   if (!teks) { showAiError('Isi dulu bagian ini sebelum diterjemahkan.'); return; }
