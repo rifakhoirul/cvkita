@@ -82,4 +82,49 @@
     clearTimeout(t.__timer);
     t.__timer = setTimeout(() => t.classList.remove('show'), 4000);
   };
+
+  // Modal pilihan AI: Improve / Translate (30 Sep). Tombol Improve & Translate
+  // digabung jadi satu tombol per lokasi; pre-check kuota dilakukan pemanggil
+  // sebelum modal ini dibuka, jadi isi modal selalu bisa dieksekusi.
+  if (!document.getElementById('ai-choice-modal')) {
+    const ai = document.createElement('div');
+    ai.id = 'ai-choice-modal';
+    ai.className = 'paywall hidden';
+    ai.setAttribute('role', 'dialog');
+    ai.setAttribute('aria-modal', 'true');
+    ai.setAttribute('aria-label', 'Pilih aksi AI');
+    ai.innerHTML = `
+      <div class="paywall-card">
+        <button id="btn-close-ai-choice" class="paywall-close" type="button" aria-label="Tutup"><svg class="ic" aria-hidden="true"><use href="#i-close"></use></svg></button>
+        <h3><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Mau apa nih?</h3>
+        <p class="ai-choice-sub">Satu aksi = 1 kuota AI. Sisa kuotamu: <b id="ai-choice-quota">…</b></p>
+        <div class="quota-actions ai-choice-actions">
+          <button id="btn-ai-improve" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Improve tulisan (bahasa Indonesia)</button>
+          <button id="btn-ai-translate" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Translate ke English</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ai);
+
+    const closeAi = () => ai.classList.add('hidden');
+    ai.addEventListener('click', (e) => { if (e.target === ai) closeAi(); });
+    document.getElementById('btn-close-ai-choice').addEventListener('click', closeAi);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !ai.classList.contains('hidden')) closeAi();
+    });
+  }
+
+  // Buka modal pilihan. onSelect('improve'|'translate') dipanggil sekali saat user memilih.
+  window.__cvkitaAiChoice = function (remaining, onSelect) {
+    const m = document.getElementById('ai-choice-modal');
+    if (!m) return;
+    const q = document.getElementById('ai-choice-quota');
+    if (q && typeof remaining === 'number') q.textContent = remaining + '×';
+    const onImprove = document.getElementById('btn-ai-improve');
+    const onTranslate = document.getElementById('btn-ai-translate');
+    // Modal dipakai ulang untuk lokasi berbeda: ganti handler tiap kali dibuka.
+    onImprove.onclick = () => { m.classList.add('hidden'); onSelect('improve'); };
+    onTranslate.onclick = () => { m.classList.add('hidden'); onSelect('translate'); };
+    m.classList.remove('hidden');
+    m.scrollIntoView({ behavior: 'smooth' });
+  };
 })();

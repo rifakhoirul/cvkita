@@ -347,6 +347,10 @@ body.has-sticky{padding-bottom:64px}
 .aktivasi-error{color:var(--err);font-size:.85rem;margin-top:8px}
 .paywall-belum{font-size:.85rem;color:var(--muted);margin-top:12px}
 .paywall-belum a{color:var(--brand-dark)}
+/* Modal pilihan AI (Improve / Translate) — tombol bertumpuk di mobile, touch target >=44px */
+.ai-choice-sub{font-size:.85rem;color:var(--muted);margin-bottom:10px}
+.ai-choice-actions{display:flex;flex-direction:column;gap:10px}
+.ai-choice-actions .btn{min-height:48px;width:100%}
 .paywall-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .paywall-close .ic{width:1.4em;height:1.4em}
 .paywall-close:hover{background:#f1efe9;color:var(--ink)}

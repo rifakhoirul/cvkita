@@ -54,8 +54,7 @@ function entryHTML(key, data = {}) {
       : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}">`
   ).join('');
   const aiBtn = key === 'pengalaman'
-    ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve dengan AI</button>'
-      + '<button type="button" class="btn ai btn-translate"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Translate ke English</button>'
+    ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Asisten AI</button>'
     : '';
   return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Hapus</button></div>`;
 }
@@ -173,8 +172,9 @@ document.addEventListener('click', e => {
     handleTranslate(e.target.closest('.btn-translate'));
     return;
   }
-  if (e.target.classList.contains('btn-ai') || e.target.closest('.btn-ai-ringkasan')) {
-    handleAiRewrite(e.target.closest('.btn-ai-ringkasan') || e.target);
+  const aiBtn = e.target.closest('.btn-ai, .btn-ai-ringkasan');
+  if (aiBtn) {
+    handleAiButton(aiBtn);
   }
   if (e.target.id === 'btn-aktivasi') {
     const code = $('#aktivasi-kode').value;
@@ -406,7 +406,6 @@ function showAiError(message) {
 async function handleAiRewrite(btn) {
   // Tombol AI ringkasan: rewrite field ringkasan dari data yang sudah diisi
   if (btn.id === 'btn-ai-ringkasan') {
-    if (!isPremium()) { showPaywall(); return; }
     const ta = document.querySelector('[name="ringkasan"]');
     const nama = (document.querySelector('[name="nama"]')?.value || '').trim();
     const headline = (document.querySelector('[name="headline"]')?.value || '').trim();
@@ -431,7 +430,6 @@ async function handleAiRewrite(btn) {
     }
     return;
   }
-  if (!isPremium()) { showPaywall(); return; }
   const entry = btn.closest('.entry');
   const posisi = entry.querySelector('[name="pengalaman.posisi"]')?.value || '';
   const organisasi = entry.querySelector('[name="pengalaman.organisasi"]')?.value || '';
@@ -458,11 +456,9 @@ async function handleAiRewrite(btn) {
 // Tombol ini menimpa isi field dengan hasil terjemahan (tanpa dialog confirm browser
 // supaya konsisten dengan tombol AI lain; user bisa undo dengan Ctrl+Z / tulis ulang).
 async function handleTranslate(btn) {
-  if (!isPremium()) { showPaywall(); return; }
-  const isRingkasan = btn.id === 'btn-translate-ringkasan';
-  const ta = isRingkasan
-    ? document.querySelector('[name="ringkasan"]')
-    : btn.closest('.entry')?.querySelector('[name="pengalaman.deskripsi"]');
+  const ta = btn.closest('.entry')
+    ? btn.closest('.entry').querySelector('[name="pengalaman.deskripsi"]')
+    : document.querySelector('[name="ringkasan"]');
   if (!ta) return;
   const teks = (ta.value || '').trim();
   if (!teks) { showAiError('Isi dulu bagian ini sebelum diterjemahkan.'); return; }
@@ -481,6 +477,31 @@ async function handleTranslate(btn) {
   } finally {
     btn.disabled = false;
   }
+}
+
+// 30 Sep (rev): tombol Improve & Translate digabung jadi SATU tombol AI per lokasi.
+// Alur klik: pre-check premium & kuota (tanpa memotong kuota, cache 5 menit) ->
+// paywall / modal kuota habis / modal pilihan Improve / Translate.
+async function handleAiButton(btn) {
+  if (!isPremium()) { showPaywall(); return; }
+  // Pre-check kuota: verifyLicense tidak memotong kuota (hanya membaca sisa).
+  const kode = localStorage.getItem(LICENSE_KEY) || '';
+  let remaining = null;
+  try {
+    const r = await verifyLicense(kode);
+    if (!r || !r.valid) { window.__cvkitaQuotaExhausted(); return; }
+    remaining = r.quota;
+  } catch {
+    // verify gagal (offline/rate-limit): jangan blokir — biarkan server yang
+    // menolak saat eksekusi kalau kuota ternyata habis.
+    remaining = null;
+  }
+  const modal = typeof window.__cvkitaAiChoice === 'function' ? window.__cvkitaAiChoice : null;
+  if (!modal) { handleAiRewrite(btn); return; } // fallback defensif
+  modal(remaining, (choice) => {
+    if (choice === 'translate') handleTranslate(btn);
+    else handleAiRewrite(btn);
+  });
 }
 
 // Init
