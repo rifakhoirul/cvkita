@@ -60,6 +60,45 @@
     });
   });
 
+  // Modal pilihan bahasa untuk Improve seluruh CV (30 Sep): Indonesia / Inggris.
+  if (!document.getElementById('improve-lang-modal')) {
+    const il = document.createElement('div');
+    il.id = 'improve-lang-modal';
+    il.className = 'paywall hidden';
+    il.setAttribute('role', 'dialog');
+    il.setAttribute('aria-modal', 'true');
+    il.setAttribute('aria-label', 'Pilih bahasa CV');
+    il.innerHTML = `
+      <div class="paywall-card">
+        <button id="btn-close-improve-lang" class="paywall-close" type="button" aria-label="Tutup"><svg class="ic" aria-hidden="true"><use href="#i-close"></use></svg></button>
+        <h3><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Improve seluruh CV — bahasa apa?</h3>
+        <p class="ai-choice-sub">Hasil menimpa seluruh isi CV. Kamu bisa lihat perbandingan sebelum menerima. Sisa kuotamu: <b id="improve-lang-quota">…</b></p>
+        <div class="quota-actions ai-choice-actions">
+          <button id="btn-improve-lang-id" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Bahasa Indonesia</button>
+          <button id="btn-improve-lang-en" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Bahasa Inggris</button>
+        </div>
+      </div>`;
+    document.body.appendChild(il);
+    const closeIl = () => il.classList.add('hidden');
+    il.addEventListener('click', (e) => { if (e.target === il) closeIl(); });
+    document.getElementById('btn-close-improve-lang').addEventListener('click', closeIl);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !il.classList.contains('hidden')) closeIl();
+    });
+  }
+
+  // Buka modal pilihan bahasa. onSelect('id'|'en') dipanggil saat user memilih.
+  window.__cvkitaImproveAllChoice = function (remaining, onSelect) {
+    const m = document.getElementById('improve-lang-modal');
+    if (!m) { onSelect('id'); return; }
+    const q = document.getElementById('improve-lang-quota');
+    if (q && typeof remaining === 'number') q.textContent = remaining + '×';
+    document.getElementById('btn-improve-lang-id').onclick = () => { m.classList.add('hidden'); onSelect('id'); };
+    document.getElementById('btn-improve-lang-en').onclick = () => { m.classList.add('hidden'); onSelect('en'); };
+    m.classList.remove('hidden');
+    m.scrollIntoView({ behavior: 'smooth' });
+  };
+
   // API global: panggil ini sebagai pengganti alert untuk error kuota
   window.__cvkitaQuotaExhausted = function () {
     const m = document.getElementById('quota-modal');
@@ -99,8 +138,9 @@
         <h3><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Mau apa nih?</h3>
         <p class="ai-choice-sub">Satu aksi = 1 kuota AI. Sisa kuotamu: <b id="ai-choice-quota">…</b></p>
         <div class="quota-actions ai-choice-actions">
-          <button id="btn-ai-improve" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Improve tulisan (bahasa Indonesia)</button>
-          <button id="btn-ai-translate" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Translate ke English</button>
+          <button id="btn-ai-improve" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Improve (bahasa Indonesia)</button>
+          <button id="btn-ai-translate" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Translate ke bahasa Inggris</button>
+          <button id="btn-ai-translate-improve" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"></use></svg> Translate ke bahasa Inggris + improve</button>
         </div>
       </div>`;
     document.body.appendChild(ai);
@@ -121,9 +161,11 @@
     if (q && typeof remaining === 'number') q.textContent = remaining + '×';
     const onImprove = document.getElementById('btn-ai-improve');
     const onTranslate = document.getElementById('btn-ai-translate');
+    const onTranslateImprove = document.getElementById('btn-ai-translate-improve');
     // Modal dipakai ulang untuk lokasi berbeda: ganti handler tiap kali dibuka.
     onImprove.onclick = () => { m.classList.add('hidden'); onSelect('improve'); };
     onTranslate.onclick = () => { m.classList.add('hidden'); onSelect('translate'); };
+    onTranslateImprove.onclick = () => { m.classList.add('hidden'); onSelect('translate-improve'); };
     m.classList.remove('hidden');
     m.scrollIntoView({ behavior: 'smooth' });
   };

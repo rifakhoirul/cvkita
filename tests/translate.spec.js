@@ -18,12 +18,12 @@ async function mockVerify(page, { valid = true, quota = 3 } = {}) {
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid, quota }) }));
 }
 
-async function mockTranslate(page, { status = 200, result = 'Managed monthly warehouse stock using spreadsheet systems.' } = {}) {
+async function mockTranslate(page, { status = 200, result = 'Managed monthly warehouse stock using spreadsheet systems.', remaining = 2 } = {}) {
   await page.route('**/api/translate', route => {
     if (status !== 200) {
       return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ error: 'Kuota AI-mu sudah habis.' }) });
     }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ result, remaining: 2 }) });
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ result, remaining }) });
   });
 }
 
@@ -89,6 +89,24 @@ test.describe('Tombol AI terpadu (Improve / Translate)', () => {
     await expect(page.locator('#ai-choice-modal')).toBeHidden();
   });
 
+  test('setelah fitur AI sukses, badge header ikut sisa kuota terbaru (bukan cache lama)', async ({ page }) => {
+    await seedPremium(page);
+    await mockVerify(page, { valid: true, quota: 7 });
+    await mockTranslate(page, { result: 'Managed monthly warehouse stock.', remaining: 3 });
+    // badge mulai dengan cache basi "7×"
+    await page.addInitScript(() => {
+      localStorage.setItem('cvkita_quota_cache', JSON.stringify({ q: 7, t: Date.now() }));
+    });
+    await page.goto('/');
+    await expect(page.locator('#premium-badge')).toContainText('7×');
+    await page.fill('[name="ringkasan"]', 'Lulusan Sistem Informasi.');
+    await page.click('#btn-ai-ringkasan');
+    await page.click('#btn-ai-translate');
+    await expect(page.locator('[name="ringkasan"]')).toHaveValue(/Managed monthly warehouse stock/);
+    // badge langsung ikut remaining dari response: 3×
+    await expect(page.locator('#premium-badge')).toContainText('3×');
+  });
+
   test('modal: pilih Improve -> API rewrite dipanggil, field tertimpa hasil', async ({ page }) => {
     await seedPremium(page);
     await mockVerify(page);
@@ -99,6 +117,23 @@ test.describe('Tombol AI terpadu (Improve / Translate)', () => {
     await page.click('#btn-ai-ringkasan');
     await page.click('#btn-ai-improve');
     await expect(page.locator('[name="ringkasan"]')).toHaveValue(/Fresh graduate Sistem Informasi/);
+  });
+
+  test('modal: pilih Translate + improve -> kirim polish:true, tetap satu panggilan', async ({ page }) => {
+    await seedPremium(page);
+    await mockVerify(page);
+    let body = null;
+    await page.route('**/api/translate', route => {
+      body = JSON.parse(route.request().postData() || '{}');
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ result: 'Managed stock, cutting errors by 20%.', remaining: 2 }) });
+    });
+    await page.goto('/');
+    await page.fill('[name="ringkasan"]', 'Mengelola stok gudang.');
+    await page.click('#btn-ai-ringkasan');
+    await page.click('#btn-ai-translate-improve');
+    await expect(page.locator('[name="ringkasan"]')).toHaveValue(/Managed stock/);
+    expect(body.polish).toBe(true);
+    await expect(page.locator('#premium-badge')).toContainText('2×');
   });
 
   test('modal bisa ditutup (X / klik luar / Escape) tanpa aksi', async ({ page }) => {

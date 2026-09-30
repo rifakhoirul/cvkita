@@ -413,12 +413,13 @@ async function handleAiRewrite(btn) {
     btn.innerHTML = '⏳ Menulis ulang...';
     btn.disabled = true;
     try {
-      const { result } = await aiRewrite({
+      const { result, remaining } = await aiRewrite({
         mode: 'ringkasan',
         posisi: headline,
         organisasi: nama,
         deskripsi: ta.value,
       });
+      if (typeof window.__cvkitaSyncBadge === 'function') window.__cvkitaSyncBadge(remaining);
       ta.value = result;
       ta.dispatchEvent(new Event('input', { bubbles: true }));
       btn.innerHTML = '✓ Ditingkatkan';
@@ -439,7 +440,8 @@ async function handleAiRewrite(btn) {
   btn.textContent = '⏳ Menulis ulang...';
   btn.disabled = true;
   try {
-    const { result } = await aiRewrite({ posisi, organisasi, deskripsi });
+    const { result, remaining } = await aiRewrite({ posisi, organisasi, deskripsi });
+    if (typeof window.__cvkitaSyncBadge === 'function') window.__cvkitaSyncBadge(remaining);
     const ta = entry.querySelector('[name="pengalaman.deskripsi"]');
     ta.value = result;
     ta.dispatchEvent(new Event('input', { bubbles: true }));
@@ -455,7 +457,7 @@ async function handleAiRewrite(btn) {
 // Terjemahan CV ke bahasa Inggris (30 Sep) — 1 kuota AI per section.
 // Tombol ini menimpa isi field dengan hasil terjemahan (tanpa dialog confirm browser
 // supaya konsisten dengan tombol AI lain; user bisa undo dengan Ctrl+Z / tulis ulang).
-async function handleTranslate(btn) {
+async function handleTranslate(btn, opts = {}) {
   const ta = btn.closest('.entry')
     ? btn.closest('.entry').querySelector('[name="pengalaman.deskripsi"]')
     : document.querySelector('[name="ringkasan"]');
@@ -464,10 +466,11 @@ async function handleTranslate(btn) {
   if (!teks) { showAiError('Isi dulu bagian ini sebelum diterjemahkan.'); return; }
 
   const label = btn.innerHTML;
-  btn.innerHTML = '⏳ Menerjemahkan...';
+  btn.innerHTML = opts.polish ? '⏳ Menerjemahkan + memperbaiki...' : '⏳ Menerjemahkan...';
   btn.disabled = true;
   try {
-    const { result } = await window.__cvkitaAiTranslate(teks);
+    const { result, remaining } = await window.__cvkitaAiTranslate(teks, opts);
+    if (typeof window.__cvkitaSyncBadge === 'function') window.__cvkitaSyncBadge(remaining);
     ta.value = result;
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     btn.innerHTML = '✓ Diterjemahkan';
@@ -500,6 +503,7 @@ async function handleAiButton(btn) {
   if (!modal) { handleAiRewrite(btn); return; } // fallback defensif
   modal(remaining, (choice) => {
     if (choice === 'translate') handleTranslate(btn);
+    else if (choice === 'translate-improve') handleTranslate(btn, { polish: true });
     else handleAiRewrite(btn);
   });
 }

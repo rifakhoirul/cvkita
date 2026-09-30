@@ -33,11 +33,17 @@ async function aiRewrite(payload) {
 }
 
 // Terjemahan CV ke bahasa Inggris — 1 kuota AI per section (30 Sep).
-async function aiTranslate(text) {
+// opts.polish = true -> terjemah + perbaiki sekaligus (tetap 1 kuota, satu panggilan AI).
+async function aiTranslate(text, opts = {}) {
   const res = await fetch(`${API_BASE}/api/translate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, target: 'en', license: localStorage.getItem(LICENSE_KEY) || '' }),
+    body: JSON.stringify({
+      text,
+      target: 'en',
+      polish: opts.polish === true,
+      license: localStorage.getItem(LICENSE_KEY) || '',
+    }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -46,6 +52,7 @@ async function aiTranslate(text) {
   return res.json();
 }
 window.__cvkitaAiTranslate = aiTranslate;
+window.__cvkitaSyncBadge = syncBadgeWithRemaining;
 
 function showPaywall() {
   $('#paywall').classList.remove('hidden');
@@ -98,6 +105,16 @@ function updatePremiumBadge(quotaInfo) {
   }
   // Header emas saat premium aktif
   document.body.classList.toggle('premium-active', isPremium());
+}
+
+// 30 Sep: sinkronkan badge header dengan sisa kuota terbaru dari response fitur AI.
+// Tanpa ini badge pakai cache 5 menit dan bisa beda dengan "Sisa kuota AI" di panel hasil.
+function syncBadgeWithRemaining(remaining) {
+  if (typeof remaining !== 'number') return;
+  try {
+    localStorage.setItem('cvkita_quota_cache', JSON.stringify({ q: remaining, t: Date.now() }));
+  } catch {}
+  updatePremiumBadge(remaining);
 }
 
 // Nama tampilan template premium (urutan = urutan

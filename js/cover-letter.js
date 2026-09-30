@@ -116,6 +116,10 @@
         modal.querySelector('.cl-text').textContent = data.text;
         modal.querySelector('.cl-remaining').textContent =
           typeof data.remaining === 'number' ? `Sisa kuota AI: ${data.remaining}` : '';
+        // Sinkronkan badge header dengan sisa kuota terbaru (cache 5 menit bisa basi)
+        if (typeof data.remaining === 'number' && typeof window.__cvkitaSyncBadge === 'function') {
+          window.__cvkitaSyncBadge(data.remaining);
+        }
         document.body.appendChild(modal);
         modal.querySelector('.cl-close').addEventListener('click', () => modal.remove());
         modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });

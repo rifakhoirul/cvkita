@@ -96,6 +96,10 @@
           cards +
           (swotHtml ? `<div class="swot-wrap"><h3 class="swot-title">📊 Analisis SWOT</h3>${swotHtml}</div>` : '') +
           `<p class="js-note"><svg class="ic" aria-hidden="true"><use href="#i-lock"></use></svg> Pencarian terbuka di portal masing-masing. Sisa kuota AI: ${data.remaining ?? '-'}</p>`;
+        // Sinkronkan badge header dengan sisa kuota terbaru (cache 5 menit bisa basi)
+        if (typeof data.remaining === 'number' && typeof window.__cvkitaSyncBadge === 'function') {
+          window.__cvkitaSyncBadge(data.remaining);
+        }
       } catch (err) {
         if (/habis/i.test(err.message) && window.__cvkitaQuotaExhausted) {
           panel.innerHTML = '';

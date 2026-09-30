@@ -76,20 +76,38 @@
     const code = localStorage.getItem('cvkita_license_v1') || '';
     if (!code) { if (typeof showPaywall === 'function') showPaywall(); return; }
     const before = collectCV();
+    // Pre-check kuota dulu (tanpa memotong kuota): paywall / modal kuota / modal pilihan bahasa
+    let remaining = null;
+    try {
+      if (typeof verifyLicense === 'function') {
+        const r = await verifyLicense(code);
+        if (!r || !r.valid) { if (window.__cvkitaQuotaExhausted) window.__cvkitaQuotaExhausted(); return; }
+        remaining = r.quota;
+      }
+    } catch { /* verify gagal: lanjut, server yang menolak kalau kuota habis */ }
+    if (typeof window.__cvkitaImproveAllChoice !== 'function') { runImprove(before); return; }
+    window.__cvkitaImproveAllChoice(remaining, (lang) => runImprove(before, lang));
+  });
+
+  async function runImprove(before, lang = 'id') {
+    const code = localStorage.getItem('cvkita_license_v1') || '';
     btn.disabled = true;
     const old = btn.innerHTML;
-    btn.innerHTML = '✨ AI sedang menulis ulang…';
+    btn.innerHTML = lang === 'en' ? '✨ AI menerjemahkan + memperbaiki seluruh CV…' : '✨ AI sedang menulis ulang…';
     try {
       const res = await fetch(API + '/api/improve-all', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, cv: before }),
+        body: JSON.stringify({ code, cv: before, english: lang === 'en' }),
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) {
         if (/habis/i.test(j.error || '') && window.__cvkitaQuotaExhausted) window.__cvkitaQuotaExhausted();
         else alert(j.error || 'Gagal memproses. Coba lagi.');
         return;
+      }
+      if (typeof j.remaining === 'number' && typeof window.__cvkitaSyncBadge === 'function') {
+        window.__cvkitaSyncBadge(j.remaining);
       }
       showConfirm(before, j, null);
     } catch {
@@ -98,5 +116,5 @@
       btn.disabled = false;
       btn.innerHTML = old;
     }
-  });
+  }
 })();
