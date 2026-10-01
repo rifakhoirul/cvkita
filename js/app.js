@@ -469,6 +469,8 @@ async function handleAiRewrite(btn) {
     ta.value = result;
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     btn.textContent = '✓ Ditingkatkan';
+    saveData();
+    render();
   } catch (err) {
     showAiError(err.message);
     btn.textContent = btnLabel;
