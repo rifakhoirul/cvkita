@@ -55,13 +55,13 @@ window.__cvkitaAiTranslate = aiTranslate;
 window.__cvkitaSyncBadge = syncBadgeWithRemaining;
 
 function showPaywall() {
-  $('#paywall').classList.remove('hidden');
-  $('#paywall').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('paywall').classList.remove('hidden');
+  document.getElementById('paywall').scrollIntoView({ behavior: 'smooth' });
 }
 
 // Bug 2026-09-28: paywall tidak bisa ditutup — user terjebak di modal.
 function closePaywall() {
-  $('#paywall').classList.add('hidden');
+  document.getElementById('paywall').classList.add('hidden');
 }
 
 // QA 2026-09-29: badge "Premium" di header — indikator lisensi aktif.
