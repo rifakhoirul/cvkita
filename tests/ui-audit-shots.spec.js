@@ -21,6 +21,8 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
 
   // Isi contoh
   await d.click('#btn-sample-top');
+  await d.waitForTimeout(500);
+  await d.locator('[data-sample="it"]').click(); // Select the IT sample to close the modal
   await d.waitForTimeout(1200);
   const c = d.locator('#btn-ats-close');
   if (await c.isVisible().catch(() => false)) await c.click();
@@ -31,7 +33,8 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await d.screenshot({ path: S('03-preview-desktop.png') });
 
   // Paywall
-  await d.locator('#btn-jobsearch').click();
+  // Trigger paywall directly instead of trying to scroll the page layout to find btn-jobsearch
+  await d.evaluate(() => window.__cvkitaPaywall && window.__cvkitaPaywall());
   await d.waitForTimeout(400);
   await d.screenshot({ path: S('04-paywall-desktop.png') });
   await d.keyboard.press('Escape');
@@ -50,6 +53,8 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await m.waitForLoadState('networkidle');
   await m.screenshot({ path: S('10-home-mobile.png') });
   await m.click('#btn-sample-top');
+  await m.waitForTimeout(500);
+  await m.locator('[data-sample="it"]').click(); // Select the IT sample to close the modal
   await m.waitForTimeout(1200);
   const c2 = m.locator('#btn-ats-close');
   if (await c2.isVisible().catch(() => false)) await c2.click();

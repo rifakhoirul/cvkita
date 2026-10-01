@@ -80,6 +80,8 @@ test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ pa
   await expect(page.locator('#paywall')).toBeHidden();
   await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
   await page.locator('#pengalaman-list .btn-ai').first().click();
+  // Karena sekarang pakai modal pilihan untuk AI terpadu (30 Sep), klik improve di modal
+  await page.locator('#btn-ai-improve').click();
   const desc = page.locator('[name="pengalaman.deskripsi"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });
