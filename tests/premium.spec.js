@@ -80,6 +80,12 @@ test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ pa
   await expect(page.locator('#paywall')).toBeHidden();
   await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
   await page.locator('#pengalaman-list .btn-ai').first().click();
+
+  // Karena sekarang ada dialog pilihan improve/translate setelah aktivasi AI terpadu:
+  const btnImprove = page.locator('#btn-ai-improve');
+  await expect(btnImprove).toBeVisible();
+  await btnImprove.click();
+
   const desc = page.locator('[name="pengalaman.deskripsi"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });
