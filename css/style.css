@@ -125,7 +125,7 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .js-portal-row{display:flex;flex-wrap:wrap;gap:6px}
 .js-portal{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;
   font-size:.8rem;font-weight:600;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:#fafbfc;
-  min-height:36px;transition:border-color .15s}
+  min-height:44px;transition:border-color .15s}
 .js-portal:hover{border-color:var(--brand);color:var(--brand-dark,#c2410c)}
 .js-portal.primary{background:var(--brand);border-color:var(--brand);color:#fff}
 .js-portal.primary:hover{background:var(--brand-dark,#c2410c);color:#fff}
@@ -150,7 +150,7 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .swot-title{font-size:.9rem;font-weight:700;margin-bottom:8px}
 .swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:480px){.swot-grid{grid-template-columns:1fr}}
-.swot-quad{border-radius:8px;padding:10px 12px;font-size:.78rem;line-height:1.5}
+.swot-quad{border-radius:8px;padding:10px 12px;font-size:.9rem;line-height:1.55}
 .swot-quad h4{font-size:.75rem;margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
 .swot-quad ul{margin:0;padding-left:16px}
 .swot-quad li{margin-bottom:3px}
@@ -170,13 +170,13 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .improve-diff{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:600px){.improve-diff{grid-template-columns:1fr}}
 .improve-diff h4{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.improve-diff pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:.78rem;background:#f9fafb;border:1px solid var(--line);border-radius:8px;padding:10px;margin:0;max-height:260px;overflow:auto}
+.improve-diff pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:.9rem;background:#f9fafb;border:1px solid var(--line);border-radius:8px;padding:10px;margin:0;max-height:260px;overflow:auto}
 .improve-diff div:last-child pre{background:#fff7ed;border-color:#fdba74}
 .improve-confirm-actions{display:flex;gap:10px;margin-top:14px;justify-content:flex-end;flex-wrap:wrap}
-.ats-close{position:absolute;top:8px;right:8px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:.95rem;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center}
+.ats-close{position:absolute;top:4px;right:4px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:.95rem;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
 .ats-panel{position:relative}
 .ats-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
-.ats-cat{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem}
+.ats-cat{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem}
 .ats-cat strong{color:var(--brand-dark,#c2410c)}
 .jobsearch-panel{border:1px solid #fed7aa;background:#fffbeb}
 /* Facts bar: satu baris ringkas menggantikan sub + badge privasi + tips */
@@ -317,7 +317,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .cl-field input:focus{outline:2px solid var(--brand);outline-offset:0;border-color:var(--brand)}
 .cl-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cl-remaining{font-size:.8rem;color:var(--muted)}
-.cl-close{position:absolute;top:10px;right:10px;border:none;background:none;font-size:1rem;cursor:pointer;color:var(--muted);min-width:36px;min-height:36px}
+.cl-close{position:absolute;top:6px;right:6px;border:none;background:none;font-size:1rem;cursor:pointer;color:var(--muted);min-width:44px;min-height:44px}
 .tier-price-old{font-size:.85rem;color:#6b7280;text-decoration:line-through !important}
 .tier-save{font-size:.62rem;font-weight:800;letter-spacing:.04em;color:#15803d;background:#dcfce7;border-radius:999px;padding:2px 8px}
 .badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
