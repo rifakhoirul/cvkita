@@ -20,11 +20,16 @@
 // checkout_click: dilacak per-klik (bukan per-hari) — event jarang, aman untuk KV.
 // Dipanggil dari pay.html saat user klik Beli.
 window.__cvkitaTrackCheckout = function () {
+  window.__cvkitaTrack('checkout_click');
+};
+
+// Tracker umum utk event jarang lainnya (import_pdf, download_pdf) — dipanggil dari app.js & import-cv.js.
+window.__cvkitaTrack = function (event) {
   try {
     fetch('https://cvkita-api.cvkita-rifakhoirul.workers.dev/api/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'checkout_click' }),
+      body: JSON.stringify({ event: event }),
       keepalive: true,
     }).catch(() => {});
   } catch {}
