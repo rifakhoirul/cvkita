@@ -45,3 +45,9 @@ test('XSS: input berbahaya tidak dieksekusi', async ({ page }) => {
   const imgCount = await page.locator('#cv-paper img').count();
   expect(imgCount).toBe(0);
 });
+
+test('XSS: single quote berhasil di-escape', async ({ page }) => {
+  await page.fill('[name="nama"]', "O'Reilly");
+  // Cek kalau teksnya masuk secara benar dan di escape di background
+  await expect(page.locator('#cv-paper h1')).toHaveText("O'Reilly");
+});

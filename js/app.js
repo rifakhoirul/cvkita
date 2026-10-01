@@ -86,7 +86,7 @@ function collectList(key) {
 }
 
 function esc(s) {
-  return (s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function nl2li(s) {
   const lines = (s || '').split('\n').map(x => x.trim()).filter(Boolean);
@@ -200,7 +200,10 @@ document.addEventListener('click', e => {
         $('#aktivasi-error').classList.remove('hidden');
       });
   }
-  if (e.target.closest && e.target.closest('#btn-download, #btn-download-sticky, #btn-download-preview')) window.print();
+  if (e.target.closest && e.target.closest('#btn-download, #btn-download-sticky, #btn-download-preview')) {
+    try { if (window.__cvkitaTrack) window.__cvkitaTrack('download_pdf'); } catch {}
+    window.print();
+  }
   if (e.target.id === 'btn-ats-close') {
     $('#ats-panel').classList.add('hidden');
   }

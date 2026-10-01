@@ -47,7 +47,7 @@
   }
 
   function showConfirm(before, after, onAccept) {
-    const esc = s => String(s).replace(/[&<>"/]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '/': '&#x2F;' }[c]));
+    const esc = s => String(s).replace(/[&<>"'/]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;' }[c]));
     const modal = document.createElement('div');
     modal.className = 'improve-confirm';
     modal.innerHTML = `

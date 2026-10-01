@@ -69,6 +69,7 @@
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) { setStatus(j.error || 'Gagal membaca CV. Coba lagi.', false); return; }
+      try { if (window.__cvkitaTrack) window.__cvkitaTrack('import_pdf'); } catch {}
       apply(j);
     } catch {
       setStatus('Gagal membaca CV. Coba lagi.', false);
