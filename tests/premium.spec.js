@@ -30,6 +30,8 @@ test('tombol AI rewrite tersedia di entri pengalaman', async ({ page }) => {
 test('klik AI rewrite tanpa lisensi menampilkan paywall dengan harga', async ({ page }) => {
   await mockApi(page);
   await page.locator('#pengalaman-list .btn-ai').first().click();
+  if (await page.locator('#improve-lang-modal').isVisible()) { await page.locator('#btn-improve-lang-id').click(); }
+  if (await page.locator('#ai-choice-modal').isVisible()) { await page.locator('#btn-ai-improve').click(); }
   await expect(page.locator('#paywall')).toBeVisible();
   await expect(page.locator('#paywall')).toContainText('Rp 9.900');
 });
@@ -38,7 +40,9 @@ test('klik AI rewrite tanpa lisensi menampilkan paywall dengan harga', async ({ 
 
 test('kode aktivasi invalid menampilkan pesan error', async ({ page }) => {
   await mockApi(page, { licenseValid: false });
-  await page.locator('#pengalaman-list .btn-ai').first().click(); // buka paywall dulu
+  await page.locator('#pengalaman-list .btn-ai').first().click();
+  if (await page.locator('#improve-lang-modal').isVisible()) { await page.locator('#btn-improve-lang-id').click(); }
+  if (await page.locator('#ai-choice-modal').isVisible()) { await page.locator('#btn-ai-improve').click(); } // buka paywall dulu
   await page.fill('#aktivasi-kode', 'KODE-PALSU');
   await page.click('#btn-aktivasi');
   await expect(page.locator('#aktivasi-error')).toContainText('tidak valid');
@@ -55,7 +59,9 @@ test('template premium terkunci sebelum aktivasi', async ({ page }) => {
 
 test('template premium bisa dipakai setelah aktivasi', async ({ page }) => {
   await mockApi(page);
-  await page.locator('#pengalaman-list .btn-ai').first().click(); // buka paywall
+  await page.locator('#pengalaman-list .btn-ai').first().click();
+  if (await page.locator('#improve-lang-modal').isVisible()) { await page.locator('#btn-improve-lang-id').click(); }
+  if (await page.locator('#ai-choice-modal').isVisible()) { await page.locator('#btn-ai-improve').click(); } // buka paywall
   await page.fill('#aktivasi-kode', 'BOOST-TEST-123');
   await page.click('#btn-aktivasi');
   await page.click('[data-tpl="classic"]');
@@ -65,7 +71,9 @@ test('template premium bisa dipakai setelah aktivasi', async ({ page }) => {
 
 test('API key tidak pernah tersimpan di localStorage', async ({ page }) => {
   await mockApi(page);
-  await page.locator('#pengalaman-list .btn-ai').first().click(); // buka paywall
+  await page.locator('#pengalaman-list .btn-ai').first().click();
+  if (await page.locator('#improve-lang-modal').isVisible()) { await page.locator('#btn-improve-lang-id').click(); }
+  if (await page.locator('#ai-choice-modal').isVisible()) { await page.locator('#btn-ai-improve').click(); } // buka paywall
   await page.fill('#aktivasi-kode', 'BOOST-TEST-123');
   await page.click('#btn-aktivasi');
   const dump = await page.evaluate(() => JSON.stringify(localStorage));
@@ -75,11 +83,15 @@ test('API key tidak pernah tersimpan di localStorage', async ({ page }) => {
 test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ page }) => {
   await mockApi(page);
   await page.locator('#pengalaman-list .btn-ai').first().click();
+  if (await page.locator('#improve-lang-modal').isVisible()) { await page.locator('#btn-improve-lang-id').click(); }
+  if (await page.locator('#ai-choice-modal').isVisible()) { await page.locator('#btn-ai-improve').click(); }
   await page.fill('#aktivasi-kode', 'BOOST-TEST-123');
   await page.click('#btn-aktivasi');
   await expect(page.locator('#paywall')).toBeHidden();
   await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
   await page.locator('#pengalaman-list .btn-ai').first().click();
+  if (await page.locator('#improve-lang-modal').isVisible()) { await page.locator('#btn-improve-lang-id').click(); }
+  if (await page.locator('#ai-choice-modal').isVisible()) { await page.locator('#btn-ai-improve').click(); }
   const desc = page.locator('[name="pengalaman.deskripsi"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });

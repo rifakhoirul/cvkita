@@ -205,7 +205,7 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 input,textarea{display:block;width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:1rem;font-family:inherit;background:#fbfaf7;color:var(--ink);margin-bottom:0}
 textarea{padding:10px 11px;min-height:70px;resize:vertical}
 input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
-::placeholder{color:#6b7280;opacity:1;font-weight:400}
+::placeholder{color:#5b6478;opacity:1;font-weight:400}
 
 .repeat-list .entry{border:1px dashed var(--line);border-radius:10px;padding:10px;margin-bottom:10px}
 .repeat-list .entry input,.repeat-list .entry textarea{width:100%;margin-bottom:8px}
@@ -283,7 +283,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 #feedback-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
 .fb-box{background:#fff;border-radius:14px;padding:22px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);max-height:90vh;overflow:auto}
 .fb-box h3{margin:0 0 6px;color:var(--ink)}
-.fb-sub{font-size:.85rem;color:#6b7280;margin-bottom:12px}
+.fb-sub{font-size:.85rem;color:#5b6478;margin-bottom:12px}
 .fb-box textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:10px;font:inherit;font-size:1rem;resize:vertical}
 .fb-count{text-align:right;font-size:.75rem;color:#9ca3af;margin:4px 0 12px}
 .fb-actions{display:flex;gap:10px;justify-content:flex-end}
@@ -318,7 +318,7 @@ input:focus,textarea:focus{outline:2px solid #fdba74;border-color:var(--brand)}
 .cl-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cl-remaining{font-size:.8rem;color:var(--muted)}
 .cl-close{position:absolute;top:10px;right:10px;border:none;background:none;font-size:1rem;cursor:pointer;color:var(--muted);min-width:36px;min-height:36px}
-.tier-price-old{font-size:.85rem;color:#6b7280;text-decoration:line-through !important}
+.tier-price-old{font-size:.85rem;color:#5b6478;text-decoration:line-through !important}
 .tier-save{font-size:.62rem;font-weight:800;letter-spacing:.04em;color:#15803d;background:#dcfce7;border-radius:999px;padding:2px 8px}
 .badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
 .badge-muted{background:#f1efe9;color:#475569}
@@ -398,10 +398,10 @@ body.has-sticky{padding-bottom:64px}
 .pay-footer{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .pay-help{font-size:.88rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}
 .pay-help .cs-wa{display:inline-block;padding:12px 4px;color:var(--brand-dark)}
-#pay-status{min-height:1.4em;font-size:.9rem;color:#059669;margin:0}
+#pay-status{min-height:1.4em;font-size:.9rem;color:#047857;margin:0}
 .pay-noscript{color:#b91c1c;font-size:.88rem;margin:0}
 .pay-back{margin-top:2px}
-.pay-tos{font-size:.82rem;color:#6b7280;line-height:1.7;max-width:420px;margin:0}
+.pay-tos{font-size:.82rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}
 .pay-tos a{display:inline-block;padding:12px 4px;color:var(--brand-dark);font-weight:600}
 
 /* Hormati preferensi reduced motion */
