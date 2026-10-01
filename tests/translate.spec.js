@@ -146,4 +146,19 @@ test.describe('Tombol AI terpadu (Improve / Translate)', () => {
     await page.keyboard.press('Escape');
     await expect(page.locator('#ai-choice-modal')).toBeHidden();
   });
+
+  test('gracefully handles malformed quota cache in localStorage', async ({ page }) => {
+    await seedPremium(page);
+    await mockVerify(page, { valid: true, quota: 5 });
+
+    // Set a malformed JSON string for the cache
+    await page.addInitScript(() => {
+      localStorage.setItem('cvkita_quota_cache', '{ malformed json');
+    });
+
+    await page.goto('/');
+
+    // It should recover by calling the verify API and displaying the correct quota
+    await expect(page.locator('#premium-badge')).toContainText('5×');
+  });
 });
