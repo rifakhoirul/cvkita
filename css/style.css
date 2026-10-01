@@ -34,6 +34,7 @@ a{color:var(--brand-dark)}
 .btn.primary:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{background:#fff}
+.btn.ghost:focus-visible{outline:3px solid #94a3b8;outline-offset:2px}
 /* Tombol aksi bawah preview: warna per fungsi agar mudah dibedakan (unduh = primary oranye) */
 #btn-ats-preview{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
 #btn-ats-preview:hover{background:#dbeafe}
@@ -45,7 +46,9 @@ a{color:var(--brand-dark)}
 #btn-cover-letter:hover{background:#ccfbf1}
 #btn-cover-letter:focus-visible{outline:3px solid #5eead4;outline-offset:2px}
 .btn.add{background:var(--brand-soft);color:var(--brand-dark);margin-top:6px}
+.btn.add:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .btn.del{background:#fef2f2;color:var(--err);border:1px solid #fecaca;margin-top:6px;font-size:.8rem;padding:11px 14px;min-height:44px}
+.btn.del:focus-visible{outline:3px solid #fca5a5;outline-offset:2px}
 /* Jarak tombol AI/Hapus dalam entry */
 .entry .btn.ai,.entry .btn.del{display:inline-block;margin-right:8px}
 /* Tombol AI premium: gradasi oranye mencolok (fitur berbayar harus kelihatan bernilai) */
@@ -56,6 +59,7 @@ a{color:var(--brand-dark)}
 .entry .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .btn.danger{border-color:#fecaca;color:var(--err)}
 .btn.danger:hover{background:#fef2f2}
+.btn.danger:focus-visible{outline:3px solid #fca5a5;outline-offset:2px}
 
 /* ===== Header ===== */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;gap:8px;flex-wrap:wrap}
