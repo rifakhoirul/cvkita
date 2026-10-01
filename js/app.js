@@ -423,7 +423,14 @@ async function handleAiRewrite(btn) {
         deskripsi: ta.value,
       });
       if (typeof window.__cvkitaSyncBadge === 'function') window.__cvkitaSyncBadge(remaining);
-      ta.value = result;
+      // 1 Okt: AI kadang tetap menjawab dash/bullet utk ringkasan — field ini dirender
+      // SATU paragraf, jadi " - " inline jadi kalimat bersambung aneh di PDF.
+      // Jaring pengaman: ubah bullet/dash leading + pemisah " - " jadi kalimat mengalir.
+      ta.value = String(result)
+        .replace(/^\s*[-•*]\s*/gm, '')
+        .replace(/\s+[-•]\s+/g, '. ')
+        .replace(/\.\s*\./g, '.')
+        .trim();
       ta.dispatchEvent(new Event('input', { bubbles: true }));
       btn.innerHTML = '✓ Ditingkatkan';
     } catch (err) {
