@@ -32,6 +32,7 @@
         </div>
         <button class="btn primary" id="btn-buy-9" style="min-height:44px">Beli</button>
       </div>
+      <p class="pay-assurance">✅ Kode aktivasi langsung tampil di halaman ini setelah pembayaran — tanpa tunggu, tanpa daftar.</p>
     </div>
     <div class="pay-item tier tier-popular">
       <div class="tier-head">
@@ -116,7 +117,10 @@
             status.textContent = 'Pembayaran gagal. Coba lagi atau pakai cara manual di bawah.';
           },
           onClose: function () {
-            status.textContent = 'Jendela pembayaran ditutup. Transaksi belum selesai.';
+            status.style.color = '#5b6478';
+            status.innerHTML = 'Jendela pembayaran ditutup — transaksi belum selesai, tidak ada yang terpotong.<br>' +
+              'Mau lanjut? Klik <b>Beli</b> lagi — pembayaran lewat GoPay/QRIS cuma butuh 1 menit.<br>' +
+              'Ada kendala? Chat kami di <a class="cs-wa" href="https://wa.me/62895628135638" target="_blank" rel="noopener"><b>WhatsApp</b></a>.';
           }
         });
       } else {
