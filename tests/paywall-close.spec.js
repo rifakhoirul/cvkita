@@ -6,7 +6,8 @@ test('paywall bisa ditutup dengan tombol X dan editor kembali bisa dipakai', asy
   await page.goto('/');
   await page.fill('[name="nama"]', 'Budi Test');
   // Picu paywall lewat template premium (butuh premium)
-  await page.click('#btn-sample');
+  await page.click('#btn-sample-top');
+  await page.click('[data-sample="it"]');
   await page.click('[data-tpl="classic"]');
   // Buka paywall: pilih template premium
   const tplTrigger = page.locator('.tpl-btn[data-tpl="executive"], [data-tpl="executive"]').first();
@@ -27,7 +28,8 @@ test('paywall bisa ditutup dengan tombol X dan editor kembali bisa dipakai', asy
 
 test('klik area gelap di luar kartu juga menutup paywall', async ({ page }) => {
   await page.goto('/');
-  await page.click('#btn-sample');
+  await page.click('#btn-sample-top');
+  await page.click('[data-sample="it"]');
   await page.click('[data-tpl="classic"]');
   const tplTrigger = page.locator('.tpl-btn[data-tpl="executive"], [data-tpl="executive"]').first();
   await tplTrigger.click();

@@ -398,7 +398,7 @@ body.has-sticky{padding-bottom:64px}
 .pay-footer{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .pay-help{font-size:.88rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}
 .pay-help .cs-wa{display:inline-block;padding:12px 4px;color:var(--brand-dark)}
-#pay-status{min-height:1.4em;font-size:.9rem;color:#059669;margin:0}
+#pay-status{min-height:1.4em;font-size:.9rem;color:#047857;margin:0}
 .pay-noscript{color:#b91c1c;font-size:.88rem;margin:0}
 .pay-back{margin-top:2px}
 .pay-tos{font-size:.82rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}

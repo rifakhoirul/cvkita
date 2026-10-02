@@ -11,6 +11,7 @@ test.describe('Smoke test API production', () => {
       res = await request.post(`${API}/api/license/verify`, {
         data: { code: 'KODE-PALSU-XYZ' },
         headers: { Origin: 'https://rifakhoirul.github.io' },
+        timeout: 10000,
       });
     } catch (e) {
       test.skip(true, `API tidak terjangkau dari runner: ${e.message}`);
@@ -27,6 +28,7 @@ test.describe('Smoke test API production', () => {
       res = await request.post(`${API}/api/license/verify`, {
         data: { code: 'X' },
         headers: { Origin: 'https://rifakhoirul.github.io' },
+        timeout: 10000,
       });
     } catch (e) {
       test.skip(true, `API tidak terjangkau: ${e.message}`);
