@@ -21,6 +21,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
 
   // Isi contoh
   await d.click('#btn-sample-top');
+  await d.locator('[data-sample="it"]').click();
   await d.waitForTimeout(1200);
   const c = d.locator('#btn-ats-close');
   if (await c.isVisible().catch(() => false)) await c.click();
@@ -31,6 +32,9 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await d.screenshot({ path: S('03-preview-desktop.png') });
 
   // Paywall
+  // First, we need to click the close button of the sample modal if it's there
+  await d.keyboard.press('Escape');
+  await d.waitForTimeout(400);
   await d.locator('#btn-jobsearch').click();
   await d.waitForTimeout(400);
   await d.screenshot({ path: S('04-paywall-desktop.png') });
@@ -50,6 +54,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await m.waitForLoadState('networkidle');
   await m.screenshot({ path: S('10-home-mobile.png') });
   await m.click('#btn-sample-top');
+  await m.locator('[data-sample="it"]').click();
   await m.waitForTimeout(1200);
   const c2 = m.locator('#btn-ats-close');
   if (await c2.isVisible().catch(() => false)) await c2.click();
