@@ -77,7 +77,18 @@ test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ pa
   await page.click('#btn-aktivasi');
   await expect(page.locator('#paywall')).toBeHidden();
   await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
+
+  // click button and handle potential quota modal choosing 'Improve'
   await page.locator('#pengalaman-list .btn-ai').first().click();
+  const improveBtn = page.locator('#btn-ai-improve');
+
+  // wait a bit for modal to potentially appear
+  await page.waitForTimeout(500);
+
+  if (await improveBtn.isVisible()) {
+    await improveBtn.click();
+  }
+
   const desc = page.locator('[name="pengalaman.deskripsi"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });
