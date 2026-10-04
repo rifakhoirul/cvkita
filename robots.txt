@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /tests/
+Disallow: /tests-disabled/
+Disallow: /vendor/
+Disallow: /worker/
+
+Sitemap: https://cvkita.id/sitemap.xml
