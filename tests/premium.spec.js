@@ -34,8 +34,6 @@ test('klik AI rewrite tanpa lisensi menampilkan paywall dengan harga', async ({ 
   await expect(page.locator('#paywall')).toContainText('Rp 9.900');
 });
 
-
-
 test('kode aktivasi invalid menampilkan pesan error', async ({ page }) => {
   await mockApi(page, { licenseValid: false });
   await page.locator('#pengalaman-list .btn-ai').first().click(); // buka paywall dulu
@@ -80,6 +78,11 @@ test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ pa
   await expect(page.locator('#paywall')).toBeHidden();
   await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
   await page.locator('#pengalaman-list .btn-ai').first().click();
+
+  const aiChoiceImprove = page.locator('#btn-ai-improve');
+  await expect(aiChoiceImprove).toBeVisible();
+  await aiChoiceImprove.click();
+
   const desc = page.locator('[name="pengalaman.deskripsi"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });

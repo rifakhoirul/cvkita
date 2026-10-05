@@ -21,6 +21,8 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
 
   // Isi contoh
   await d.click('#btn-sample-top');
+  await d.waitForTimeout(500); // wait for modal
+  await d.click('[data-sample="it"]'); // close modal by selecting sample
   await d.waitForTimeout(1200);
   const c = d.locator('#btn-ats-close');
   if (await c.isVisible().catch(() => false)) await c.click();
@@ -50,6 +52,8 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await m.waitForLoadState('networkidle');
   await m.screenshot({ path: S('10-home-mobile.png') });
   await m.click('#btn-sample-top');
+  await m.waitForTimeout(500); // wait for modal
+  await m.click('[data-sample="it"]'); // close modal by selecting sample
   await m.waitForTimeout(1200);
   const c2 = m.locator('#btn-ats-close');
   if (await c2.isVisible().catch(() => false)) await c2.click();
