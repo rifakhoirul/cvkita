@@ -78,8 +78,15 @@ test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ pa
   await page.fill('#aktivasi-kode', 'BOOST-TEST-123');
   await page.click('#btn-aktivasi');
   await expect(page.locator('#paywall')).toBeHidden();
-  await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
+  // Wait for modal then choose Improve
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(500);
+
+  await page.fill('[name=\"pengalaman.posisi\"]', 'Magang Marketing');
   await page.locator('#pengalaman-list .btn-ai').first().click();
-  const desc = page.locator('[name="pengalaman.deskripsi"]').first();
+  // The new AI modal has 'Improve' and 'Translate'
+  await expect(page.locator('#ai-choice-modal')).toBeVisible({ timeout: 5000 });
+  await page.locator('#btn-ai-improve').click();
+  const desc = page.locator('[name=\"pengalaman.deskripsi\"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });
