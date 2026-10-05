@@ -34,6 +34,7 @@ a{color:var(--brand-dark)}
 .btn.primary:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{background:#fff}
+.btn.ghost:focus-visible{outline:3px solid #fdba74;outline-offset:2px}
 /* Tombol aksi bawah preview: warna per fungsi agar mudah dibedakan (unduh = primary oranye) */
 #btn-ats-preview{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
 #btn-ats-preview:hover{background:#dbeafe}
@@ -356,6 +357,7 @@ body.has-sticky{padding-bottom:64px}
 .paywall-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .paywall-close .ic{width:1.4em;height:1.4em}
 .paywall-close:hover{background:#f1efe9;color:var(--ink)}
+.paywall-close:focus-visible{outline:3px solid #fdba74;outline-offset:2px;background:#f1efe9;color:var(--ink)}
 
 /* Panel ATS */
 .ats-panel{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px}
@@ -398,7 +400,7 @@ body.has-sticky{padding-bottom:64px}
 .pay-footer{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .pay-help{font-size:.88rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}
 .pay-help .cs-wa{display:inline-block;padding:12px 4px;color:var(--brand-dark)}
-#pay-status{min-height:1.4em;font-size:.9rem;color:#059669;margin:0}
+#pay-status{min-height:1.4em;font-size:.9rem;color:#047857;margin:0}
 .pay-noscript{color:#b91c1c;font-size:.88rem;margin:0}
 .pay-back{margin-top:2px}
 .pay-tos{font-size:.82rem;color:#5b6478;line-height:1.7;max-width:420px;margin:0}
