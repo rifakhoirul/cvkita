@@ -13,7 +13,7 @@
 :root{
   --bg:#f6f5f1; --card:#fff; --ink:#16202e; --muted:#5b6478;
   --brand:#ea580c; --brand-dark:#c2410c; --brand-soft:#fff1e7;
-  --line:#e6e3da; --ok:#047857; --err:#b91c1c;
+  --line:#e6e3da; --ok:#059669; --err:#b91c1c;
   --font-ui:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-accent:'Newsreader',Georgia,serif;
   /* Alias lama agar JS/template lama tetap jalan */
