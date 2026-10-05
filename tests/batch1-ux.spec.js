@@ -23,7 +23,7 @@ test.describe('Batch-1 UX: sample di awal, ATS di bawah preview, ikon hapus, AI 
       el => [...el.closest('form').querySelectorAll('*')].indexOf(el)
     );
     expect(idxBtn).toBeLessThan(firstSummary);
-    expect(form).toBeVisible();
+    await expect(form).toBeVisible();
   });
 
   test('tombol Cek ATS ada di bawah preview, sebelum tombol Unduh PDF', async ({ page }) => {
