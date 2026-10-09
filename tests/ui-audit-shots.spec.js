@@ -16,7 +16,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   const dctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
   const d = await dctx.newPage();
   await d.goto('/');
-  await d.waitForLoadState('networkidle');
+  await d.waitForLoadState('domcontentloaded');
   await d.screenshot({ path: S('01-home-hero-desktop.png') });
 
   // Isi contoh
@@ -31,6 +31,10 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await d.screenshot({ path: S('03-preview-desktop.png') });
 
   // Paywall
+  const c3 = d.locator('#sample-cancel');
+  try {
+    await c3.click({ timeout: 1000 });
+  } catch (e) {}
   await d.locator('#btn-jobsearch').click();
   await d.waitForTimeout(400);
   await d.screenshot({ path: S('04-paywall-desktop.png') });
@@ -47,7 +51,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   const mctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
   const m = await mctx.newPage();
   await m.goto('/');
-  await m.waitForLoadState('networkidle');
+  await m.waitForLoadState('domcontentloaded');
   await m.screenshot({ path: S('10-home-mobile.png') });
   await m.click('#btn-sample-top');
   await m.waitForTimeout(1200);
@@ -60,7 +64,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
 
   // Pay page
   await m.goto('/pay.html');
-  await m.waitForLoadState('networkidle');
+  await m.waitForLoadState('domcontentloaded');
   await m.screenshot({ path: S('12-pay-mobile.png'), fullPage: true });
   await mctx.close();
 
@@ -68,7 +72,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   const bctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
   const b = await bctx.newPage();
   await b.goto('/blog/');
-  await b.waitForLoadState('networkidle');
+  await b.waitForLoadState('domcontentloaded');
   await b.screenshot({ path: S('13-blog-mobile.png') });
   await bctx.close();
 
