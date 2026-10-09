@@ -132,7 +132,7 @@ for (const target of [
   test(`audit ${target.name} (desktop)`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(target.path);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     const data = await page.evaluate(AUDIT_JS);
     fs.writeFileSync(`${OUT}/report-${target.name}-desktop.json`, JSON.stringify(data, null, 2));
     expect(true).toBe(true);
@@ -141,7 +141,7 @@ for (const target of [
   test(`audit ${target.name} (mobile)`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(target.path);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     const data = await page.evaluate(AUDIT_JS);
     fs.writeFileSync(`${OUT}/report-${target.name}-mobile.json`, JSON.stringify(data, null, 2));
     expect(true).toBe(true);
