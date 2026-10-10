@@ -56,7 +56,7 @@ function entryHTML(key, data = {}) {
   const aiBtn = (key === 'pengalaman' || key === 'project')
     ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve / Translate</button>'
     : '';
-  return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Hapus</button></div>`;
+  return `<div class="entry" data-key="${key}">${fields}${aiBtn}<button type="button" class="btn del" data-del aria-label="Hapus baris ini"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Hapus</button></div>`;
 }
 
 function renderList(key, items = [{}]) {
