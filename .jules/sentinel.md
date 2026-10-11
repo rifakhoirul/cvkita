@@ -16,3 +16,8 @@ This document serves as a repository for tracking security vulnerabilities, thei
 - **Fix**: Updated the regular expression to include the single quote (`/[&<>"'/]/g`) and added a mapping for the single quote to its HTML entity `&#39;` in the replacement object.
 - **Lesson Learned**: Always use comprehensive escaping functions that cover all critical characters (`&`, `<`, `>`, `"`, `'`, `/`) when dynamically generating HTML strings to prevent XSS.
 >>>>>>> e3a2c75 (🔒 Fix incomplete HTML escaping in improve-all.js)
+
+## 2026-10-11 - [Fix XSS in entryHTML list rendering]
+**Vulnerability:** XSS vulnerability in `js/app.js` where user input from dynamically generated list items (e.g., education, experience) was being inserted into innerHTML without escaping.
+**Learning:** Even if data is escaped in main view functions, functions generating dynamic form elements using user data must also escape that data if they are later inserted into the DOM.
+**Prevention:** Always use the `esc()` function when inserting arbitrary user text into HTML strings, even for form inputs (`<input value="...">`, `<textarea>...</textarea>`).

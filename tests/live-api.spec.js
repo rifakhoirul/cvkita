@@ -9,6 +9,7 @@ test.describe('Smoke test API production', () => {
     let res;
     try {
       res = await request.post(`${API}/api/license/verify`, {
+        timeout: 5000,
         data: { code: 'KODE-PALSU-XYZ' },
         headers: { Origin: 'https://rifakhoirul.github.io' },
       });
@@ -25,6 +26,7 @@ test.describe('Smoke test API production', () => {
     let res;
     try {
       res = await request.post(`${API}/api/license/verify`, {
+        timeout: 5000,
         data: { code: 'X' },
         headers: { Origin: 'https://rifakhoirul.github.io' },
       });
