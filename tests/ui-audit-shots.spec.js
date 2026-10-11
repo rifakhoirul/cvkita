@@ -26,15 +26,21 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   if (await c.isVisible().catch(() => false)) await c.click();
   await d.screenshot({ path: S('02-form-terisi-desktop.png') });
 
+  // Tutup modal contoh jika terbuka
+  await d.locator('#btn-sample-top').evaluate(el => document.querySelector('.paywall') && document.querySelector('.paywall').classList.add('hidden')).catch(()=>{});
+
   // Preview area
   await d.locator('#cv-paper').scrollIntoViewIfNeeded();
   await d.screenshot({ path: S('03-preview-desktop.png') });
+
+  await d.locator('#sample-modal').evaluate(el => document.querySelector('.paywall') && document.querySelector('.paywall').classList.add('hidden')).catch(()=>{});
 
   // Paywall
   await d.locator('#btn-jobsearch').click();
   await d.waitForTimeout(400);
   await d.screenshot({ path: S('04-paywall-desktop.png') });
   await d.keyboard.press('Escape');
+  await d.waitForTimeout(400);
 
   // Panel ATS
   await d.locator('#btn-ats-preview').click();
