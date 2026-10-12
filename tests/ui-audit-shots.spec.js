@@ -21,6 +21,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
 
   // Isi contoh
   await d.click('#btn-sample-top');
+  await d.click('[data-sample="it"]');
   await d.waitForTimeout(1200);
   const c = d.locator('#btn-ats-close');
   if (await c.isVisible().catch(() => false)) await c.click();

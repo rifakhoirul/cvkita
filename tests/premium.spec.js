@@ -80,6 +80,10 @@ test('aktivasi sukses lalu AI rewrite mengisi deskripsi pengalaman', async ({ pa
   await expect(page.locator('#paywall')).toBeHidden();
   await page.fill('[name="pengalaman.posisi"]', 'Magang Marketing');
   await page.locator('#pengalaman-list .btn-ai').first().click();
+  // Since 30 Sep UI update: clicking the AI button opens the Choice modal first
+  const modal = page.locator('#ai-choice-modal');
+  await expect(modal).toBeVisible();
+  await page.click('#btn-ai-improve');
   const desc = page.locator('[name="pengalaman.deskripsi"]').first();
   await expect(desc).toHaveValue(REWRITE_RESULT, { timeout: 5000 });
 });
