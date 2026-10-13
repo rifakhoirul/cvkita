@@ -1,0 +1,3 @@
+## 2026-10-13 - Improve color contrast for #pay-status
+**Learning:** Hardcoded success states using green colors often lack sufficient contrast with white backgrounds. In this project, `#059669` is used for success messages in `pay.html` but only provides a ~3.45 contrast ratio which fails the WCAG 4.5 requirement for standard text. Darker greens like `#047857` or `#064e3b` provide a much better contrast while remaining semantically positive.
+**Action:** Always check color contrast for state-based textual feedback, especially success (green) and warning (orange/yellow) states. Ensure both the static CSS and inline dynamic JavaScript overrides are updated synchronously.
