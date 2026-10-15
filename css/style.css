@@ -168,6 +168,22 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .improve-confirm-card h3{margin:0 0 4px;font-size:1.05rem}
 .improve-confirm-sub{font-size:.8rem;color:var(--muted);margin:0 0 12px}
 .improve-diff{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* CV Tailoring per lowongan */
+.tailor-btn{margin-top:8px}
+.improve-confirm-card .improve-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:1.6rem;line-height:1;color:var(--muted);cursor:pointer;padding:8px;min-width:44px;min-height:44px}
+#tailor-modal,#tailor-result{position:fixed}
+#tailor-modal .improve-confirm-card{position:relative}
+#tailor-jobtext{width:100%;margin-top:6px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font:inherit;font-size:.85rem;resize:vertical}
+#tailor-jobtext:focus{outline:2px solid var(--brand,#ea580c);outline-offset:1px}
+.tailor-err{color:#b91c1c;font-size:.8rem;margin:6px 0 0;min-height:1em}
+.tailor-score{display:flex;align-items:center;gap:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px;margin:10px 0}
+.tailor-score-total{font-size:.8rem;color:#166534;text-align:center}
+.tailor-score-total span{display:block;font-size:1.7rem;font-weight:700;line-height:1.1}
+.tailor-score-bars{flex:1;display:grid;gap:6px;font-size:.75rem;color:#374151}
+.tailor-bar{background:#e5e7eb;border-radius:99px;height:8px;overflow:hidden}
+.tailor-bar i{display:block;height:100%;background:#16a34a;border-radius:99px}
+.tailor-gaps{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:10px 12px;font-size:.82rem;margin:0 0 10px}
+.tailor-gaps ul{margin:4px 0 0;padding-left:18px}
 @media(max-width:600px){.improve-diff{grid-template-columns:1fr}}
 .improve-diff h4{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .improve-diff pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:.9rem;background:#f9fafb;border:1px solid var(--line);border-radius:8px;padding:10px;margin:0;max-height:260px;overflow:auto}
