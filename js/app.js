@@ -48,11 +48,12 @@ function saveData() {
 
 function entryHTML(key, data = {}) {
   const sec = SECTIONS[key];
-  const fields = sec.fields.map(f =>
-    f.textarea
-      ? `<textarea name="${key}.${f.n}" rows="3" placeholder="${f.p}">${data[f.n] || ''}</textarea>`
-      : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}">`
-  ).join('');
+  const fields = sec.fields.map(f => {
+    const ariaLabel = (f.p || '').split(',')[0].trim();
+    return f.textarea
+      ? `<textarea name="${key}.${f.n}" rows="3" placeholder="${f.p}" aria-label="${ariaLabel}">${data[f.n] || ''}</textarea>`
+      : `<input name="${key}.${f.n}" placeholder="${f.p}" value="${data[f.n] || ''}" aria-label="${ariaLabel}">`;
+  }).join('');
   const aiBtn = (key === 'pengalaman' || key === 'project')
     ? '<button type="button" class="btn ai btn-ai"><svg class="ic" aria-hidden="true"><use href="#i-sparkle"/></svg> Improve / Translate</button>'
     : '';
