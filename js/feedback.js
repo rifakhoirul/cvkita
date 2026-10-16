@@ -12,7 +12,7 @@
       '<div class="fb-box" role="dialog" aria-modal="true" aria-labelledby="fb-title">' +
       '<h3 id="fb-title">Bantu CVKita jadi lebih baik</h3>' +
       '<p class="fb-sub">Ceritakan: apa yang bikin kamu bingung, atau fitur apa yang kamu harapkan?</p>' +
-      '<textarea id="fb-text" rows="4" maxlength="500" placeholder="Tulis masukanmu di sini (maks 500 karakter)..."></textarea>' +
+      '<textarea id="fb-text" rows="4" maxlength="500" placeholder="Tulis masukanmu di sini (maks 500 karakter)..." aria-label="Masukan"></textarea>' +
       '<div class="fb-count"><span id="fb-n">0</span>/500</div>' +
       '<div class="fb-actions">' +
       '<button type="button" id="fb-cancel" class="fb-btn fb-ghost">Batal</button>' +

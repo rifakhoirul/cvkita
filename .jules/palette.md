@@ -1,0 +1,3 @@
+## 2026-10-16 - Add aria-label to dynamically injected form fields
+**Learning:** Dynamically injected form fields created via JavaScript string concatenation without explicit `<label for="">` tags or implicit wrapping often fail accessibility audits for missing accessible names (e.g. `aria-label`). The problem is exacerbated when inputs only use a `placeholder` attribute, which screen readers often don't treat as a robust label, and which fails when the input is populated.
+**Action:** Always ensure that when dynamically constructing form elements (like `input` and `textarea`), you add an `aria-label` attribute if a dedicated, explicitly linked `<label>` tag isn't provided or possible. Using descriptive parts of existing `placeholder` texts can provide a quick fallback.
