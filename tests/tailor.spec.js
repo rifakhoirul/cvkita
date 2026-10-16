@@ -111,3 +111,15 @@ test.describe('CV Tailoring (btn-tailor)', () => {
     await expect(page.locator('#tailor-result')).toHaveCount(0);
   });
 });
+
+test.describe('tombol tailor alignment', () => {
+  test('btn-tailor full-width, sejajar dengan btn-improve-all (375px)', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    const a = await page.locator('#btn-tailor').boundingBox();
+    const b = await page.locator('#btn-improve-all').boundingBox();
+    expect(a.width).toBeGreaterThan(340);
+    expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs((a.x + a.width) - (b.x + b.width))).toBeLessThanOrEqual(2);
+  });
+});

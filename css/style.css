@@ -169,7 +169,7 @@ body.premium-active .topbar{background:linear-gradient(90deg,#fffbeb,#fef3c7);bo
 .improve-confirm-sub{font-size:.8rem;color:var(--muted);margin:0 0 12px}
 .improve-diff{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* CV Tailoring per lowongan */
-.tailor-btn{margin-top:8px}
+.tailor-btn{width:100%;margin-top:8px;justify-content:center}
 .improve-confirm-card .improve-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:1.6rem;line-height:1;color:var(--muted);cursor:pointer;padding:8px;min-width:44px;min-height:44px}
 #tailor-modal,#tailor-result{position:fixed}
 #tailor-modal .improve-confirm-card{position:relative}
