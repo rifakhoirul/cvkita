@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=48">
+<link rel="stylesheet" href="css/style.css?v=49">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG (konsisten di semua perangkat) ===== -->
@@ -29,6 +29,7 @@
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.4 5L12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4L12 13.4 6.4 19 5 17.6 10.6 12 5 6.4 6.4 5z" fill="currentColor"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M12 5c5 0 9 4.5 9 7s-4 7-9 7-9-4.5-9-7 4-7 9-7zm0 3a4 4 0 100 8 4 4 0 000-8z" fill="currentColor"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24"><path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 5a3 3 0 116 0v3H9V7zm3 7a2 2 0 011 3.7V20h-2v-2.3A2 2 0 0112 14z" fill="currentColor"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M9 3h6a2 2 0 012 2v2h3a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2h3V5a2 2 0 012-2zm0 2v2h6V5H9zm-5 8v6h16v-6h-7v2h-2v-2H4z" fill="currentColor"/></symbol>
 </svg>
 
 <!-- ===== Header ===== -->
@@ -39,12 +40,14 @@
   </div>
   <div class="topbar-actions">
     <button id="btn-more" class="btn ghost btn-more" type="button" aria-label="Menu lainnya" aria-expanded="false">⋯</button>
+    <a id="nav-lowongan" class="btn ghost topbar-extra" href="lowongan.html"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"></use></svg> Cari Lowongan</a>
     <button id="btn-reset" class="btn ghost danger topbar-extra" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
     <button id="btn-download" class="btn primary" type="button"><svg class="ic" aria-hidden="true"><use href="#i-download"></use></svg> <span class="dl-label">Unduh PDF (Gratis)</span></button>
   </div>
 </header>
 <!-- Menu overflow mobile: berisi aksi sekunder -->
 <div id="more-menu" class="more-menu hidden">
+  <a id="mm-lowongan" class="btn ghost" href="lowongan.html"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"></use></svg> Cari Lowongan</a>
   <button id="mm-reset" class="btn ghost danger" type="button"><svg class="ic" aria-hidden="true"><use href="#i-trash"></use></svg> Reset</button>
 </div>
 
@@ -205,6 +208,7 @@
 <footer class="footer">
   CVKita — CV gratis tanpa watermark untuk fresh graduate Indonesia. Data 100% tersimpan di perangkatmu, tidak dikirim ke server.
   <div class="footer-links">
+    <a href="/lowongan.html">Cari Lowongan</a> ·
     <a href="/blog/">Panduan Karier</a> ·
     <a href="/blog/apa-itu-ats.html">Apa itu ATS?</a> ·
     <a href="/pay.html">Aktivasi AI Rewrite</a> ·

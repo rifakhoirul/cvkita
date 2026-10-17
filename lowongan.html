@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<title>Cari Lowongan Kerja &amp; Magang untuk Fresh Graduate — CVKita</title>
+<meta name="description" content="Cari lowongan kerja dan magang untuk fresh graduate Indonesia. Hasil dikartikan rapi, tinggal klik Lihat &amp; Lamar. Gratis di CVKita.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=49">
+</head>
+<body>
+<!-- ===== Sprite ikon SVG ===== -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M10 2a8 8 0 105.3 14l5 5 1.4-1.4-5-5A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" fill="currentColor"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M9 3h6a2 2 0 012 2v2h3a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2h3V5a2 2 0 012-2zm0 2v2h6V5H9zm-5 8v6h16v-6h-7v2h-2v-2H4z" fill="currentColor"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" fill="currentColor"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14V3zM5 5h6v2H6v11h11v-5h2v7H4V5z" fill="currentColor"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3z" fill="currentColor"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2zm8 1.5V8h4.5L14 3.5zM8 11h8v1.5H8V11zm0 4h8v1.5H8V15z" fill="currentColor"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="logo-wrap">
+    <a class="logo" href="/" style="text-decoration:none;color:inherit" aria-label="CVKita — kembali ke halaman utama">CV<span>Kita</span></a>
+  </div>
+  <div class="topbar-actions">
+    <a class="btn primary lw-topbar-cta" href="/"><svg class="ic" aria-hidden="true"><use href="#i-doc"></use></svg> Bikin CV</a>
+  </div>
+</header>
+
+<main class="lw-page">
+  <section class="lw-hero">
+    <h1>Cari Lowongan Kerja &amp; Magang</h1>
+    <p class="lw-sub">Lowongan terbaru dari Kalibrr, dikumpulkan di satu tempat. Klik <strong>Lihat &amp; Lamar</strong> untuk lanjut ke halaman resminya.</p>
+
+    <form id="jobs-form" class="lw-form" role="search" novalidate>
+      <label for="jobs-q" class="lw-label">Cari posisi atau kata kunci</label>
+      <div class="lw-row">
+        <input id="jobs-q" class="lw-input" type="search" name="q" value="intern" maxlength="60" autocomplete="off" placeholder="Contoh: data analyst, magang marketing">
+        <button id="jobs-go" class="btn primary lw-go" type="submit"><svg class="ic" aria-hidden="true"><use href="#i-search"></use></svg> Cari</button>
+      </div>
+    </form>
+
+    <div id="jobs-chips" class="lw-chips" role="group" aria-label="Kata kunci populer">
+      <button type="button" class="chip" data-q="magang" aria-pressed="false">Magang</button>
+      <button type="button" class="chip" data-q="fresh graduate" aria-pressed="false">Fresh Graduate</button>
+      <button type="button" class="chip" data-q="data" aria-pressed="false">Data</button>
+      <button type="button" class="chip" data-q="marketing" aria-pressed="false">Marketing</button>
+      <button type="button" class="chip" data-q="design" aria-pressed="false">Design</button>
+      <button type="button" class="chip" data-q="it" aria-pressed="false">IT</button>
+    </div>
+  </section>
+
+  <p id="jobs-status" class="lw-status" role="status" aria-live="polite"></p>
+  <ul id="jobs-list" class="lw-list" aria-label="Hasil lowongan"></ul>
+
+  <section class="jobs-cta">
+    <p>CV kamu sudah siap? Bikin CV dulu di CVKita</p>
+    <a class="btn primary" href="/"><svg class="ic" aria-hidden="true"><use href="#i-doc"></use></svg> Bikin CV Gratis</a>
+  </section>
+</main>
+
+<footer class="footer">
+  CVKita — CV gratis tanpa watermark untuk fresh graduate Indonesia. Data lowongan bersumber dari Kalibrr; pelamaran dilakukan langsung di situs mereka.
+  <div class="footer-links">
+    <a href="/">Bikin CV</a> ·
+    <a href="/blog/">Panduan Karier</a> ·
+    <a href="/privacy.html">Kebijakan Privasi</a> ·
+    <a href="/terms.html">Syarat &amp; Ketentuan</a>
+  </div>
+</footer>
+
+<script src="js/analytics.js?v=5"></script>
+<script src="js/lowongan.js?v=1"></script>
+</body>
+</html>

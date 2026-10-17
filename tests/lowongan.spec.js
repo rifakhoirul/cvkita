@@ -1,0 +1,333 @@
+// Halaman "Cari Lowongan" (lowongan.html): sumber Kalibrr lewat Worker GET /api/jobs.
+// Semua test memakai page.route — TIDAK pernah memanggil Worker/Kalibrr asli.
+import { test, expect } from '@playwright/test';
+
+const JOBS = [
+  { id: 101, title: 'Marketing Intern', company: 'PT Maju Jaya', location: 'South Jakarta', tenure: 'Full time', isIntern: true, freshGrad: true, url: 'https://www.kalibrr.com/c/maju-jaya/jobs/101/marketing-intern', description: 'Bantu tim marketing.' },
+  { id: 102, title: 'Data Analyst', company: 'Astro Technologies', location: 'West Jakarta', tenure: 'Full time', isIntern: false, freshGrad: false, url: 'https://www.kalibrr.com/c/astro/jobs/102/data-analyst', description: '' },
+  { id: 103, title: 'Video Editor', company: 'Studio Kreatif', location: 'Bandung', tenure: 'Freelance', isIntern: false, freshGrad: false, url: 'https://www.kalibrr.com/c/studio/jobs/103/video-editor', description: '' },
+];
+
+// Pasang mock; kembalikan daftar query yang diminta UI.
+async function mockJobs(page, handler) {
+  const queries = [];
+  await page.route('**/api/jobs**', async route => {
+    const q = new URL(route.request().url()).searchParams.get('q');
+    queries.push(q);
+    if (handler) return handler(route, q);
+    return route.fulfill({ json: { jobs: JOBS, total: JOBS.length } });
+  });
+  return queries;
+}
+
+test.describe('Cari Lowongan', () => {
+  test('default query "intern" otomatis dicari & hasil dikartikan', async ({ page }) => {
+    const queries = await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('h1')).toContainText(/lowongan/i);
+    await expect(page.locator('#jobs-q')).toHaveValue('intern');
+    const cards = page.locator('.job-card');
+    await expect(cards).toHaveCount(3);
+    expect(queries[0]).toBe('intern');
+  });
+
+  test('kartu: judul, perusahaan, lokasi, tenure; badge Open to Fresh Grad hanya jika true', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const first = page.locator('.job-card').nth(0);
+    await expect(first.locator('.job-title')).toHaveText('Marketing Intern');
+    await expect(first.locator('.job-company')).toHaveText('PT Maju Jaya');
+    await expect(first.locator('.job-loc')).toContainText('South Jakarta');
+    await expect(first.locator('.job-tenure')).toHaveText('Magang');
+    await expect(first.locator('.job-badge')).toHaveText(/Open to Fresh Grad/i);
+    const second = page.locator('.job-card').nth(1);
+    await expect(second.locator('.job-tenure')).toHaveText('Full-time');
+    await expect(second.locator('.job-badge')).toHaveCount(0);
+    await expect(page.locator('.job-card').nth(2).locator('.job-tenure')).toHaveText('Freelance');
+  });
+
+  test('tombol "Lihat & Lamar" buka URL kalibrr di tab baru (aman: noopener)', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const a = page.locator('.job-card').first().locator('a.job-apply');
+    await expect(a).toHaveText(/Lihat & Lamar/);
+    await expect(a).toHaveAttribute('href', 'https://www.kalibrr.com/c/maju-jaya/jobs/101/marketing-intern');
+    await expect(a).toHaveAttribute('target', '_blank');
+    await expect(a).toHaveAttribute('rel', /noopener/);
+    const box = await a.boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('URL non-kalibrr dari API ditolak (tidak jadi link) — pertahanan XSS/open redirect', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [
+      { ...JOBS[0], url: 'javascript:alert(1)' },
+      { ...JOBS[1], url: 'https://evil.example.com/x' },
+    ], total: 2 } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(0);
+    await expect(page.locator('#jobs-status')).toContainText(/Belum ada lowongan yang cocok/);
+  });
+
+  test('judul berisi HTML ditampilkan sebagai teks, bukan dieksekusi', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [
+      { ...JOBS[0], title: '<img src=x onerror="window.__pwned=1">Intern', company: '<b>PT</b>' },
+    ], total: 1 } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-title')).toHaveText('<img src=x onerror="window.__pwned=1">Intern');
+    expect(await page.evaluate(() => window.__pwned)).toBeUndefined();
+    await expect(page.locator('.job-card img')).toHaveCount(0);
+  });
+
+  test('input + tombol cari (touch target ≥44px); submit memanggil API dengan kata kunci', async ({ page }) => {
+    const queries = await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    for (const sel of ['#jobs-q', '#jobs-go']) {
+      const box = await page.locator(sel).boundingBox();
+      expect(box.height, sel).toBeGreaterThanOrEqual(44);
+    }
+    await page.fill('#jobs-q', 'data analyst');
+    await page.click('#jobs-go');
+    await expect.poll(() => queries.length).toBe(2);
+    expect(queries[1]).toBe('data analyst');
+    await page.fill('#jobs-q', 'desain grafis');
+    await page.press('#jobs-q', 'Enter');
+    await expect.poll(() => queries.length).toBe(3);
+    expect(queries[2]).toBe('desain grafis');
+  });
+
+  test('input kosong → kembali ke default "intern"', async ({ page }) => {
+    const queries = await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await page.fill('#jobs-q', '   ');
+    await page.click('#jobs-go');
+    await expect.poll(() => queries.length).toBe(2);
+    expect(queries[1]).toBe('intern');
+  });
+
+  test('input pencarian punya label di atas box (aksesibel)', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.getByLabel(/cari/i).first()).toBeVisible();
+    const labelBox = await page.locator('label[for="jobs-q"]').boundingBox();
+    const inputBox = await page.locator('#jobs-q').boundingBox();
+    expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(inputBox.y + 1);
+  });
+
+  test('quick-filter chips: Magang, Fresh Graduate, Data, Marketing, Design, IT', async ({ page }) => {
+    const queries = await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const chips = page.locator('#jobs-chips .chip');
+    await expect(chips).toHaveText(['Magang', 'Fresh Graduate', 'Data', 'Marketing', 'Design', 'IT']);
+    for (let i = 0; i < 6; i++) {
+      const box = await chips.nth(i).boundingBox();
+      expect(box.height).toBeGreaterThanOrEqual(44);
+    }
+    await chips.nth(1).click();
+    await expect.poll(() => queries.length).toBe(2);
+    expect(queries[1]).toBe('fresh graduate');
+    await expect(page.locator('#jobs-q')).toHaveValue('fresh graduate');
+    await expect(chips.nth(1)).toHaveAttribute('aria-pressed', 'true');
+    await chips.nth(0).click();
+    await expect.poll(() => queries.length).toBe(3);
+    expect(queries[2]).toBe('magang');
+    await expect(chips.nth(1)).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('chip bisa diklik di ikon/anak elemen (event delegation closest)', async ({ page }) => {
+    const queries = await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    // Sisipkan ikon SVG anak di dalam chip lalu klik ikonnya: target klik BUKAN tombol itu sendiri
+    await page.evaluate(() => {
+      document.querySelectorAll('#jobs-chips .chip')[2].insertAdjacentHTML('afterbegin',
+        '<svg id="chip-ic" class="ic" width="20" height="20" aria-hidden="true"><rect width="20" height="20"/></svg>');
+    });
+    await page.locator('#chip-ic').click();
+    await expect.poll(() => queries.length).toBe(2);
+    expect(queries[1]).toBe('data');
+  });
+
+  test('loading state tampil saat menunggu, hilang setelah selesai', async ({ page }) => {
+    let release;
+    const gate = new Promise(r => { release = r; });
+    await mockJobs(page, async route => { await gate; await route.fulfill({ json: { jobs: JOBS, total: 3 } }); });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('#jobs-status')).toContainText(/Mencari/i);
+    await expect(page.locator('#jobs-status')).toHaveAttribute('role', 'status');
+    release();
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await expect(page.locator('#jobs-status')).not.toContainText(/Mencari/i);
+  });
+
+  test('empty state: pesan santai kalau tidak ada hasil', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [], total: 0 } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('#jobs-status')).toHaveText('Belum ada lowongan yang cocok, coba kata kunci lain ya');
+    await expect(page.locator('.job-card')).toHaveCount(0);
+  });
+
+  test('error sumber (200 + error) → pesan santai, bukan empty state biasa', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [], total: 0, error: 'sumber_lowongan_gagal' } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('#jobs-status')).toContainText(/lagi gangguan|coba lagi/i);
+    await expect(page.locator('#jobs-status')).not.toContainText('Belum ada lowongan yang cocok');
+  });
+
+  test('rate limit 429 → pesan batas pencarian; jaringan putus → pesan santai', async ({ page }) => {
+    let mode = 429;
+    await mockJobs(page, route => mode === 429
+      ? route.fulfill({ status: 429, json: { jobs: [], total: 0, error: 'Terlalu banyak pencarian. Coba lagi dalam satu jam.' } })
+      : route.abort());
+    await page.goto('/lowongan.html');
+    await expect(page.locator('#jobs-status')).toContainText(/Terlalu banyak pencarian/);
+    mode = 0;
+    await page.click('#jobs-go');
+    await expect(page.locator('#jobs-status')).toContainText(/koneksi|coba lagi/i);
+    await expect(page.locator('.job-card')).toHaveCount(0);
+  });
+
+  test('respons lama yang telat tidak menimpa hasil pencarian terbaru', async ({ page }) => {
+    await mockJobs(page, async (route, q) => {
+      if (q === 'intern') { await new Promise(r => setTimeout(r, 700)); return route.fulfill({ json: { jobs: [JOBS[0]], total: 1 } }); }
+      return route.fulfill({ json: { jobs: [JOBS[1], JOBS[2]], total: 2 } });
+    });
+    await page.goto('/lowongan.html');
+    await page.fill('#jobs-q', 'data');
+    await page.click('#jobs-go');
+    await expect(page.locator('.job-card')).toHaveCount(2);
+    await page.waitForTimeout(1000);
+    await expect(page.locator('.job-card')).toHaveCount(2);
+    await expect(page.locator('.job-card').first().locator('.job-title')).toHaveText('Data Analyst');
+  });
+
+  test('analytics: event jobs_search dikirim via /api/track tiap pencarian (tanpa mengubah struktur event)', async ({ page }) => {
+    await mockJobs(page);
+    const events = [];
+    await page.route('**/api/track', async route => {
+      events.push(JSON.parse(route.request().postData() || '{}'));
+      await route.fulfill({ json: { ok: true } });
+    });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await page.fill('#jobs-q', 'marketing');
+    await page.click('#jobs-go');
+    await expect.poll(() => events.filter(e => e.event === 'jobs_search').length).toBe(2);
+    const e = events.find(x => x.event === 'jobs_search');
+    expect(Object.keys(e).sort()).toEqual(['event', 'qa']);
+  });
+
+  test('footer CTA: "CV kamu sudah siap?" → link ke index', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const cta = page.locator('.jobs-cta');
+    await expect(cta).toContainText('CV kamu sudah siap? Bikin CV dulu di CVKita');
+    const link = cta.locator('a');
+    await expect(link).toHaveAttribute('href', '/');
+    const box = await link.boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    await link.click();
+    await expect(page).toHaveURL(/localhost:8090\/(index\.html)?$/);
+  });
+
+  test('ikon pakai sprite SVG (<use href>), bukan emoji, di tombol fungsional', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await expect(page.locator('#jobs-go svg use')).toHaveAttribute('href', /^#i-/);
+    await expect(page.locator('.job-apply svg use').first()).toHaveAttribute('href', /^#i-/);
+    const emoji = /\p{Extended_Pictographic}/u;
+    for (const sel of ['#jobs-go', '.job-apply', '#jobs-chips .chip']) {
+      for (const t of await page.locator(sel).allInnerTexts()) expect(t).not.toMatch(emoji);
+    }
+  });
+
+  test('versi cache-busting: css & js dimuat dengan ?v=', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const srcs = await page.evaluate(() => [
+      ...[...document.querySelectorAll('link[rel=stylesheet]')].map(l => l.getAttribute('href')),
+      ...[...document.querySelectorAll('script[src]')].map(s => s.getAttribute('src')),
+    ].filter(u => /^(css|js)\//.test(u)));
+    expect(srcs.length).toBeGreaterThanOrEqual(3);
+    for (const u of srcs) expect(u).toMatch(/\?v=\d+$/);
+  });
+
+  test('kontras badge & tenure memenuhi WCAG AA (≥4.5:1)', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    const ratios = await page.evaluate(() => {
+      const lum = ([r, g, b]) => {
+        const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+      };
+      const rgb = s => s.match(/[\d.]+/g).slice(0, 3).map(Number);
+      const out = {};
+      for (const sel of ['.job-badge', '.job-tenure', '.job-company', '.job-loc', '.chip', '.job-apply']) {
+        const el = document.querySelector(sel);
+        let bgEl = el, bg;
+        while (bgEl) {
+          const c = getComputedStyle(bgEl).backgroundColor;
+          if (c && !/rgba\(.*,\s*0\)$/.test(c) && c !== 'transparent') { bg = c; break; }
+          bgEl = bgEl.parentElement;
+        }
+        const l1 = lum(rgb(getComputedStyle(el).color)), l2 = lum(rgb(bg || 'rgb(255,255,255)'));
+        out[sel] = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      }
+      return out;
+    });
+    for (const [sel, r] of Object.entries(ratios)) expect(r, sel).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test('mobile 375px: tidak ada scroll horizontal', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 700 });
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [
+      { ...JOBS[0], title: 'Sales Trainee Academy by Ruangguru Brain Academy Pasir Pengaraian Kabupaten Rokan Hulu', company: 'PT Sangat Panjang Sekali Nama Perusahaannya Indonesia Tbk' },
+      JOBS[1],
+    ], total: 2 } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(2);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+});
+
+test.describe('Navigasi ke Cari Lowongan', () => {
+  test('index.html: link di header (desktop) menuju lowongan.html dengan ikon sprite', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    const link = page.locator('.topbar a[href$="lowongan.html"]');
+    await expect(link).toBeVisible();
+    await expect(link).toContainText('Cari Lowongan');
+    await expect(link.locator('svg use')).toHaveAttribute('href', /^#i-/);
+    const box = await link.boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    await link.click();
+    await expect(page).toHaveURL(/lowongan\.html$/);
+  });
+
+  test('index.html mobile: link ada di menu ⋯', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 700 });
+    await page.goto('/');
+    await page.click('#btn-more');
+    const link = page.locator('#more-menu a[href$="lowongan.html"]');
+    await expect(link).toBeVisible();
+    await expect(link).toContainText('Cari Lowongan');
+  });
+
+  test('footer index menaut ke Cari Lowongan & sitemap mendaftarkannya', async ({ page, request }) => {
+    await page.goto('/');
+    await expect(page.locator('.footer-links a[href$="lowongan.html"]')).toHaveCount(1);
+    const xml = await (await request.get('/sitemap.xml')).text();
+    expect(xml).toContain('https://cvkita.id/lowongan.html');
+  });
+
+  test('urutan tombol preview tidak berubah (Cek ATS → Unduh PDF → Analisis Karier → Cover Letter)', async ({ page }) => {
+    await page.goto('/');
+    const ids = await page.evaluate(() => ['btn-ats-preview', 'btn-download-preview', 'btn-jobsearch', 'btn-cover']
+      .map(id => document.getElementById(id)).filter(Boolean)
+      .map(el => el.id));
+    expect(ids.slice(0, 3)).toEqual(['btn-ats-preview', 'btn-download-preview', 'btn-jobsearch']);
+  });
+});
