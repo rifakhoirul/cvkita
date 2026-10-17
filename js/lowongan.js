@@ -40,6 +40,15 @@
     return null;
   }
 
+  // Halaman detail SEO disajikan Worker: /job/{id}/{slug}. id & slug diambil dari job.url Kalibrr
+  // (…/c/{company}/jobs/{id}/{slug}) yang sudah lolos safeKalibrrUrl; pola tak cocok → null (tanpa link).
+  function detailUrl(job) {
+    const href = job && safeKalibrrUrl(job.url);
+    if (!href) return null;
+    const m = /^\/c\/[^/]+\/jobs\/(\d+)\/([^/]+)$/.exec(new URL(href).pathname);
+    return m ? API + '/job/' + m[1] + '/' + m[2] : null;
+  }
+
   function tenureLabel(job) {
     if (job.isIntern) return 'Magang';
     const raw = String(job.tenure || '').trim();
@@ -112,13 +121,23 @@
     }
     li.appendChild(meta);
 
+    const actions = el('div', 'job-actions');
     const a = el('a', 'btn primary job-apply');
     a.href = href;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
     a.appendChild(document.createTextNode('Lihat & Lamar '));
     a.appendChild(icon('i-external'));
-    li.appendChild(a);
+    actions.appendChild(a);
+    const detail = detailUrl(job);
+    if (detail) {
+      const d = el('a', 'job-detail-link', 'Detail');
+      d.href = detail;
+      d.target = '_blank';
+      d.rel = 'noopener';
+      actions.appendChild(d);
+    }
+    li.appendChild(actions);
     return li;
   }
 

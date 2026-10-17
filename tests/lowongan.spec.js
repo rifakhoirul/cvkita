@@ -447,8 +447,9 @@ test.describe('Logo perusahaan di kartu lowongan', () => {
 
   test('lowongan.html memuat versi cache baru (css v52, lowongan.js v4)', async ({ request }) => {
     const html = await (await request.get('/lowongan.html')).text();
-    expect(html).toContain('css/style.css?v=52');
-    expect(html).toContain('js/lowongan.js?v=4');
+    // Versi hanya boleh naik (bump tiap perubahan css/js); pin eksak cepat basi → cek batas bawah.
+    expect(Number(/css\/style\.css\?v=(\d+)/.exec(html)[1])).toBeGreaterThanOrEqual(52);
+    expect(Number(/js\/lowongan\.js\?v=(\d+)/.exec(html)[1])).toBeGreaterThanOrEqual(4);
   });
 });
 
@@ -743,5 +744,118 @@ test.describe('Navigasi ke Cari Lowongan', () => {
       .map(id => document.getElementById(id)).filter(Boolean)
       .map(el => el.id));
     expect(ids.slice(0, 3)).toEqual(['btn-ats-preview', 'btn-download-preview', 'btn-jobsearch']);
+  });
+});
+
+// Link "Detail" di kartu → halaman SEO yang disajikan Worker: GET /job/{id}/{slug}
+// (id & slug diambil dari job.url Kalibrr yang sudah lolos safeKalibrrUrl).
+test.describe('Link Detail lowongan (halaman SEO Worker)', () => {
+  const API = 'https://cvkita-api.cvkita-rifakhoirul.workers.dev';
+
+  test('tiap kartu punya link Detail dengan href /job/{id}/{slug} dari job.url', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const cards = page.locator('.job-card');
+    await expect(cards).toHaveCount(3);
+    await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/101/marketing-intern`);
+    await expect(cards.nth(1).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/102/data-analyst`);
+    await expect(cards.nth(2).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/103/video-editor`);
+    await expect(cards.nth(0).locator('a.job-detail-link')).toHaveText(/Detail/);
+    await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('target', '_blank');
+    await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('rel', /noopener/);
+  });
+
+  test('tombol Lamar tetap utuh (href kalibrr, teks sama) & tidak ditutupi link Detail', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const card = page.locator('.job-card').first();
+    const apply = card.locator('a.job-apply');
+    const detail = card.locator('a.job-detail-link');
+    await expect(apply).toHaveText(/Lihat & Lamar/);
+    await expect(apply).toHaveAttribute('href', 'https://www.kalibrr.com/c/maju-jaya/jobs/101/marketing-intern');
+    await expect(apply).toHaveAttribute('target', '_blank');
+    for (const vp of [{ width: 375, height: 700 }, { width: 1280, height: 800 }]) {
+      await page.setViewportSize(vp);
+      const a = await apply.boundingBox();
+      const d = await detail.boundingBox();
+      const overlap = a.x < d.x + d.width && d.x < a.x + a.width && a.y < d.y + d.height && d.y < a.y + a.height;
+      expect(overlap, `overlap @${vp.width}`).toBe(false);
+      // titik tengah masing-masing benar-benar mengenai elemennya sendiri (tidak tertutup)
+      const hitApply = await page.evaluate(([x, y]) => !!document.elementFromPoint(x, y).closest('a.job-apply'), [a.x + a.width / 2, a.y + a.height / 2]);
+      const hitDetail = await page.evaluate(([x, y]) => !!document.elementFromPoint(x, y).closest('a.job-detail-link'), [d.x + d.width / 2, d.y + d.height / 2]);
+      expect(hitApply).toBe(true);
+      expect(hitDetail).toBe(true);
+    }
+  });
+
+  test('area klik link Detail ≥ 44px tinggi, tanpa scroll horizontal di 375px', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 700 });
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    const box = await page.locator('.job-card').first().locator('a.job-detail-link').boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(box.width).toBeGreaterThanOrEqual(44);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
+  test('url tanpa pola /jobs/{id}/{slug} valid → tanpa link Detail, tombol Lamar tetap ada', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [
+      { ...JOBS[0], id: 201, url: 'https://www.kalibrr.com/c/x/jobs/abc/slug-x' },
+      { ...JOBS[1], id: 202, url: 'https://www.kalibrr.com/job-board/te/data' },
+      { ...JOBS[2], id: 203, url: 'https://www.kalibrr.com/c/x/jobs/203/' },
+    ], total: 3 } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await expect(page.locator('a.job-apply')).toHaveCount(3);
+    await expect(page.locator('a.job-detail-link')).toHaveCount(0);
+  });
+
+  test('slug berisi karakter spesial tidak merusak href (tetap ter-encode)', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [
+      { ...JOBS[0], id: 301, url: 'https://www.kalibrr.com/c/x/jobs/301/a%22%3E%3Cb%20c' },
+    ], total: 1 } }));
+    await page.goto('/lowongan.html');
+    const href = await page.locator('a.job-detail-link').getAttribute('href');
+    expect(href).toBe(`${API}/job/301/a%22%3E%3Cb%20c`);
+    await expect(page.locator('.job-card b')).toHaveCount(0);
+  });
+
+  test('kartu hasil "Tampilkan lebih banyak" juga punya link Detail', async ({ page }) => {
+    await mockJobs(page, (route) => {
+      const u = new URL(route.request().url());
+      if (u.searchParams.get('page') === '2') {
+        return route.fulfill({ json: { jobs: [{ ...JOBS[1], id: 402, url: 'https://www.kalibrr.com/c/y/jobs/402/page-two' }], total: 1, page: 2, hasMore: false } });
+      }
+      return route.fulfill({ json: { jobs: JOBS, total: JOBS.length, page: 1, hasMore: true } });
+    });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await page.locator('#jobs-more').click();
+    await expect(page.locator('.job-card')).toHaveCount(4);
+    await expect(page.locator('.job-card').nth(3).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/402/page-two`);
+  });
+
+  test('kontras teks link Detail ≥ 4.5:1 & versi cache-busting dinaikkan (css v54, lowongan.js v5)', async ({ page }) => {
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    const ratio = await page.evaluate(() => {
+      const lum = ([r, g, b]) => { const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+      const rgb = s => s.match(/[\d.]+/g).slice(0, 3).map(Number);
+      const el = document.querySelector('.job-detail-link');
+      let bgEl = el, bg;
+      while (bgEl) { const c = getComputedStyle(bgEl).backgroundColor; if (c && !/rgba\(.*,\s*0\)$/.test(c) && c !== 'transparent') { bg = c; break; } bgEl = bgEl.parentElement; }
+      const l1 = lum(rgb(getComputedStyle(el).color)), l2 = lum(rgb(bg || 'rgb(255,255,255)'));
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+    const srcs = await page.evaluate(() => [
+      ...[...document.querySelectorAll('link[rel=stylesheet]')].map(l => l.getAttribute('href')),
+      ...[...document.querySelectorAll('script[src]')].map(s => s.getAttribute('src')),
+    ]);
+    expect(srcs).toContain('css/style.css?v=54');
+    expect(srcs).toContain('js/lowongan.js?v=5');
   });
 });
