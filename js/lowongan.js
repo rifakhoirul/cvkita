@@ -46,7 +46,7 @@
     const href = job && safeKalibrrUrl(job.url);
     if (!href) return null;
     const m = /^\/c\/[^/]+\/jobs\/(\d+)\/([^/]+)$/.exec(new URL(href).pathname);
-    return m ? API + '/job/' + m[1] + '/' + m[2] : null;
+    return m ? 'https://cvkita.id/job/' + m[1] + '/' + m[2] : null;
   }
 
   function tenureLabel(job) {
