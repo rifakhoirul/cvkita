@@ -2,9 +2,13 @@
 // Semua test memakai page.route — TIDAK pernah memanggil Worker/Kalibrr asli.
 import { test, expect } from '@playwright/test';
 
+// Logo Kalibrr (di-host di rec-data.kalibrr.com). PNG 1x1 transparan dipakai sebagai isi gambar.
+const LOGO_URL = 'https://rec-data.kalibrr.com/www.kalibrr.com/logos/ASTRO123-logo.png';
+const PNG_1X1 = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64');
+
 const JOBS = [
   { id: 101, title: 'Marketing Intern', company: 'PT Maju Jaya', location: 'South Jakarta', tenure: 'Full time', isIntern: true, freshGrad: true, url: 'https://www.kalibrr.com/c/maju-jaya/jobs/101/marketing-intern', description: 'Bantu tim marketing.' },
-  { id: 102, title: 'Data Analyst', company: 'Astro Technologies', location: 'West Jakarta', tenure: 'Full time', isIntern: false, freshGrad: false, url: 'https://www.kalibrr.com/c/astro/jobs/102/data-analyst', description: '' },
+  { id: 102, title: 'Data Analyst', company: 'Astro Technologies', location: 'West Jakarta', tenure: 'Full time', isIntern: false, freshGrad: false, url: 'https://www.kalibrr.com/c/astro/jobs/102/data-analyst', description: '', logo: LOGO_URL },
   { id: 103, title: 'Video Editor', company: 'Studio Kreatif', location: 'Bandung', tenure: 'Freelance', isIntern: false, freshGrad: false, url: 'https://www.kalibrr.com/c/studio/jobs/103/video-editor', description: '' },
 ];
 
@@ -290,6 +294,161 @@ test.describe('Cari Lowongan', () => {
     await expect(page.locator('.job-card')).toHaveCount(2);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(0);
+  });
+});
+
+test.describe('Logo perusahaan di kartu lowongan', () => {
+  const okImage = page => page.route('https://rec-data.kalibrr.com/**', r => r.fulfill({ status: 200, contentType: 'image/png', body: PNG_1X1 }));
+
+  test('job dengan logo: img.job-logo (src benar, lazy, 48x48, alt kosong) tanpa fallback', async ({ page }) => {
+    await okImage(page);
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const card = page.locator('.job-card').nth(1);
+    const img = card.locator('img.job-logo');
+    await expect(img).toHaveCount(1);
+    await expect(img).toHaveAttribute('src', LOGO_URL);
+    await expect(img).toHaveAttribute('loading', 'lazy');
+    await expect(img).toHaveAttribute('alt', '');
+    await expect(img).toHaveAttribute('width', '48');
+    await expect(img).toHaveAttribute('height', '48');
+    await expect(card.locator('.job-logo-fallback')).toHaveCount(0);
+    const box = await img.boundingBox();
+    expect(Math.round(box.width)).toBe(48);
+    expect(Math.round(box.height)).toBe(48);
+  });
+
+  test('job tanpa logo (absen / null): fallback inisial huruf pertama, TIDAK ada img', async ({ page }) => {
+    await okImage(page);
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [JOBS[0], { ...JOBS[2], logo: null }], total: 2 } }));
+    await page.goto('/lowongan.html');
+    const cards = page.locator('.job-card');
+    await expect(cards).toHaveCount(2);
+    await expect(cards.nth(0).locator('.job-logo-fallback')).toHaveText('M'); // PT Maju Jaya
+    await expect(cards.nth(1).locator('.job-logo-fallback')).toHaveText('S'); // Studio Kreatif
+    await expect(page.locator('.job-card img')).toHaveCount(0);
+    await expect(cards.nth(0).locator('.job-logo-fallback')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  test('inisial: huruf kecil → kapital; awalan PT/CV dilewati; nama kosong/hanya "PT" tidak merusak kartu', async ({ page }) => {
+    const names = ['kreasi nusantara', 'CV Karya Mandiri', 'pt. abadi', 'PT', ''];
+    await mockJobs(page, route => route.fulfill({ json: { jobs: names.map((company, i) => ({ ...JOBS[0], id: 800 + i, company })), total: names.length } }));
+    await page.goto('/lowongan.html');
+    const fb = page.locator('.job-card .job-logo-fallback');
+    await expect(fb).toHaveCount(names.length);
+    await expect(fb).toHaveText(['K', 'K', 'A', 'P', '?']);
+  });
+
+  test('logo GAGAL dimuat (request gambar di-abort) → swap ke fallback inisial', async ({ page }) => {
+    await page.route('https://rec-data.kalibrr.com/**', r => r.abort());
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    const card = page.locator('.job-card').nth(1);
+    await expect(card.locator('.job-logo-fallback')).toHaveText('A'); // Astro Technologies
+    await expect(card.locator('img')).toHaveCount(0);
+    await expect(card.locator('.job-title')).toHaveText('Data Analyst');
+  });
+
+  test('logo dimuat 404 → fallback inisial juga', async ({ page }) => {
+    await page.route('https://rec-data.kalibrr.com/**', r => r.fulfill({ status: 404, body: 'nope' }));
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card').nth(1).locator('.job-logo-fallback')).toHaveText('A');
+    await expect(page.locator('.job-card img')).toHaveCount(0);
+  });
+
+  test('keamanan: logo http / hostname bukan kalibrr / skema berbahaya → fallback, bukan img', async ({ page }) => {
+    const requested = [];
+    page.on('request', r => { if (/evil|kalibrr\.com\.|notkalibrr/.test(r.url())) requested.push(r.url()); });
+    const bad = [
+      'http://evil.com/x.png',
+      'https://evil.com/x.png',
+      'http://rec-data.kalibrr.com/x.png',
+      'https://kalibrr.com.evil.com/x.png',
+      'https://notkalibrr.com/x.png',
+      'https://evil.com/?h=rec-data.kalibrr.com',
+      'javascript:alert(1)',
+      'data:image/png;base64,AAAA',
+      '//rec-data.kalibrr.com/x.png',
+      12345,
+    ];
+    await mockJobs(page, route => route.fulfill({ json: {
+      jobs: bad.map((logo, i) => ({ ...JOBS[0], id: 900 + i, logo })), total: bad.length,
+    } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(bad.length);
+    await expect(page.locator('.job-card img')).toHaveCount(0);
+    await expect(page.locator('.job-logo-fallback')).toHaveCount(bad.length);
+    expect(requested).toEqual([]);
+  });
+
+  test('nama perusahaan berisi HTML: inisial dirender sebagai teks (tanpa innerHTML)', async ({ page }) => {
+    await mockJobs(page, route => route.fulfill({ json: { jobs: [{ ...JOBS[0], company: '<img src=x onerror="window.__pwned=1">PT' }], total: 1 } }));
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-logo-fallback')).toHaveText('<');
+    expect(await page.evaluate(() => window.__pwned)).toBeUndefined();
+    await expect(page.locator('.job-card img')).toHaveCount(0);
+  });
+
+  test('layout: logo di kiri, teks (judul+perusahaan) di kanan, sejajar atas — mobile & desktop', async ({ page }) => {
+    await okImage(page);
+    await mockJobs(page);
+    for (const vp of [{ width: 375, height: 700 }, { width: 1280, height: 800 }]) {
+      await page.setViewportSize(vp);
+      await page.goto('/lowongan.html');
+      await expect(page.locator('.job-card')).toHaveCount(3);
+      const withLogo = page.locator('.job-card').nth(1);
+      const noLogo = page.locator('.job-card').nth(0);
+      for (const [card, logoSel] of [[withLogo, 'img.job-logo'], [noLogo, '.job-logo-fallback']]) {
+        const l = await card.locator(logoSel).boundingBox();
+        const t = await card.locator('.job-title').boundingBox();
+        const c = await card.locator('.job-company').boundingBox();
+        expect(l.x + l.width, `${vp.width} ${logoSel}`).toBeLessThanOrEqual(t.x + 1);
+        expect(l.x + l.width).toBeLessThanOrEqual(c.x + 1);
+        expect(Math.abs(l.y - t.y)).toBeLessThanOrEqual(12);
+        expect(Math.round(l.width)).toBe(48);
+        expect(Math.round(l.height)).toBe(48);
+      }
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
+  });
+
+  test('styling: .job-logo (radius 10px, contain, putih, border) & fallback (bulat, bobot 800, kontras AA)', async ({ page }) => {
+    await okImage(page);
+    await mockJobs(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    const s = await page.evaluate(() => {
+      const g = sel => getComputedStyle(document.querySelector(sel));
+      const img = g('img.job-logo'), fb = g('.job-logo-fallback');
+      return {
+        img: { radius: img.borderRadius, fit: img.objectFit, bg: img.backgroundColor, border: img.borderTopWidth, w: img.width, h: img.height },
+        fb: { radius: fb.borderRadius, weight: fb.fontWeight, color: fb.color, bg: fb.backgroundColor, w: fb.width, h: fb.height },
+      };
+    });
+    expect(s.img.radius).toBe('10px');
+    expect(s.img.fit).toBe('contain');
+    expect(s.img.bg).toBe('rgb(255, 255, 255)');
+    expect(s.img.border).toBe('1px');
+    expect(s.img.w).toBe('48px');
+    expect(s.img.h).toBe('48px');
+    expect(s.fb.weight).toBe('800');
+    expect(s.fb.w).toBe('48px');
+    expect(s.fb.h).toBe('48px');
+    expect(s.fb.bg).toBe('rgb(255, 241, 231)'); // --brand-soft
+    expect(s.fb.color).toBe('rgb(194, 65, 12)'); // --brand-dark
+    expect(['50%', '24px']).toContain(s.fb.radius);
+    const lum = ([r, g, b]) => { const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+    const rgb = x => x.match(/[\d.]+/g).slice(0, 3).map(Number);
+    const l1 = lum(rgb(s.fb.color)), l2 = lum(rgb(s.fb.bg));
+    expect((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test('lowongan.html memuat versi cache baru (css v51, lowongan.js v3)', async ({ request }) => {
+    const html = await (await request.get('/lowongan.html')).text();
+    expect(html).toContain('css/style.css?v=51');
+    expect(html).toContain('js/lowongan.js?v=3');
   });
 });
 

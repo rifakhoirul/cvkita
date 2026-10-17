@@ -447,6 +447,12 @@ body.has-sticky{padding-bottom:64px}
 .job-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .job-title{font-size:1.02rem;line-height:1.3;overflow-wrap:anywhere}
 .job-company{font-size:.9rem;font-weight:700;color:var(--ink);overflow-wrap:anywhere}
+/* Logo perusahaan: kiri; judul + perusahaan: kolom teks kanan */
+.job-head{display:flex;align-items:flex-start;gap:12px;min-width:0}
+.job-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.job-logo,.job-logo-fallback{flex:0 0 48px;width:48px;height:48px;border-radius:10px}
+.job-logo{object-fit:contain;background:#fff;border:1px solid var(--line);box-sizing:border-box}
+.job-logo-fallback{display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--brand-soft);color:var(--brand-dark);font-weight:800;font-size:1.2rem;line-height:1;user-select:none}
 .job-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.82rem}
 .job-loc{color:var(--muted);overflow-wrap:anywhere}
 .job-tenure{background:#eef2ff;color:#3730a3;border-radius:99px;padding:2px 10px;font-weight:700}

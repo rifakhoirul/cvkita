@@ -46,10 +46,54 @@
     return TENURE_LABEL[raw.toLowerCase()] || raw;
   }
 
+  // Logo Kalibrr di-host di rec-data.kalibrr.com (berakhir .kalibrr.com → lolos). Domain lain TIDAK diizinkan.
+  function safeLogoUrl(u) {
+    if (typeof u !== 'string') return null;
+    return safeKalibrrUrl(u);
+  }
+
+  // Awalan badan usaha (PT/CV/UD/PD) dilewati supaya inisial bermakna: "PT Maju Jaya" → "M".
+  function initialOf(name) {
+    let s = String(name || '').trim();
+    const rest = s.replace(/^(?:pt|cv|ud|pd)\.?\s+/i, '');
+    if (rest) s = rest;
+    const ch = Array.from(s)[0];
+    return ch ? ch.toUpperCase() : '?';
+  }
+
+  // Placeholder dekoratif (nama perusahaan sudah ada sebagai teks di sebelahnya) → aria-hidden.
+  function logoFallback(company) {
+    const f = el('div', 'job-logo-fallback', initialOf(company));
+    f.setAttribute('aria-hidden', 'true');
+    return f;
+  }
+
+  function logoNode(job) {
+    const src = safeLogoUrl(job.logo);
+    if (!src) return logoFallback(job.company);
+    const img = document.createElement('img');
+    img.className = 'job-logo';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.width = 48;
+    img.height = 48;
+    // Gambar gagal dimuat (404/diblok/offline) → ganti ke placeholder inisial.
+    img.addEventListener('error', () => {
+      if (img.parentNode) img.parentNode.replaceChild(logoFallback(job.company), img);
+    }, { once: true });
+    img.src = src;
+    return img;
+  }
+
   function card(job, href) {
     const li = el('li', 'job-card');
-    li.appendChild(el('h2', 'job-title', job.title || ''));
-    li.appendChild(el('p', 'job-company', job.company || ''));
+    const head = el('div', 'job-head');
+    head.appendChild(logoNode(job));
+    const info = el('div', 'job-info');
+    info.appendChild(el('h2', 'job-title', job.title || ''));
+    info.appendChild(el('p', 'job-company', job.company || ''));
+    head.appendChild(info);
+    li.appendChild(head);
 
     const meta = el('div', 'job-meta');
     if (job.location) {
