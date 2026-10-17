@@ -167,6 +167,7 @@
     input.value = q;
     markChip(q);
     skeleton();
+    nextPage = 0; updateMoreBtn('reset'); // search baru: tombol hilang segera, page kembali 1
     // Hanya event jobs_search; kontrak analytics.js tidak diubah (query tidak ikut dikirim).
     try { if (window.__cvkitaTrack) window.__cvkitaTrack('jobs_search'); } catch (e) { /* analytics opsional */ }
 
@@ -199,6 +200,74 @@
     }
     const n = render(data.jobs);
     setStatus(n ? '' : 'Belum ada lowongan yang cocok, coba kata kunci lain ya');
+    nextPage = data.hasMore === true ? (data.page || 1) + 1 : 0;
+    updateMoreBtn();
+  }
+
+  // ── Load more (Tampilkan lebih banyak) ──
+  let nextPage = 0;
+
+  function updateMoreBtn(loading) {
+    const btn = document.getElementById('jobs-more');
+    if (!btn) return;
+    if (!nextPage || loading === 'reset') { btn.hidden = true; btn.disabled = false; btn.textContent = 'Tampilkan lebih banyak'; return; }
+    if (loading) {
+      btn.hidden = false;
+      btn.disabled = true;
+      btn.textContent = 'Memuat…';
+      return;
+    }
+    btn.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Tampilkan lebih banyak';
+  }
+
+  async function loadMore() {
+    if (!nextPage) return;
+    const q = input.value.trim() || DEFAULT_Q;
+    const mine = seq;
+    updateMoreBtn(true);
+    try { if (window.__cvkitaTrack) window.__cvkitaTrack('jobs_search'); } catch (e) { /* analytics opsional */ }
+    let data = null;
+    let failed = false;
+    try {
+      const res = await fetch(API + '/api/jobs?q=' + encodeURIComponent(q) + '&page=' + nextPage);
+      data = await res.json().catch(() => null);
+      if (res.status === 429) {
+        if (mine !== seq) return;
+        updateMoreBtn();
+        setStatus('Terlalu banyak pencarian. Coba lagi dalam satu jam ya.');
+        return;
+      }
+      if (!res.ok) failed = true;
+    } catch (e) {
+      failed = true;
+    }
+    if (mine !== seq) return; // pencarian baru membatalkan load more telat
+    if (failed || !data) {
+      updateMoreBtn();
+      setStatus('Koneksi lagi bermasalah. Coba lagi sebentar lagi ya.');
+      return;
+    }
+    if (data.error) {
+      updateMoreBtn();
+      setStatus('Sumber lowongan lagi gangguan. Coba lagi sebentar lagi ya.');
+      return;
+    }
+    setStatus('');
+    renderAppend(data.jobs);
+    nextPage = data.hasMore === true ? (data.page || nextPage) + 1 : 0;
+    updateMoreBtn();
+  }
+
+  function renderAppend(jobs) {
+    const frag = document.createDocumentFragment();
+    (Array.isArray(jobs) ? jobs : []).forEach(job => {
+      const href = job && safeKalibrrUrl(job.url);
+      if (!href) return;
+      frag.appendChild(card(job, href));
+    });
+    list.appendChild(frag);
   }
 
   form.addEventListener('submit', e => { e.preventDefault(); search(input.value); });
@@ -206,8 +275,8 @@
   // Event delegation: ikon/anak elemen chip tetap terdeteksi lewat closest()
   document.addEventListener('click', e => {
     const chip = e.target.closest('#jobs-chips .chip');
-    if (!chip) return;
-    search(chip.getAttribute('data-q'));
+    if (chip) { search(chip.getAttribute('data-q')); return; }
+    if (e.target.closest('#jobs-more')) loadMore();
   });
 
   search(input.value);

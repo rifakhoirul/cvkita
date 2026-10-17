@@ -445,10 +445,265 @@ test.describe('Logo perusahaan di kartu lowongan', () => {
     expect((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)).toBeGreaterThanOrEqual(4.5);
   });
 
-  test('lowongan.html memuat versi cache baru (css v51, lowongan.js v3)', async ({ request }) => {
+  test('lowongan.html memuat versi cache baru (css v52, lowongan.js v4)', async ({ request }) => {
     const html = await (await request.get('/lowongan.html')).text();
-    expect(html).toContain('css/style.css?v=51');
-    expect(html).toContain('js/lowongan.js?v=3');
+    expect(html).toContain('css/style.css?v=52');
+    expect(html).toContain('js/lowongan.js?v=4');
+  });
+});
+
+// ── Tombol "Tampilkan lebih banyak" (load more) ──
+function makeJobs(from, n) {
+  return Array.from({ length: n }, (_, i) => {
+    const id = from + i;
+    return { id, title: `Lowongan ${id}`, company: `PT Contoh ${id}`, location: 'Jakarta', tenure: 'Full time', isIntern: false, freshGrad: false, url: `https://www.kalibrr.com/c/contoh/jobs/${id}/lowongan-${id}`, description: '' };
+  });
+}
+
+// Mock berpaginasi: page 1 → 15 job hasMore:true; page 2 → 5 job hasMore:false.
+// `opts.onPage2(route)` boleh menimpa respons page 2; `opts.queryJobs[q]` hasil khusus untuk query tertentu.
+async function mockPaged(page, opts = {}) {
+  const calls = [];
+  await page.route('**/api/jobs**', async route => {
+    const u = new URL(route.request().url());
+    const q = u.searchParams.get('q');
+    const p = Number(u.searchParams.get('page') || 1);
+    calls.push({ q, page: p });
+    if (opts.custom && opts.custom[q]) return route.fulfill({ json: opts.custom[q] });
+    if (p === 1) return route.fulfill({ json: { jobs: makeJobs(1, 15), total: 15, count: 20, page: 1, hasMore: true } });
+    if (opts.onPage2) return opts.onPage2(route, p);
+    return route.fulfill({ json: { jobs: makeJobs(16, 5), total: 5, count: 20, page: 2, hasMore: false } });
+  });
+  return calls;
+}
+
+test.describe('Cari Lowongan — Tampilkan lebih banyak', () => {
+  test('tombol #jobs-more tampil setelah pencarian awal (hasMore:true), teks persis, touch target ≥44px, gaya ghost', async ({ page }) => {
+    await mockPaged(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    const more = page.locator('#jobs-more');
+    await expect(more).toBeVisible();
+    await expect(more).toHaveText('Tampilkan lebih banyak');
+    await expect(more).toBeEnabled();
+    await expect(more).toHaveClass(/\bghost\b/);
+    const box = await more.boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    // tepat di bawah list (setelah kartu terakhir)
+    const last = await page.locator('.job-card').last().boundingBox();
+    expect(box.y).toBeGreaterThan(last.y + last.height - 1);
+  });
+
+  test('tanpa hasMore (atau field tidak ada) → tombol tidak ada', async ({ page }) => {
+    await mockJobs(page); // respons lama { jobs, total } tanpa hasMore
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await expect(page.locator('#jobs-more')).toBeHidden();
+  });
+
+  test('klik → fetch page 2, job di-APPEND (20 total) tanpa duplikasi hasil awal', async ({ page }) => {
+    const calls = await mockPaged(page);
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    const titles = await page.locator('.job-title').allTextContents();
+    expect(new Set(titles).size).toBe(20);
+    expect(titles[0]).toBe('Lowongan 1');
+    expect(titles[14]).toBe('Lowongan 15');
+    expect(titles[15]).toBe('Lowongan 16');
+    expect(titles[19]).toBe('Lowongan 20');
+    expect(calls).toEqual([{ q: 'intern', page: 1 }, { q: 'intern', page: 2 }]);
+  });
+
+  test('tombol hilang setelah respons terakhir hasMore:false', async ({ page }) => {
+    await mockPaged(page);
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    await expect(page.locator('#jobs-more')).toBeHidden();
+  });
+
+  test('halaman berikutnya yang hasMore:true → tombol tetap ada & minta page 3', async ({ page }) => {
+    const calls = await mockPaged(page, { onPage2: (route, p) => route.fulfill({ json: p === 2
+      ? { jobs: makeJobs(16, 15), total: 15, count: 100, page: 2, hasMore: true }
+      : { jobs: makeJobs(31, 15), total: 15, count: 100, page: 3, hasMore: true } }) });
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(30);
+    await expect(page.locator('#jobs-more')).toBeVisible();
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(45);
+    expect(calls.map(c => c.page)).toEqual([1, 2, 3]);
+  });
+
+  test('saat loading: tombol disabled "Memuat…", list lama tetap (tanpa skeleton)', async ({ page }) => {
+    let release;
+    const gate = new Promise(r => { release = r; });
+    await mockPaged(page, { onPage2: async route => { await gate; await route.fulfill({ json: { jobs: makeJobs(16, 5), total: 5, count: 20, page: 2, hasMore: false } }); } });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    await page.click('#jobs-more');
+    const more = page.locator('#jobs-more');
+    await expect(more).toBeDisabled();
+    await expect(more).toHaveText('Memuat…');
+    await expect(page.locator('.job-skeleton')).toHaveCount(0);
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    await expect(page.locator('#jobs-list')).not.toHaveAttribute('aria-busy', 'true');
+    release();
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    await expect(page.locator('#jobs-more')).toBeHidden();
+  });
+
+  test('klik ganda saat loading tidak mengirim request page 2 dua kali', async ({ page }) => {
+    let release;
+    const gate = new Promise(r => { release = r; });
+    const calls = await mockPaged(page, { onPage2: async route => { await gate; await route.fulfill({ json: { jobs: makeJobs(16, 5), total: 5, count: 20, page: 2, hasMore: false } }); } });
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await page.evaluate(() => { const b = document.getElementById('jobs-more'); if (b) { b.click(); b.click(); } });
+    release();
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    expect(calls.filter(c => c.page === 2)).toHaveLength(1);
+  });
+
+  test('search baru (chip) reset: tombol hilang & list diganti hasil baru', async ({ page }) => {
+    await mockPaged(page, { custom: { 'data analyst': { jobs: makeJobs(500, 3), total: 3, count: 3, page: 1, hasMore: false } } });
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    await page.fill('#jobs-q', 'data analyst');
+    await page.click('#jobs-go');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    await expect(page.locator('.job-title').first()).toHaveText('Lowongan 500');
+    await expect(page.locator('#jobs-more')).toBeHidden();
+  });
+
+  test('search baru (submit) dari hasil yang masih hasMore → page berikutnya kembali ke 2 untuk query baru', async ({ page }) => {
+    const calls = await mockPaged(page);
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    await page.fill('#jobs-q', 'marketing');
+    await page.click('#jobs-go');
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    await expect(page.locator('#jobs-more')).toBeVisible();
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    expect(calls.slice(-2)).toEqual([{ q: 'marketing', page: 1 }, { q: 'marketing', page: 2 }]);
+  });
+
+  test('search baru hapus tombol segera (saat skeleton), tidak menunggu respons', async ({ page }) => {
+    let release;
+    const gate = new Promise(r => { release = r; });
+    await mockPaged(page, { custom: {} });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('#jobs-more')).toBeVisible();
+    await page.unroute('**/api/jobs**');
+    await page.route('**/api/jobs**', async route => { await gate; await route.fulfill({ json: { jobs: makeJobs(700, 2), total: 2, count: 2, page: 1, hasMore: false } }); });
+    await page.fill('#jobs-q', 'desain');
+    await page.click('#jobs-go');
+    await expect(page.locator('.job-skeleton').first()).toBeVisible();
+    await expect(page.locator('#jobs-more')).toBeHidden();
+    release();
+    await expect(page.locator('.job-card')).toHaveCount(2);
+  });
+
+  test('race guard: load more yang telat dibatalkan oleh pencarian baru', async ({ page }) => {
+    let release;
+    const gate = new Promise(r => { release = r; });
+    await mockPaged(page, {
+      custom: { 'data analyst': { jobs: makeJobs(500, 3), total: 3, count: 3, page: 1, hasMore: false } },
+      onPage2: async route => { await gate; await route.fulfill({ json: { jobs: makeJobs(16, 5), total: 5, count: 20, page: 2, hasMore: false } }); },
+    });
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more'); // page 2 tertahan
+    await page.fill('#jobs-q', 'data analyst');
+    await page.click('#jobs-go');
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    release();
+    await page.waitForTimeout(500);
+    await expect(page.locator('.job-card')).toHaveCount(3);
+    const titles = await page.locator('.job-title').allTextContents();
+    expect(titles).toEqual(['Lowongan 500', 'Lowongan 501', 'Lowongan 502']);
+    await expect(page.locator('#jobs-more')).toBeHidden();
+  });
+
+  test('gagal fetch page 2 → pesan santai, list awal utuh, tombol kembali normal & bisa dicoba lagi', async ({ page }) => {
+    let fail = true;
+    const calls = await mockPaged(page, { onPage2: route => fail
+      ? route.abort('failed')
+      : route.fulfill({ json: { jobs: makeJobs(16, 5), total: 5, count: 20, page: 2, hasMore: false } }) });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    await page.click('#jobs-more');
+    await expect(page.locator('#jobs-status')).toContainText(/Koneksi lagi bermasalah|coba lagi/i);
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    const more = page.locator('#jobs-more');
+    await expect(more).toBeVisible();
+    await expect(more).toBeEnabled();
+    await expect(more).toHaveText('Tampilkan lebih banyak');
+    fail = false;
+    await more.click();
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    await expect(page.locator('#jobs-more')).toBeHidden();
+    await expect(page.locator('#jobs-status')).toHaveText('');
+    expect(calls.filter(c => c.page === 2)).toHaveLength(2);
+  });
+
+  test('page 2 balas error (data.error / HTTP 500) → pesan santai, tombol bisa dicoba lagi', async ({ page }) => {
+    let mode = 'error';
+    await mockPaged(page, { onPage2: route => mode === 'error'
+      ? route.fulfill({ json: { jobs: [], total: 0, error: 'sumber_lowongan_gagal' } })
+      : route.fulfill({ status: 500, body: 'oops' }) });
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await expect(page.locator('#jobs-status')).toContainText(/gangguan|coba lagi/i);
+    await expect(page.locator('#jobs-more')).toBeEnabled();
+    mode = 'http500';
+    await page.click('#jobs-more');
+    await expect(page.locator('#jobs-status')).toContainText(/Koneksi lagi bermasalah|coba lagi/i);
+    await expect(page.locator('#jobs-more')).toBeEnabled();
+    await expect(page.locator('.job-card')).toHaveCount(15);
+  });
+
+  test('analytics: load more juga mengirim jobs_search (struktur event tetap {event, qa})', async ({ page }) => {
+    await mockPaged(page);
+    const events = [];
+    await page.route('**/api/track', async route => {
+      events.push(JSON.parse(route.request().postData() || '{}'));
+      await route.fulfill({ json: { ok: true } });
+    });
+    await page.goto('/lowongan.html');
+    await expect(page.locator('.job-card')).toHaveCount(15);
+    await expect.poll(() => events.filter(e => e.event === 'jobs_search').length).toBe(1);
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(20);
+    await expect.poll(() => events.filter(e => e.event === 'jobs_search').length).toBe(2);
+    for (const e of events.filter(x => x.event === 'jobs_search')) expect(Object.keys(e).sort()).toEqual(['event', 'qa']);
+  });
+
+  test('keamanan: job tambahan dari page 2 tetap lewat textContent & filter URL kalibrr', async ({ page }) => {
+    await mockPaged(page, { onPage2: route => route.fulfill({ json: { jobs: [
+      { ...makeJobs(16, 1)[0], title: '<img src=x onerror="window.__pwned=1">Intern' },
+      { ...makeJobs(17, 1)[0], url: 'https://evil.example.com/x' },
+    ], total: 2, count: 20, page: 2, hasMore: false } }) });
+    await page.goto('/lowongan.html');
+    await page.click('#jobs-more');
+    await expect(page.locator('.job-card')).toHaveCount(16); // URL jahat dibuang
+    expect(await page.evaluate(() => window.__pwned)).toBeUndefined();
+    await expect(page.locator('.job-card img[src="x"]')).toHaveCount(0);
+  });
+
+  test('mobile 375px: tombol load more muat di layar, tanpa overflow horizontal', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 700 });
+    await mockPaged(page);
+    await page.goto('/lowongan.html');
+    const box = await page.locator('#jobs-more').boundingBox();
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(375);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
   });
 });
 
