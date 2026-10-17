@@ -101,14 +101,28 @@
     });
   }
 
+  function skeleton() {
+    list.textContent = '';
+    for (let i = 0; i < 6; i++) {
+      const li = el('li', 'job-card job-skeleton');
+      li.setAttribute('aria-hidden', 'true');
+      const box = (cls, w) => { const s = el('span', cls); s.style.width = w; return s; };
+      li.appendChild(box('sk-line sk-title', '60%'));
+      li.appendChild(box('sk-line sk-company', '40%'));
+      li.appendChild(box('sk-line sk-meta', '75%'));
+      li.appendChild(box('sk-line sk-btn', '130px'));
+      list.appendChild(li);
+    }
+    setStatus('Mencari lowongan…');
+    list.setAttribute('aria-busy', 'true');
+  }
+
   async function search(raw) {
     const q = String(raw || '').trim().replace(/\s+/g, ' ') || DEFAULT_Q;
     const mine = ++seq;
     input.value = q;
     markChip(q);
-    list.textContent = '';
-    setStatus('Mencari lowongan…');
-    list.setAttribute('aria-busy', 'true');
+    skeleton();
     // Hanya event jobs_search; kontrak analytics.js tidak diubah (query tidak ikut dikirim).
     try { if (window.__cvkitaTrack) window.__cvkitaTrack('jobs_search'); } catch (e) { /* analytics opsional */ }
 
@@ -129,6 +143,7 @@
     }
     if (mine !== seq) return; // sudah ada pencarian yang lebih baru
     list.removeAttribute('aria-busy');
+    list.textContent = ''; // bersihkan skeleton sebelum render hasil/pesan error
 
     if (failed || !data) {
       setStatus('Koneksi lagi bermasalah. Coba lagi sebentar lagi ya.');

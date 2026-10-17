@@ -454,6 +454,19 @@ body.has-sticky{padding-bottom:64px}
 .job-apply{margin-top:auto;align-self:flex-start}
 .jobs-cta{text-align:center;padding:24px 16px;margin-bottom:16px;background:var(--brand-soft);border:1px solid #fed7aa;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .jobs-cta p{font-weight:700}
+/* Loading: skeleton shimmer + fade-in kartu (dihormati prefers-reduced-motion global) */
+.job-card{transition:opacity .3s ease,transform .3s ease}
+@keyframes sk-shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.job-skeleton{cursor:progress}
+.sk-line{display:block;height:14px;border-radius:8px;background:linear-gradient(90deg,#ece9e0 25%,#f7f5ef 50%,#ece9e0 75%);background-size:200% 100%;animation:sk-shimmer 1.3s linear infinite}
+.sk-title{height:18px;margin-bottom:4px}
+.sk-btn{margin-top:12px;height:44px;border-radius:10px}
+@keyframes card-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lw-list:not([aria-busy]) .job-card:not(.job-skeleton){animation:card-in .35s ease both}
+.lw-list:not([aria-busy]) .job-card:not(.job-skeleton):nth-child(2){animation-delay:.05s}
+.lw-list:not([aria-busy]) .job-card:not(.job-skeleton):nth-child(3){animation-delay:.1s}
+.lw-list:not([aria-busy]) .job-card:not(.job-skeleton):nth-child(4){animation-delay:.15s}
+.lw-list:not([aria-busy]) .job-card:not(.job-skeleton):nth-child(n+5){animation-delay:.2s}
 @media(min-width:900px){
   .lw-page{padding-top:32px}
   .lw-hero h1{font-size:1.9rem}
