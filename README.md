@@ -9,9 +9,11 @@ CV builder gratis untuk fresh graduate Indonesia — bikin CV lolos ATS dalam 5 
 - ✅ Export PDF gratis via print — tanpa watermark, tanpa batas
 - ✅ Autosave localStorage — data 100% di perangkat user, tanpa server
 - ✅ Isi dalam Bahasa Indonesia → output CV berbahasa Inggris (ATS-ready)
+- ✅ Import CV otomatis (gratis, dari file/PDF CV lama)
+- ✅ Fitur AI premium (sekali bayar): Analisis Karier + SWOT, Cover Letter, CV Tailoring
 
 ## Stack
-HTML + CSS + vanilla JS. Nol dependensi, nol build step, nol server.
+HTML + CSS + vanilla JS (frontend). API AI via Cloudflare Worker (`cvkita-api`).
 
 ## Jalankan Lokal
 ```bash
@@ -20,10 +22,7 @@ python3 -m http.server 8090
 ```
 
 ## Roadmap
-- [ ] Deploy ke Cloudflare Pages / Netlify
-- [ ] Halaman SEO: contoh CV fresh graduate
-- [ ] AI rewrite bullet points (freemium)
-- [ ] Template premium
+Belum ada backlog aktif — fitur baru didiskusikan per kasus.
 
 ---
 Dibuat dengan ❤️ untuk para fresh graduate Indonesia.
