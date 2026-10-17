@@ -483,3 +483,31 @@ body.has-sticky{padding-bottom:64px}
   .lw-hero h1{font-size:1.9rem}
   .lw-list{grid-template-columns:1fr 1fr}
 }
+
+/* Cek Kecocokan CV (job-match) — modal hasil skor, gap, dan kekuatan */
+#jm-modal{position:fixed}
+#jm-modal .improve-confirm-card{position:relative}
+#jm-modal [hidden]{display:none!important}
+.jm-card h3{font-size:1.1rem}
+.jm-loading{display:grid;gap:10px;padding:8px 0 4px}
+.jm-sk-ring{width:120px;height:120px;border-radius:50%;justify-self:center}
+.jm-score-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;margin:8px 0}
+.jm-ring{--p:0;--c:#16a34a;width:132px;height:132px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p) * 1%),#e5e7eb 0);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.jm-ring::before{content:"";position:absolute;inset:12px;border-radius:50%;background:#fff}
+.jm-ring>*{position:relative}
+#jm-score{font-size:2.2rem;font-weight:800;line-height:1;color:#14532d}
+.jm-ring small{font-size:.8rem;color:#166534;font-weight:600}
+.jm-summary{margin:0;font-size:.92rem;color:var(--ink);max-width:46ch}
+.jm-h4{font-size:.9rem;margin:14px 0 6px;color:var(--ink)}
+.jm-strengths{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.jm-strengths li{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d;border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600}
+.jm-gaps{display:grid;gap:8px}
+.jm-gap{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:10px 12px}
+.jm-gap-label{display:block;font-size:.88rem;color:#78350f}
+.jm-gap-tip{margin:4px 0 0;font-size:.82rem;color:#374151}
+#jm-modal .improve-close{min-width:44px;min-height:44px}
+#jm-modal .improve-confirm-actions .btn{min-height:44px}
+@media(min-width:900px){
+  .jm-strengths{grid-template-columns:1fr 1fr}
+  .jm-gaps{grid-template-columns:1fr 1fr}
+}
