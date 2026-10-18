@@ -31,7 +31,7 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
   await d.screenshot({ path: S('03-preview-desktop.png') });
 
   // Paywall
-  await d.locator('#btn-jobsearch').click();
+  const sModal = d.locator('#sample-modal'); if(await sModal.isVisible().catch(()=>false)){await d.locator('#sample-cancel').click();} await d.locator('#btn-jobsearch').click();
   await d.waitForTimeout(400);
   await d.screenshot({ path: S('04-paywall-desktop.png') });
   await d.keyboard.press('Escape');
