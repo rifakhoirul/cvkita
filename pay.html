@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aktivasi Premium — CVKita</title>
   <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="css/style.css?v=60">
+<link rel="stylesheet" href="css/style.css?v=61">
 <!-- Midtrans Snap (production) -->
 <script src="https://app.midtrans.com/snap/snap.js"
         data-client-key="Mid-client-JC5qOJTb6L0NNrp8"></script>
 </head>
 <body>
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20 8l-1.4-1.4L9 16.2z" fill="currentColor"/></symbol>
+</svg>
 <header class="topbar"><a class="logo" href="/" style="text-decoration:none;color:inherit" aria-label="CVKita — kembali ke halaman utama">CV<span>Kita</span></a></header>
 <main style="max-width:640px;margin:24px auto;padding:0 16px">
   <h2>Aktivasi Premium — sekali bayar, bukan langganan</h2>
   <p style="line-height:1.8;margin:12px 0"><strong>Kuota AI bisa dipakai untuk fitur apa pun — kamu yang pilih.</strong><br>Bayar sekali, langsung aktif otomatis.
   Bisa lewat <b>GoPay / QRIS</b> atau transfer <b>Virtual Account</b> (Mandiri, BNI, BSI, Permata) — prosesnya otomatis lewat Midtrans.</p>
-  <p class="pay-urgency">⚡ Harga perkenalan — akan naik seiring fitur bertambah. Kunci harga sekarang.</p>
+  <p class="pay-urgency"><svg class="ic" aria-hidden="true"><use href="#i-bolt"></use></svg> Harga perkenalan — akan naik seiring fitur bertambah. Kunci harga sekarang.</p>
 
   <div class="paybox" id="paybox">
     <div class="pay-item tier">
@@ -33,7 +37,7 @@
         </div>
         <button class="btn primary" id="btn-buy-9" style="min-height:44px">Beli</button>
       </div>
-      <p class="pay-assurance">✅ Kode aktivasi langsung tampil di halaman ini setelah pembayaran — tanpa tunggu, tanpa daftar.</p>
+      <p class="pay-assurance"><svg class="ic" aria-hidden="true"><use href="#i-check"></use></svg> Kode aktivasi langsung tampil di halaman ini setelah pembayaran — tanpa tunggu, tanpa daftar.</p>
     </div>
     <div class="pay-item tier tier-popular">
       <div class="tier-head">
@@ -149,7 +153,7 @@
         .then(function (res) {
           if (res.ok && res.body.code) {
             statusEl.innerHTML =
-              '<b>Pembayaran berhasil! 🎉</b><br>' +
+              '<b>Pembayaran berhasil!</b><br>' +
               'Kode aktivasi kamu: <b style="font-size:1.15rem;letter-spacing:.05em">' + res.body.code + '</b><br>' +
               '<button id="btn-simpan-otomatis" class="btn primary" style="margin-top:8px">Aktivasi Sekarang di Editor</button><br>' +
               '<span style="font-size:.78rem">Kode juga tersimpan di halaman ini — screenshot ya, biar aman.</span>';
