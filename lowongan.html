@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=56">
+<link rel="stylesheet" href="css/style.css?v=57">
 </head>
 <body>
 <!-- ===== Sprite ikon SVG ===== -->
@@ -57,6 +57,18 @@
 
   <p id="jobs-status" class="lw-status" role="status" aria-live="polite"></p>
   <ul id="jobs-list" class="lw-list" aria-label="Hasil lowongan"></ul>
+  <section id="alert-card" class="alert-card" aria-labelledby="alert-title">
+    <h2 id="alert-title" class="alert-title">Dapat kabar lowongan baru</h2>
+    <p class="alert-sub">Kami kirim email ringkasan tiap pagi. Satu email = satu kata kunci; langganan baru menggantikan yang lama.</p>
+    <form id="alert-form" class="alert-form" novalidate>
+      <label for="alert-email" class="lw-label">Email</label>
+      <input id="alert-email" class="lw-input" type="email" name="email" autocomplete="email" maxlength="200" placeholder="nama@email.com">
+      <label for="alert-q" class="lw-label">Kata kunci</label>
+      <input id="alert-q" class="lw-input" type="text" name="q" autocomplete="off" maxlength="60" value="intern">
+      <button id="alert-submit" class="btn primary" type="submit">Aktifkan alert</button>
+      <p id="alert-msg" class="alert-msg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
   <div class="lw-more"><button id="jobs-more" class="btn ghost" type="button" hidden>Tampilkan lebih banyak</button></div>
 
   <section class="jobs-cta">
@@ -76,6 +88,6 @@
 </footer>
 
 <script src="js/analytics.js?v=5"></script>
-<script src="js/lowongan.js?v=6"></script>
+<script src="js/lowongan.js?v=7"></script>
 </body>
 </html>

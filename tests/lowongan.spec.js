@@ -750,16 +750,16 @@ test.describe('Navigasi ke Cari Lowongan', () => {
 // Link "Detail" di kartu → halaman SEO yang disajikan Worker: GET /job/{id}/{slug}
 // (id & slug diambil dari job.url Kalibrr yang sudah lolos safeKalibrrUrl).
 test.describe('Link Detail lowongan (halaman SEO Worker)', () => {
-  const API = 'https://cvkita-api.cvkita-rifakhoirul.workers.dev';
+  const DETAIL_ORIGIN = 'https://cvkita.id';
 
   test('tiap kartu punya link Detail dengan href /job/{id}/{slug} dari job.url', async ({ page }) => {
     await mockJobs(page);
     await page.goto('/lowongan.html');
     const cards = page.locator('.job-card');
     await expect(cards).toHaveCount(3);
-    await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/101/marketing-intern`);
-    await expect(cards.nth(1).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/102/data-analyst`);
-    await expect(cards.nth(2).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/103/video-editor`);
+    await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('href', `${DETAIL_ORIGIN}/job/101/marketing-intern`);
+    await expect(cards.nth(1).locator('a.job-detail-link')).toHaveAttribute('href', `${DETAIL_ORIGIN}/job/102/data-analyst`);
+    await expect(cards.nth(2).locator('a.job-detail-link')).toHaveAttribute('href', `${DETAIL_ORIGIN}/job/103/video-editor`);
     await expect(cards.nth(0).locator('a.job-detail-link')).toHaveText(/Detail/);
     await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('target', '_blank');
     await expect(cards.nth(0).locator('a.job-detail-link')).toHaveAttribute('rel', /noopener/);
@@ -818,7 +818,7 @@ test.describe('Link Detail lowongan (halaman SEO Worker)', () => {
     ], total: 1 } }));
     await page.goto('/lowongan.html');
     const href = await page.locator('a.job-detail-link').getAttribute('href');
-    expect(href).toBe(`${API}/job/301/a%22%3E%3Cb%20c`);
+    expect(href).toBe(`${DETAIL_ORIGIN}/job/301/a%22%3E%3Cb%20c`);
     await expect(page.locator('.job-card b')).toHaveCount(0);
   });
 
@@ -834,10 +834,10 @@ test.describe('Link Detail lowongan (halaman SEO Worker)', () => {
     await expect(page.locator('.job-card')).toHaveCount(3);
     await page.locator('#jobs-more').click();
     await expect(page.locator('.job-card')).toHaveCount(4);
-    await expect(page.locator('.job-card').nth(3).locator('a.job-detail-link')).toHaveAttribute('href', `${API}/job/402/page-two`);
+    await expect(page.locator('.job-card').nth(3).locator('a.job-detail-link')).toHaveAttribute('href', `${DETAIL_ORIGIN}/job/402/page-two`);
   });
 
-  test('kontras teks link Detail ≥ 4.5:1 & versi cache-busting dinaikkan (css v54, lowongan.js v5)', async ({ page }) => {
+  test('kontras teks link Detail ≥ 4.5:1 & versi cache-busting dinaikkan (css ≥ v57, lowongan.js ≥ v7)', async ({ page }) => {
     await mockJobs(page);
     await page.goto('/lowongan.html');
     await expect(page.locator('.job-card')).toHaveCount(3);
@@ -855,7 +855,7 @@ test.describe('Link Detail lowongan (halaman SEO Worker)', () => {
       ...[...document.querySelectorAll('link[rel=stylesheet]')].map(l => l.getAttribute('href')),
       ...[...document.querySelectorAll('script[src]')].map(s => s.getAttribute('src')),
     ]);
-    expect(srcs).toContain('css/style.css?v=54');
-    expect(srcs).toContain('js/lowongan.js?v=5');
+    expect(Number(srcs.find(s => s.startsWith('css/style.css?v=')).split('=')[1])).toBeGreaterThanOrEqual(57);
+    expect(Number(srcs.find(s => s.startsWith('js/lowongan.js?v=')).split('=')[1])).toBeGreaterThanOrEqual(7);
   });
 });

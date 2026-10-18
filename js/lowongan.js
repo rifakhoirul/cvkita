@@ -184,6 +184,7 @@
     const q = String(raw || '').trim().replace(/\s+/g, ' ') || DEFAULT_Q;
     const mine = ++seq;
     input.value = q;
+    alertQ.value = q;
     markChip(q);
     skeleton();
     nextPage = 0; updateMoreBtn('reset'); // search baru: tombol hilang segera, page kembali 1
@@ -296,6 +297,49 @@
     const chip = e.target.closest('#jobs-chips .chip');
     if (chip) { search(chip.getAttribute('data-q')); return; }
     if (e.target.closest('#jobs-more')) loadMore();
+  });
+
+  // ── Alert lowongan via email (POST /api/alert/subscribe; kata kunci default = query aktif) ──
+  const alertForm = document.getElementById('alert-form');
+  const alertEmail = document.getElementById('alert-email');
+  const alertQ = document.getElementById('alert-q');
+  const alertSubmit = document.getElementById('alert-submit');
+  const alertMsg = document.getElementById('alert-msg');
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setAlertMsg(text, kind) {
+    alertMsg.textContent = text;
+    alertMsg.className = 'alert-msg' + (kind ? ' is-' + kind : '');
+  }
+
+  alertForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    try { if (window.__cvkitaTrack) window.__cvkitaTrack('alert_subscribe_click'); } catch (err) { /* analytics opsional */ }
+    const email = alertEmail.value.trim();
+    const q = alertQ.value.trim().replace(/\s+/g, ' ');
+    const emailBad = !EMAIL_RE.test(email) || email.length > 200;
+    const qBad = q.length < 2 || q.length > 60;
+    alertEmail.setAttribute('aria-invalid', String(emailBad));
+    alertQ.setAttribute('aria-invalid', String(qBad));
+    if (emailBad) return setAlertMsg('Masukkan email yang valid ya.', 'err');
+    if (qBad) return setAlertMsg('Kata kunci harus 2–60 karakter ya.', 'err');
+
+    alertSubmit.disabled = true;
+    setAlertMsg('Mengirim…');
+    try {
+      const res = await fetch(API + '/api/alert/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, q }),
+      });
+      if (res.status === 429) return setAlertMsg('Terlalu banyak permintaan. Coba lagi dalam satu jam ya.', 'err');
+      if (!res.ok) return setAlertMsg('Ada kendala di server. Coba lagi sebentar lagi ya.', 'err');
+      setAlertMsg('Cek email-mu untuk konfirmasi ✅', 'ok');
+    } catch (err) {
+      setAlertMsg('Koneksi lagi bermasalah. Coba lagi sebentar lagi ya.', 'err');
+    } finally {
+      alertSubmit.disabled = false;
+    }
   });
 
   search(input.value);

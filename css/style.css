@@ -465,6 +465,17 @@ body.has-sticky{padding-bottom:64px}
 .lw-more .btn{width:100%;max-width:420px;min-height:48px}
 .jobs-cta{text-align:center;padding:24px 16px;margin-bottom:16px;background:var(--brand-soft);border:1px solid #fed7aa;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .jobs-cta p{font-weight:700}
+.alert-card{margin:8px 0 20px;padding:20px 16px;background:#fff;border:1px solid #fed7aa;border-radius:12px}
+.alert-title{font-size:1.1rem;margin:0 0 4px}
+.alert-sub{margin:0 0 14px;font-size:.9rem;color:var(--muted)}
+.alert-form{display:flex;flex-direction:column;gap:6px}
+.alert-form .lw-label{margin-top:4px}
+.alert-form .lw-input[aria-invalid="true"]{border-color:#b91c1c}
+.alert-form .btn{width:100%;min-height:48px;margin-top:10px}
+.alert-msg{min-height:1.5em;margin:8px 0 0;font-size:.92rem;color:var(--muted)}
+.alert-msg.is-ok{color:#15803d;font-weight:700}
+.alert-msg.is-err{color:#b91c1c}
+@media(min-width:600px){.alert-form .btn{width:auto;align-self:flex-start}}
 /* Loading: skeleton shimmer + fade-in kartu (dihormati prefers-reduced-motion global) */
 .job-card{transition:opacity .3s ease,transform .3s ease}
 @keyframes sk-shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
