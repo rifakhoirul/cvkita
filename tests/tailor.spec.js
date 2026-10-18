@@ -87,6 +87,39 @@ test.describe('CV Tailoring (btn-tailor)', () => {
     await expect(page.locator('[name="headline"]')).toHaveValue('Fresh Graduate — Data Analyst');
   });
 
+  test('hardreqs dari server → blok peringatan "Syarat wajib" tampil di modal hasil', async ({ page }) => {
+    await seedPremium(page);
+    const withHardreqs = { ...TAILORED, hardreqs: ['Sertifikasi BNSP wajib', 'Pengalaman minimal 2 tahun'] };
+    await mockEndpoints(page, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(withHardreqs) }));
+    await page.route('**/api/tailor', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(withHardreqs) }));
+    await page.goto('/');
+    await page.fill('[name="nama"]', 'Rania');
+    await page.fill('[name="keahlian"]', 'SQL, Excel');
+    await page.click('#btn-tailor');
+    await page.fill('#tailor-jobtext', JOB_TEXT);
+    await page.click('#tailor-submit');
+    await expect(page.locator('#tailor-result')).toBeVisible({ timeout: 10000 });
+    const warn = page.locator('.tailor-hardreqs');
+    await expect(warn).toBeVisible();
+    await expect(warn).toContainText('Sertifikasi BNSP wajib');
+    await expect(warn).toContainText('Pengalaman minimal 2 tahun');
+  });
+
+  test('hardreqs kosong → blok peringatan TIDAK tampil', async ({ page }) => {
+    await seedPremium(page);
+    const noHardreqs = { ...TAILORED, hardreqs: [] };
+    await mockEndpoints(page, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(noHardreqs) }));
+    await page.route('**/api/tailor', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(noHardreqs) }));
+    await page.goto('/');
+    await page.fill('[name="nama"]', 'Rania');
+    await page.fill('[name="keahlian"]', 'SQL, Excel');
+    await page.click('#btn-tailor');
+    await page.fill('#tailor-jobtext', JOB_TEXT);
+    await page.click('#tailor-submit');
+    await expect(page.locator('#tailor-result')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.tailor-hardreqs')).toHaveCount(0);
+  });
+
   test('Pertahankan punyaku → field tidak berubah', async ({ page }) => {
     await seedPremium(page);
     await mockEndpoints(page, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(TAILORED) }));

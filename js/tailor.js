@@ -104,6 +104,7 @@
           </div>
         </div>
         ${gaps.length ? `<div class="tailor-gaps"><strong>Gap yang bisa kamu kejar:</strong><ul>${gaps.map(g => `<li>${escHtml(g)}</li>`).join('')}</ul></div>` : ''}
+        ${(Array.isArray(result.hardreqs) && result.hardreqs.length) ? `<div class="tailor-hardreqs" role="alert"><strong>Syarat wajib lowongan yang belum kamu penuhi:</strong><ul>${result.hardreqs.map(h => `<li>${escHtml(h)}</li>`).join('')}</ul></div>` : ''}
         <p class="improve-confirm-sub">Skor estimasi AI, bukan jaminan lolos. AI hanya menata ulang fakta CV-mu — tidak mengarang.</p>
         <div class="improve-diff">
           <div><h4>Sebelum</h4><pre>${escHtml(tailorPreview(before))}</pre></div>
