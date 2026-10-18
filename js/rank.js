@@ -7,7 +7,7 @@
   const btn = document.getElementById('btn-rank');
   if (!btn) return;
 
-  function escHtml(s) { return String(s).replace(/[&<>\"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+  function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
   function collectCV() {
     const g = n => { const el = document.querySelector(`[name="${n}"]`); return el ? el.value.trim() : ''; };
