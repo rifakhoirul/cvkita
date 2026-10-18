@@ -21,7 +21,7 @@ async function openPage(page, { subscribe } = {}) {
 }
 
 test.describe('Alert lowongan via email', () => {
-  test('kartu tampil di bawah daftar hasil, sebelum tombol Tampilkan lebih banyak', async ({ page }) => {
+  test('tombol Tampilkan lebih banyak tepat setelah daftar, sebelum kartu alert', async ({ page }) => {
     await openPage(page);
     const card = page.locator('#alert-card');
     await expect(card).toBeVisible();
@@ -33,11 +33,11 @@ test.describe('Alert lowongan via email', () => {
       const alert = document.getElementById('alert-card');
       const more = document.querySelector('.lw-more');
       return {
-        listBeforeAlert: !!(list.compareDocumentPosition(alert) & Node.DOCUMENT_POSITION_FOLLOWING),
-        alertBeforeMore: !!(alert.compareDocumentPosition(more) & Node.DOCUMENT_POSITION_FOLLOWING),
+        listBeforeMore: !!(list.compareDocumentPosition(more) & Node.DOCUMENT_POSITION_FOLLOWING),
+        moreBeforeAlert: !!(more.compareDocumentPosition(alert) & Node.DOCUMENT_POSITION_FOLLOWING),
       };
     });
-    expect(order).toEqual({ listBeforeAlert: true, alertBeforeMore: true });
+    expect(order).toEqual({ listBeforeMore: true, moreBeforeAlert: true });
   });
 
   test('kata kunci terisi dari query aktif dan ikut berubah saat mencari', async ({ page }) => {
