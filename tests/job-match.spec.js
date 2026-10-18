@@ -190,8 +190,8 @@ test.describe('Cek Kecocokan CV (job-match)', () => {
     expect(index).toContain('js/job-match.js?v=1');
     for (const f of ['index.html', 'pay.html', 'lowongan.html']) {
       const html = readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
-      expect(html, f).toContain('css/style.css?v=57');
-      expect(html, f).not.toMatch(/css\/style\.css\?v=5[0-6]\b/);
+      expect(html, f).toContain('css/style.css?v=59');
+      expect(html, f).not.toMatch(/css\/style\.css\?v=5[0-8]\b/);
     }
   });
 });

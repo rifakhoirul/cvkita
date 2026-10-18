@@ -143,6 +143,15 @@
     showJobModal(jobText => runTailor(code, jobText));
   });
 
+  // Hook untuk js/rank.js: buka modal Tailoring dengan jobText terisi (CTA "Tailor lowongan ini").
+  window.__cvkitaOpenTailor = function (jobText) {
+    const code = localStorage.getItem('cvkita_license_v1') || '';
+    if (!code) { if (typeof showPaywall === 'function') showPaywall(); return; }
+    showJobModal(t => runTailor(code, t));
+    const ta = document.getElementById('tailor-jobtext');
+    if (ta) ta.value = jobText;
+  };
+
   async function runTailor(code, jobText) {
     const before = collectCV();
     btn.disabled = true;
