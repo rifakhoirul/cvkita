@@ -5,9 +5,9 @@ import { test, expect } from '@playwright/test';
 test('paywall bisa ditutup dengan tombol X dan editor kembali bisa dipakai', async ({ page }) => {
   await page.goto('/');
   await page.fill('[name="nama"]', 'Budi Test');
-  // Picu paywall lewat template premium (butuh premium)
-  await page.click('#btn-sample');
-  await page.click('[data-tpl="classic"]');
+  // Isi contoh CV (30 Sep: lewat modal pilih bidang — btn-sample-top)
+  await page.click('#btn-sample-top');
+  await page.click('[data-sample="it"]');
   // Buka paywall: pilih template premium
   const tplTrigger = page.locator('.tpl-btn[data-tpl="executive"], [data-tpl="executive"]').first();
   await tplTrigger.click();
@@ -27,8 +27,8 @@ test('paywall bisa ditutup dengan tombol X dan editor kembali bisa dipakai', asy
 
 test('klik area gelap di luar kartu juga menutup paywall', async ({ page }) => {
   await page.goto('/');
-  await page.click('#btn-sample');
-  await page.click('[data-tpl="classic"]');
+  await page.click('#btn-sample-top');
+  await page.click('[data-sample="it"]');
   const tplTrigger = page.locator('.tpl-btn[data-tpl="executive"], [data-tpl="executive"]').first();
   await tplTrigger.click();
   await expect(page.locator('#paywall')).toBeVisible();

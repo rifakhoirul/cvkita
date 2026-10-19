@@ -93,6 +93,7 @@
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
     modal.querySelectorAll('.rank-tailor').forEach(b => {
       b.addEventListener('click', () => {
+        try { if (window.__cvkitaTrack) window.__cvkitaTrack('rank_tailor_click'); } catch (e) { /* analytics opsional */ }
         const jobText = jobs[Number(b.dataset.jobindex)];
         modal.remove();
         if (typeof window.__cvkitaOpenTailor === 'function') window.__cvkitaOpenTailor(jobText);
@@ -124,6 +125,7 @@
           return;
         }
         if (modal) modal.remove();
+        try { if (window.__cvkitaTrack) window.__cvkitaTrack('rank_submit'); } catch (e) { /* analytics opsional */ }
         showResult(jobs, j.ranked || []);
       } catch {
         const modal = document.getElementById('rank-modal');

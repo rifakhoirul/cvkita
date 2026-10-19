@@ -66,6 +66,30 @@ test.describe('Banding Lowongan (btn-rank)', () => {
     await expect(page.locator('#tailor-jobtext')).not.toHaveValue('');
   });
 
+  // 19 Okt: analytics funnel — rank_submit saat ranking sukses, rank_tailor_click saat CTA tailor diklik
+  test('analytics: rank_submit dikirim saat hasil tampil, rank_tailor_click saat CTA tailor diklik', async ({ page }) => {
+    const tracked = [];
+    await page.route('**/api/track', async r => {
+      const b = r.request().postDataJSON();
+      tracked.push(b && b.event);
+      await r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
+    });
+    await seedPremium(page);
+    await mockEndpoints(page, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ranked: RANKED }) }));
+    await page.route('**/api/license/verify*', r => r.fulfill({ contentType: 'application/json', body: JSON.stringify({ valid: true, quota: 3 }) }));
+    await page.goto('/');
+    await page.fill('[name="nama"]', 'Rania');
+    await page.fill('[name="keahlian"]', 'SQL, Excel');
+    await page.click('#btn-rank');
+    await page.fill('#rank-jobtext', `${JOB_A}\n---\n${JOB_B}`);
+    await page.click('#rank-submit');
+    await expect(page.locator('#rank-result')).toBeVisible({ timeout: 10000 });
+    expect(tracked).toContain('rank_submit');
+    await page.locator('#rank-result .rank-row').first().locator('.rank-tailor').click();
+    await expect(page.locator('#tailor-modal')).toBeVisible();
+    expect(tracked).toContain('rank_tailor_click');
+  });
+
   test('lowongan terlalu pendek → error inline, /api/rank TIDAK dipanggil', async ({ page }) => {
     const spy = { called: false };
     await mockEndpoints(page, r => { spy.called = true; return r.fulfill({ status: 200, contentType: 'application/json', body: '{}' }); });

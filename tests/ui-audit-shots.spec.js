@@ -21,7 +21,10 @@ test('kumpulkan screenshot audit', async ({ browser }) => {
 
   // Isi contoh
   await d.click('#btn-sample-top');
-  await d.waitForTimeout(1200);
+  await d.waitForTimeout(400);
+  await d.click('[data-sample="it"]');
+  await d.waitForLoadState('networkidle');
+  await d.waitForTimeout(800);
   const c = d.locator('#btn-ats-close');
   if (await c.isVisible().catch(() => false)) await c.click();
   await d.screenshot({ path: S('02-form-terisi-desktop.png') });
