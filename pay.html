@@ -110,7 +110,7 @@
             // Dulu user hanya diberi order id dan disuruh menunggu "kiriman" yang tidak ada.
             status.style.color = '#059669';
             status.innerHTML = 'Pembayaran berhasil! Mengambil kode aktivasi...';
-            ambilKode(res.body.order_id, status);
+            ambilKode(res.body.order_id, res.body.order_token, status);
           },
           onPending: function () {
             status.style.color = '#b45309';
@@ -143,12 +143,15 @@
     });
   }
 
-  function ambilKode(orderId, statusEl) {
+  function ambilKode(orderId, orderToken, statusEl) {
     // Polling sampai webhook Midtrans menerbitkan lisensi (biasanya < 5 detik)
+    // Security audit 2026-10-19: kirim order_token (bukti kepemilikan order).
     var attempts = 0;
     function coba() {
       attempts++;
-      fetch(API + '/api/license/by-order?order_id=' + encodeURIComponent(orderId))
+      var q = '?order_id=' + encodeURIComponent(orderId);
+      if (orderToken) q += '&order_token=' + encodeURIComponent(orderToken);
+      fetch(API + '/api/license/by-order' + q)
         .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, status: r.status, body: b }; }); })
         .then(function (res) {
           if (res.ok && res.body.code) {
