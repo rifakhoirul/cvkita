@@ -1,0 +1,3 @@
+## 2026-10-20 - [ARIA Labels for Dynamically Rendered Inputs]
+**Learning:** In dynamically constructed form structures (like `entryHTML` in `js/app.js`), inputs often lack explicit `<label>` tags. Since they're injected dynamically, traditional `label[for]` mappings are hard to maintain, and relying solely on `placeholder` attributes is a widespread accessibility anti-pattern.
+**Action:** When adding or rendering elements dynamically in JS where explicit labels are omitted for UI reasons, ALWAYS add `aria-label` directly on the input. Additionally, repeating action buttons in lists (like "Hapus") must have contextual `aria-label`s (e.g. `Hapus entri Pendidikan`) so screen reader users don't just hear an endless sequence of identical "Delete" buttons.
