@@ -1,0 +1,3 @@
+## 2026-10-21 - [Aria-labels for dynamically generated form elements]
+**Learning:** In projects where UI components are constructed dynamically via JavaScript without explicit `<label>` tags (often for visual compactness relying on placeholders), accessibility fails because inputs lack an associated name for screen readers. This pattern is particularly prevalent in repetitive input blocks (like adding multiple education or experience entries).
+**Action:** When creating form inputs dynamically via template strings in JavaScript, ensure `aria-label` attributes are included using the placeholder text or equivalent descriptive text if a formal `<label>` element is omitted.
