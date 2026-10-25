@@ -16,3 +16,7 @@ This document serves as a repository for tracking security vulnerabilities, thei
 - **Fix**: Updated the regular expression to include the single quote (`/[&<>"'/]/g`) and added a mapping for the single quote to its HTML entity `&#39;` in the replacement object.
 - **Lesson Learned**: Always use comprehensive escaping functions that cover all critical characters (`&`, `<`, `>`, `"`, `'`, `/`) when dynamically generating HTML strings to prevent XSS.
 >>>>>>> e3a2c75 (🔒 Fix incomplete HTML escaping in improve-all.js)
+## 2026-10-25 - [Fix missing output encoding]
+**Vulnerability:** Input data rendered in `entryHTML` (e.g. from local storage or form data) was inserted directly into HTML `<textarea>` and `<input>` value and inner text fields without prior HTML encoding.
+**Learning:** This permitted an attacker to break out of attributes using single quotes, double quotes, or tags and inject arbitrary code (XSS), due to relying strictly on browser layout engines rather than robust input escaping on client side logic.
+**Prevention:** Always ensure all values read from uncontrolled states (like local storage or user inputs) are defensively escaped (e.g. using a comprehensive HTML escape function for &, <, >, ", and ') prior to injecting into raw HTML formats.
