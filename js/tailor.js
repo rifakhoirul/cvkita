@@ -46,7 +46,7 @@
 
   // Modal input lowongan — closable 3 cara (X, backdrop, Escape) sesuai aturan UX.
   function showJobModal(onSubmit) {
-    const esc = s => String(s).replace(/[&<>"'/]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;' }[c]));
+    const esc = s => String(s).replace(/[&<>"'\/]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;' }[c]));
     const modal = document.createElement('div');
     modal.className = 'improve-confirm';
     modal.id = 'tailor-modal';
@@ -84,7 +84,7 @@
     document.body.appendChild(modal);
   }
 
-  function escHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+  function escHtml(s) { return String(s).replace(/[&<>"'\/]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;' }[c])); }
 
   function showResult(before, result, onAccept) {
     const s = result.score || {};
