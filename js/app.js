@@ -86,7 +86,7 @@ function collectList(key) {
 }
 
 function esc(s) {
-  return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return (s || '').replace(/[&<>"'\/]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;'}[c]));
 }
 function nl2li(s) {
   const lines = (s || '').split('\n').map(x => x.trim()).filter(Boolean);
