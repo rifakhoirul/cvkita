@@ -203,6 +203,18 @@ document.addEventListener('click', e => {
   if (e.target.closest && e.target.closest('#btn-download, #btn-download-sticky, #btn-download-preview')) {
     try { if (window.__cvkitaTrack) window.__cvkitaTrack('download_pdf'); } catch {}
     window.print();
+    // HG-007: banner cross-promo GajiCVKita — sekali per sesi, setelah unduh PDF.
+    try {
+      if (!sessionStorage.getItem('hg_banner_seen')) {
+        const banner = document.getElementById('hg-banner');
+        if (banner) banner.classList.remove('hidden');
+        sessionStorage.setItem('hg_banner_seen', '1');
+      }
+    } catch {}
+  }
+  if (e.target.id === 'hg-banner-close') {
+    const banner = document.getElementById('hg-banner');
+    if (banner) banner.classList.add('hidden');
   }
   if (e.target.id === 'btn-ats-close') {
     $('#ats-panel').classList.add('hidden');
